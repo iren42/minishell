@@ -35,7 +35,6 @@ typedef struct	s_mini
 {
 	t_list	*tokens;
 	char	*s;
-	char	**s_split;
 	char	**env;
 	int	fd;
 
@@ -44,9 +43,13 @@ typedef struct	s_mini
 void	print_tmini(t_mini *mini);
 void	print_split(char **split);
 void	print_lst(t_list *head);
+
 t_list	*lexer(t_mini *m);
-char	**ft_splitsh(const char *s, const char *c);
 int	is_quote(int c);
+int	ft_isspace(int c);
+void	del_token(void *token);
+
+//char	**ft_splitsh(const char *s, const char *c);
 void	ft_error(char *m, int code);
 
 #endif

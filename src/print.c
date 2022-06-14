@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/13 13:37:19 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/14 14:36:18 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void	print_tmini(t_mini *mini)
 
 	i = 0;
 //	printf("s = %s\n", mini->s);
-	print_split(mini->s_split);
+	print_lst(mini->tokens);
 }
 
 void	print_token(t_token *t)
 {
-	printf("token type %d\n", t->type);
-	printf("token value %s\n", t->value);
+	printf("token type %d\t", t->type);
+	printf("value %s\n", t->value);
 
 }
 

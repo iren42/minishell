@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/14 09:22:57 by iren             ###   ########.fr        #
+#    Updated: 2022/06/14 14:52:22 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ DIR_SOURCES	= src/
 
 SOURCES		=	minishell.c \
 				print.c \
-				lexer.c \
+				parser/lexer.c \
 				ft_splitsh.c \
 				ft_error.c
 				
@@ -35,7 +35,8 @@ CC		= gcc
 CFLAGS	= 
 #-Wall -Wextra -Werror
 
-SANI	= -fsanitize=address -g3
+SANI	= 
+#-fsanitize=address -g3
 
 RM		= rm -f
 
@@ -59,6 +60,7 @@ clean	:
 		make clean -C $(LIBFT)
 
 fclean	: clean
+		make fclean -C $(LIBFT)
 		$(RM) $(NAME)
 
 re		: fclean all

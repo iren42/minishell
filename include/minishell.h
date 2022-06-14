@@ -49,7 +49,9 @@ int	is_quote(int c);
 int	ft_isspace(int c);
 void	del_token(void *token);
 
+
 //char	**ft_splitsh(const char *s, const char *c);
 void	ft_error(char *m, int code);
 
+t_list	*parser(t_mini *m);
 #endif

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/14 14:50:43 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/16 16:49:47 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	init_tmini(char *s, char **env, t_mini *mini)
 {
 	mini->s = s;
 	mini->env = env;
-	mini->tokens = 0;
+	mini->token_list = 0;
+	mini->cmdtab_list = 0;
 	mini->fd = 0;
 }
 
@@ -33,10 +34,12 @@ int	main(int ac, char **av, char **env)
 	s = readline(PROMPT);
 	while (s != NULL)
 	{
+	//	printf("s=%s", s);
 		init_tmini(s, env, &mini);
-		mini.tokens = lexer(&mini);
+		mini.token_list = lexer(&mini);
+		mini.cmdtab_list = parser(&mini);
+		ft_lstclear(&mini.token_list, del_token);
 		print_tmini(&mini);
-	//	ft_lstclear(&mini.tokens, del_token);
 		
 		s = readline(PROMPT);
 		

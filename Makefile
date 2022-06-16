@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/14 14:52:22 by iren             ###   ########.fr        #
+#    Updated: 2022/06/15 22:36:58 by isabelle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,11 @@ DIR_SOURCES	= src/
 SOURCES		=	minishell.c \
 				print.c \
 				parser/lexer.c \
+				parser/parser.c \
 				ft_splitsh.c \
-				ft_error.c
+				ft_error.c \
+				parser/get_cmd.c \
+				free.c
 				
 
 
@@ -43,12 +46,12 @@ RM		= rm -f
 all		: $(NAME)
 
 %.o		: %.c $(HEADER)
-		$(CC) $(CFLAGS) $(SANI) -Iinclude -c $< -o $@
+		$(CC) $(CFLAGS) $(SANI) -g3 -Iinclude -c $< -o $@
 
 $(NAME) : $(OBJS) $(HEADER) $(LIBFT)
 		make -C $(LIBFT)
 		make bonus -C $(LIBFT)
-	  	$(CC) $(SANI) -o $@ $(OBJS) -lreadline libft/libft.a
+	  	$(CC) $(SANI) -o  $@ $(OBJS) -lreadline libft/libft.a
 	
 
 norm	:

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/14 14:36:18 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/16 13:52:06 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	print_tmini(t_mini *mini)
 
 	i = 0;
 //	printf("s = %s\n", mini->s);
-	print_lst(mini->tokens);
+	print_token_list(mini->token_list);
+	print_cmdtab_list(mini->cmdtab_list);
 }
 
 void	print_token(t_token *t)
@@ -45,13 +46,64 @@ void	print_token(t_token *t)
 
 }
 
-void	 print_lst(t_list *head)
+void	print_arg(void *o)
 {
-	printf("--LIST--\n");
+	t_arg	*a;
+
+	a = (t_arg *)o;
+	printf("\targ value = %s\n", a->value);
+//	printf("arg quote = %d\n", a->is_in_quotes);
+}
+
+void	print_redir(void *o)
+{
+	t_redir	*a;
+
+	a = (t_redir *)o;
+	printf("\tredir filename = %s\n", a->filename);
+	printf("\tredir type = %d\n", a->type);
+//	printf("arg quote = %d\n", a->is_in_quotes);
+}
+
+void	print_cmdtab(t_cmdtab *c)
+{
+	printf("cmd =%s\n", c->cmd);
+	print_list(c->arg_list, &print_arg);
+	print_list(c->redir_list, &print_redir);
+}
+
+void	 print_list(t_list *l, void (*f)(void *))
+{
+	t_list	*head;
+	head = l;
 	while (head)
 	{
-	print_token(head->content);
+		f(head->content);
 		head = head->next;
 	}
-	printf("--LIST END--\n");
+}
+
+void	 print_token_list(t_list *l)
+{
+	printf("--LIST--\n");
+	t_list	*head;
+	head = l;
+	while (head)
+	{
+		print_token(head->content);
+		head = head->next;
+	}
+	printf("--LIST END--\n\n");
+}
+void	 print_cmdtab_list(t_list *l)
+{
+	printf("--LIST--\n");
+	t_list	*head;
+	head = l;
+	while (head)
+	{
+		print_cmdtab(head->content);
+		head = head->next;
+	}
+	printf("--LIST END--\n\n");
 }

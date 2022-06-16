@@ -13,6 +13,7 @@
 
 # define PROMPT "> "
 
+struct s_mini;
 typedef enum e_token_type
 {
 	NONE,
@@ -21,19 +22,50 @@ typedef enum e_token_type
 	GREAT,
 	LESS,
 	DOUBLE_GREAT,
-	PIPE, //NEWLINE,
-}			t_token_type;
+	PIPE,
+	NL,
+}	t_token_type;
 
 typedef struct	s_token
 {
 	char	*value;
 	t_token_type	type;
+	struct s_mini	*m;
 	
 }	t_token;
 
+typedef enum e_redir_type{
+	RE_GREAT,
+	RE_DOUBLE_GREAT,
+	RE_LESS,
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	int				index;
+	t_redir_type	type;
+	int				is_in_quotes;
+	char			*filename;
+}	t_redir;
+
+typedef struct s_arg{
+	int				is_in_quotes;
+	char			*value;
+}	t_arg;
+
+typedef struct	s_cmdtab
+{
+	int			is_in_quotes;
+	char		*cmd;
+	t_list		*arg_list;
+	t_list		*redir_list;
+} t_cmdtab;
+
 typedef struct	s_mini
 {
-	t_list	*tokens;
+	t_list	*token_list;
+	t_list	*cmdtab_list;
+
 	char	*s;
 	char	**env;
 	int	fd;
@@ -42,7 +74,10 @@ typedef struct	s_mini
 
 void	print_tmini(t_mini *mini);
 void	print_split(char **split);
-void	print_lst(t_list *head);
+void	print_token_list(t_list *head);
+void	print_cmdtab_list(t_list *head);
+void	print_list(t_list *head, void (*f)(void *));
+void	print_token(t_token *t);
 
 t_list	*lexer(t_mini *m);
 int	is_quote(int c);
@@ -54,4 +89,6 @@ void	del_token(void *token);
 void	ft_error(char *m, int code);
 
 t_list	*parser(t_mini *m);
+char	*get_cmd(char **env, char *cmd);
+void	free_split(char **split);
 #endif

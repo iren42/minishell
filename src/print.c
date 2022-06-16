@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/16 13:52:06 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/16 23:10:00 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,14 @@ void	 print_cmdtab_list(t_list *l)
 		head = head->next;
 	}
 	printf("--LIST END--\n\n");
+}
+
+void	print_export(void  *o)
+{
+	t_export *e;
+
+	e = (t_export *)o;
+	printf("\te index = %d\n", e->index);
+	printf("\te name = %s\n", e->name);
+	printf("\te value = %s\n", e->value);
 }

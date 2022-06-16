@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/15 22:36:58 by isabelle         ###   ########.fr        #
+#    Updated: 2022/06/16 22:15:34 by isabelle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SOURCES		=	minishell.c \
 				ft_splitsh.c \
 				ft_error.c \
 				parser/get_cmd.c \
-				free.c
+				free.c \
+				expander/expander.c
 				
 
 

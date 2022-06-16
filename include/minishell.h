@@ -72,12 +72,21 @@ typedef struct	s_mini
 
 } t_mini;
 
+typedef struct s_export
+{
+	int	is_in_quotes;
+	int	index;
+	char	*name;
+	char	*value;
+} t_export;
+
 void	print_tmini(t_mini *mini);
 void	print_split(char **split);
 void	print_token_list(t_list *head);
 void	print_cmdtab_list(t_list *head);
 void	print_list(t_list *head, void (*f)(void *));
 void	print_token(t_token *t);
+void	print_export(void *e);
 
 t_list	*lexer(t_mini *m);
 int	is_quote(int c);
@@ -91,4 +100,6 @@ void	ft_error(char *m, int code);
 t_list	*parser(t_mini *m);
 char	*get_cmd(char **env, char *cmd);
 void	free_split(char **split);
+
+char	*expander(char *s);
 #endif

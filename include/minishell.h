@@ -80,6 +80,16 @@ typedef struct s_export
 	char	*value;
 } t_export;
 
+typedef struct s_func_cmd_sub
+{
+	t_list	*l;
+	char	*res;
+	char	*texport_value;
+	int	list_index;
+	int	start;
+	int	end;
+} t_func_cmd_sub;
+
 void	print_tmini(t_mini *mini);
 void	print_split(char **split);
 void	print_token_list(t_list *head);
@@ -100,6 +110,9 @@ void	ft_error(char *m, int code);
 t_list	*parser(t_mini *m);
 char	*get_cmd(char **env, char *cmd);
 void	free_split(char **split);
+void	del_cmdtab(void *o);
 
 char	*expander(char *s);
+t_list	*create_list(char *s);
+char	*command_substitution(t_list *export_list, char *s);
 #endif

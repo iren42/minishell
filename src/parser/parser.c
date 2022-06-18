@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/16 16:48:47 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/18 14:32:08 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	is_cmd(t_token *t)
 	//	printf("buff %s\n",  buff);
 	if (buff == 0 && is_cmd == -1)
 		return (0);
+	free(buff);
 	return (1);
 
 }
@@ -111,9 +112,38 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 	}
 }
 
+void	del_redir(void *o)
+{
+	t_redir *r;
+
+	r = (t_redir *)o;
+	free(r->filename);
+	free(r);
+}
+
+void	del_arg(void *o)
+{
+	t_arg *a;
+
+	a = (t_arg *)o;
+	free(a->value);
+	free(a);
+}
+
+void	del_cmdtab(void *o)
+{
+	t_cmdtab	*c;
+
+	c = (t_cmdtab *)o;
+	free(c->cmd);
+	ft_lstclear(&c->arg_list, del_arg);
+	ft_lstclear(&c->redir_list, del_redir);
+	free(c);
+}
+
 t_list	*parser(t_mini *m)
 {
-	printf("\n--IN PARSER--\n");
+//	printf("\n--IN PARSER--\n");
 	t_list	*cmd_list;
 	t_cmdtab	*new;
 	t_list	*l;
@@ -135,7 +165,7 @@ t_list	*parser(t_mini *m)
 		//	printf("cmd? %s\n",new->cmd);
 		if (get_token_type(l->content) == PIPE || get_token_type(l->content) == SEMI)
 		{
-			printf("add in list\n");
+	//		printf("add in list\n");
 			ft_lstadd_back(&cmd_list, ft_lstnew(new));
 			new = malloc(sizeof(t_cmdtab));
 			if (!new)
@@ -146,7 +176,7 @@ t_list	*parser(t_mini *m)
 		l = l->next;
 	}
 	ft_lstadd_back(&cmd_list, ft_lstnew(new));
-	printf("--OUT PARSER--\n");
+//	printf("--OUT PARSER--\n");
 	//	print_list(cmd_list, );
 //	ft_lstclear(m->token_list, &del_token);
 	return (cmd_list);

@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 15:14:19 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/19 16:35:19 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,24 +60,24 @@ void pop(t_list **l, char *s, int *index_close)
 	t_list	*tmp;
 	int	index_open;
 	int	i;
-	int	metacharactere;
+	int	metacharacter;
 
 	i = 0;
-	metacharactere = 0;
+	metacharacter = 0;
 	tmp = *l;
 	index_open = get_index(tmp->content);
 	*l = (*l)->next;
 	ft_lstdelone(tmp, &del_tfunc_rm_quotes);
 	while (s[index_open + i] && index_open + i < *index_close)
 	{
-		if (ft_strchr("$ |\t\n\v\f\r", s[index_open + i]) != 0)
+		if (ft_strchr("$ |<>\t\n\v\f\r", s[index_open + i]) != 0)
 		{
-			metacharactere++;
+			metacharacter++;
 			break ;
 		}
 		i++;
 	}
-	if (!metacharactere)
+	if (!metacharacter)
 	{
 		ft_memmove(&s[*index_close], &s[*index_close + 1], ft_strlen(s));
 		ft_memmove(&s[index_open], &s[index_open + 1], ft_strlen(s));

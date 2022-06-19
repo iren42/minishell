@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 16:27:05 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/19 17:10:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ int	len_word(char *s)
 		{
 			while (s[i])
 			{
-				if (ft_strchr(" |<>'\"", s[i]) == 0)
-					i++;
-				else
+				if (ft_strchr(" |<>'\"", s[i]))
 				{
 					i--;
-					break ;
+					break;
 				}
+				i++;
 			}
 		}
 	}
@@ -66,6 +65,7 @@ char	*str_texportname(char *s)
 	name[len_w] = '\0';
 	return (name);
 }
+
 int	little_str_in_list(char *s, t_func_cmd_sub *f)
 {
 	t_list	*l;
@@ -98,10 +98,10 @@ int	little_str_in_list(char *s, t_func_cmd_sub *f)
 		}
 		l = l->next;
 	}
-	//	}
-free(name);
-return (0);
+	free(name);
+	return (0);
 }
+
 int	update_index_value(char *s, int index)
 {
 	int	i;
@@ -127,7 +127,7 @@ char	*join_with_dollar(char *name, char *prev_res)
 	tmp = ft_strjoin("$", name);
 	if (!tmp)
 		exit(1);
-	res = ft_strjoin(prev_res, tmp); // sans substitution
+	res = ft_strjoin(prev_res, tmp);
 	if (!res)
 		exit(1);
 	free(tmp);
@@ -223,15 +223,14 @@ void pop1(t_list **l, char *s, int *index_close)
 	t_list	*tmp;
 	int	index_open;
 	int	i;
-	int	metacharactere;
 
 	i = 0;
-	metacharactere = 0;
 	tmp = *l;
 	index_open = get_index(tmp->content);
 	*l = (*l)->next;
 	ft_lstdelone(tmp, &del_tfunc_rm_quotes);
 }
+
 void	print_quote(void *o)
 {
 	t_quote *f;

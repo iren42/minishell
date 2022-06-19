@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/18 14:32:08 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/18 20:31:21 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ t_list	*parser(t_mini *m)
 	if (!new)
 		exit(1);
 	init_cmdtab(new);
+	if (l)
+	{
 	while (get_token_type(l->content) != NL)
 	{
 		ret = 0;
@@ -179,6 +181,7 @@ t_list	*parser(t_mini *m)
 //	printf("--OUT PARSER--\n");
 	//	print_list(cmd_list, );
 //	ft_lstclear(m->token_list, &del_token);
+	}
 	return (cmd_list);
 
 }

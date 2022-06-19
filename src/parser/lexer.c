@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/16 16:48:28 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/18 20:30:27 by isabelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void create_token_list(char *s, t_list **l, t_mini *m)
 	t_list	*new;
 
 	i = 0;
+	if (s)
+	{
 	while (s[i])
 	{
 		if (!ft_isspace(s[i]))
@@ -126,6 +128,7 @@ void create_token_list(char *s, t_list **l, t_mini *m)
 	}
 	new = ft_lstnew(create_token("\n", &i, m));
 	ft_lstadd_back(l, new);
+	}
 }
 
 t_list	*lexer(t_mini *m)

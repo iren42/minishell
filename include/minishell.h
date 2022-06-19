@@ -80,15 +80,24 @@ typedef struct s_export
 	char	*value;
 } t_export;
 
+typedef struct s_quote
+{
+	char	c;
+	int	index;
+
+} t_quote;
 typedef struct s_func_cmd_sub
 {
 	t_list	*l;
+	t_list	*quote_list;
 	char	*res;
 	char	*texport_value;
 	int	list_index;
 	int	start;
 	int	end;
+	char	q;
 } t_func_cmd_sub;
+
 
 void	print_tmini(t_mini *mini);
 void	print_split(char **split);
@@ -114,5 +123,12 @@ void	del_cmdtab(void *o);
 
 char	*expander(char *s);
 t_list	*create_list(char *s);
-char	*command_substitution(t_list *export_list, char *s);
+char	*var_substitution(t_list *export_list, char *s);
+char	*rm_superflous(char *s);
+int	matching(char b1, char b2);
+char	get_char(void *o);
+void	del_tfunc_rm_quotes(void *o);
+int	get_index(void *o);
+void	push(t_list **l, char c, char *s, int i);
+
 #endif

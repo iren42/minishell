@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 17:10:11 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/19 20:43:42 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,8 @@ char	*var_substitution(t_list *list, char *s)
 
 	init_cmd_sub(&f, list);
 	i = 0;
+	if (s)
+	{
 	while (s[i])
 	{
 		f.list_index = update_index_value(&s[i], f.list_index);
@@ -275,5 +277,6 @@ char	*var_substitution(t_list *list, char *s)
 	f.res = join_regular_str(&f, i, s);
 	ft_lstclear(&f.quote_list, &del_tfunc_rm_quotes);
 	//	printf("var_sub() final s %s\n", f.res);
+	}
 	return (f.res);
 }

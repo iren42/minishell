@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 16:35:19 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/20 00:23:12 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ char	*rm_superflous(char *s) // verify quotes closed and rm useless quotes
 
 	i = 0;
 	quote_list = 0;
+	if (s)
+	{
 	while (s[i])
 	{
 		if (is_quote(s[i]))
@@ -115,6 +117,7 @@ char	*rm_superflous(char *s) // verify quotes closed and rm useless quotes
 	//	print_list(quote_list, &print_char);
 	//	printf("LIST\n");
 	ft_lstclear(&quote_list, &del_tfunc_rm_quotes);
-	printf("rm_superflous() final s %s\n", s);
+//	printf("rm_superflous() final s %s\n", s);
+	}
 	return (s);
 }

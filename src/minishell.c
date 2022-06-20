@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/18 14:27:14 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/20 12:48:41 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,36 @@ int	main(int ac, char **av, char **env)
 {
 	char	*s;
 	t_mini	mini;
+	char	*prompt;
 
 	(void)ac;
 	(void)av;
 	(void)env;
 	if (ac > 1)
 		ft_error(TOO_MANY_ARG, 1);
-	s = readline(PROMPT);
-	while (s != NULL)
+	signal_handler();
+	prompt = ft_strdup(PUR"> "RESET);
+	while (1)
 	{
-	//	printf("s=%s", s);
+		printf("%s", prompt);
+		s = readline(0);
+		if (s == NULL)
+		{
+			// free all
+			printf("\n");
+			exit(0);
+		}
+		add_history(s);
 		init_tmini(s, env, &mini);
 		mini.s = expander(s);
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
+		print_tmini(&mini);
 		ft_lstclear(&mini.token_list, del_token);
 		ft_lstclear(&mini.cmdtab_list, del_cmdtab);
-	//	print_tmini(&mini);
-		
-		s = readline(PROMPT);
-		
+		free(mini.s);
+		free(s);	
 	}
+	free(prompt);
+	rl_clear_history();
 }

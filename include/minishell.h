@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 
 #include "libft.h"
 
@@ -12,7 +13,11 @@
 # define MALLOC "Error on malloc()\n"
 
 # define PROMPT "> "
-
+# define GRN "\x1B[32m"
+# define RESET "\x1B[0m"
+# define YEL "\x1B[33m"
+# define BLU "\x1B[34m"
+# define PUR "\x1B[35m"
 struct s_mini;
 typedef enum e_token_type
 {
@@ -130,5 +135,10 @@ char	get_char(void *o);
 void	del_tfunc_rm_quotes(void *o);
 int	get_index(void *o);
 void	push(t_list **l, char c, char *s, int i);
+
+
+void	signal_handler();
+void	print_prompt();
+
 
 #endif

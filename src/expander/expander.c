@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 15:10:55 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/19 22:49:29 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*expander(char *s)
 		print_list(export_list, print_export);
 	res = var_substitution(export_list, s);
 	ft_lstclear(&export_list, del_texport);
-	printf("final res %s|\n", res);
-	free(res);
-	return (s);
+//	printf("final res %s|\n", res);
+//	free(res);
+	return (res);
 }

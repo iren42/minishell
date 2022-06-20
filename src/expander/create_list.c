@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/18 14:42:13 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/19 20:42:50 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ t_list	*create_list(char *s)
 	l = 0;
 	index = 0;
 	p = s;
+	if (s)
+	{
 	while (s[i])
 	{
 		p = ft_strnstr(p, "export ", ft_strlen(p));
@@ -99,6 +101,7 @@ t_list	*create_list(char *s)
 		}
 		else
 			break ;
+	}
 	}
 	return (l);
 }

@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/19 20:45:57 by isabelle         ###   ########.fr        #
+#    Updated: 2022/06/20 15:34:46 by isabelle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,9 @@ SOURCES		=	minishell.c \
 				expander/create_list.c  \
 				expander/var_substitution.c \
 				expander/rm_superflous.c \
-				signal_handler.c
+				signal_handler.c \
+				builtin/ft_pwd.c \
+				builtin/ft_env.c
 				
 
 

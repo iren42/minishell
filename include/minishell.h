@@ -13,6 +13,10 @@
 # define MALLOC "Error on malloc()\n"
 
 # define PROMPT "> "
+
+# define SUCCESS 1
+# define FAILURE 0
+
 # define GRN "\x1B[32m"
 # define RESET "\x1B[0m"
 # define YEL "\x1B[33m"
@@ -70,20 +74,20 @@ typedef struct	s_mini
 {
 	t_list	*token_list;
 	t_list	*cmdtab_list;
-
+	t_list	*env_list;
 	char	*s;
 	char	**env;
 	int	fd;
 
 } t_mini;
 
-typedef struct s_export
+typedef struct s_env
 {
-	int	is_in_quotes;
+//	int	is_in_quotes;
 	int	index;
 	char	*name;
 	char	*value;
-} t_export;
+} t_env;
 
 typedef struct s_quote
 {
@@ -96,7 +100,7 @@ typedef struct s_func_cmd_sub
 	t_list	*l;
 	t_list	*quote_list;
 	char	*res;
-	char	*texport_value;
+	char	*tenv_value;
 	int	list_index;
 	int	start;
 	int	end;
@@ -106,11 +110,11 @@ typedef struct s_func_cmd_sub
 
 void	print_tmini(t_mini *mini);
 void	print_split(char **split);
-void	print_token_list(t_list *head);
-void	print_cmdtab_list(t_list *head);
 void	print_list(t_list *head, void (*f)(void *));
-void	print_token(t_token *t);
-void	print_export(void *e);
+//void	print_token(t_token *t);
+void	print_cmdtab(void *o);
+void	print_token(void *t);
+void	print_env(void *e);
 
 t_list	*lexer(t_mini *m);
 int	is_quote(int c);
@@ -140,5 +144,6 @@ void	push(t_list **l, char c, char *s, int i);
 void	signal_handler();
 void	print_prompt();
 
-
+int	ft_pwd(t_list *cmdtab_list);
+int	ft_env(t_mini *m);
 #endif

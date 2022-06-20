@@ -6,18 +6,18 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 22:49:29 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/20 20:53:17 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void	del_texport(void *o)
+void	del_tenv(void *o)
 {
-	t_export	*e;
+	t_env	*e;
 
-	e = (t_export *)o;
+	e = (t_env *)o;
 	free(e->name);
 	free(e->value);
 	free(e);
@@ -26,13 +26,13 @@ void	del_texport(void *o)
 char	*expander(char *s)
 {
 	char	*res;
-	t_list	*export_list;
+	t_list	*env_list;
 
 	s = rm_superflous(s);
-	export_list = create_list(s);
-		print_list(export_list, print_export);
-	res = var_substitution(export_list, s);
-	ft_lstclear(&export_list, del_texport);
+	env_list = create_list(s);
+//		print_list(env_list, print_env);
+	res = var_substitution(env_list, s);
+	ft_lstclear(&env_list, del_tenv);
 //	printf("final res %s|\n", res);
 //	free(res);
 	return (res);

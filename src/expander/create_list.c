@@ -6,13 +6,13 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 20:42:50 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/20 19:40:12 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	separate_name_value(t_export *e, char *s)
+void	separate_name_value(t_env *e, char *s)
 {
 	int	i;
 
@@ -26,32 +26,30 @@ void	separate_name_value(t_export *e, char *s)
 	e->value = ft_substr(s, i + 1, ft_strlen(s));
 }
 
-void	init_texport(t_export *e, int index)
+void	init_texport(t_env *e, int index)
 {
 	e->value = 0;
 	e->name = 0;
 	e->index = index;
-	e->is_in_quotes = 0;
 }
 
-t_export	*create_texport(char *s, int index)
+t_env	*create_texport(char *s, int index)
 {
 	int	i;
-	t_export	*e;
+	t_env	*e;
 	char	q;
 	char	*namevalue;
 
 	i = 0;
 	s += 7;
 	q = 0;
-	e = malloc(sizeof(t_export));
+	e = malloc(sizeof(t_env));
 	if (!e)
 		exit(1);
 	init_texport(e, index);
 	//	printf("get export value %s\n", s);
 	if (is_quote(s[i]))
 	{
-		e->is_in_quotes = 1;
 		q = s[i++];
 		while (s[i] && q)
 		{

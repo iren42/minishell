@@ -6,18 +6,18 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/19 20:43:42 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/20 19:40:53 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_name_e(t_export *e)
+char	*get_name_e(t_env *e)
 {
 	return (e->name);
 }
 
-char	*get_value_e(t_export *e)
+char	*get_value_e(t_env *e)
 {
 	return (e->value);
 }
@@ -52,7 +52,7 @@ int	len_word(char *s)
 	return (i);
 }
 
-char	*str_texportname(char *s)
+char	*str_tenvname(char *s)
 {
 	char	*name;
 	int	len_w;
@@ -82,7 +82,7 @@ int	little_str_in_list(char *s, t_func_cmd_sub *f)
 	}
 	l = f->l;
 	index = f->list_index;
-	name = str_texportname(s);
+	name = str_tenvname(s);
 	//	printf("name %s\n", name);
 	if (!name)
 		exit(1);
@@ -92,7 +92,7 @@ int	little_str_in_list(char *s, t_func_cmd_sub *f)
 		if (ft_strncmp(name, get_name_e(l->content),
 					ft_strlen(name)) == 0)
 		{
-			f->texport_value = get_value_e(l->content);
+			f->tenv_value = get_value_e(l->content);
 			free(name);
 			return (1);
 		}
@@ -157,7 +157,7 @@ void	init_cmd_sub(t_func_cmd_sub *f, t_list *l)
 	f->l = l;
 	f->start = 0;
 	f->end = 0;
-	f->texport_value = 0;
+	f->tenv_value = 0;
 	f->quote_list = 0;
 	f->list_index = -1;
 	f->res = ft_strdup("");
@@ -170,7 +170,7 @@ char	*join_str_in_list(t_func_cmd_sub *f, char *s, int i)
 	char	*res;
 
 	//			printf("buff %s|\n", buff);
-	res = ft_strjoin(f->res, f->texport_value);
+	res = ft_strjoin(f->res, f->tenv_value);
 	free(f->res);
 	f->start = f->end + len_word(&s[i]) + 1;
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/20 19:40:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 01:00:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ void	separate_name_value(t_env *e, char *s)
 	e->value = ft_substr(s, i + 1, ft_strlen(s));
 }
 
-void	init_texport(t_env *e, int index)
+void	init_tenv(t_env *e, int index)
 {
 	e->value = 0;
 	e->name = 0;
 	e->index = index;
 }
 
-t_env	*create_texport(char *s, int index)
+t_env	*create_tenv(char *s, int index)
 {
 	int	i;
 	t_env	*e;
@@ -46,7 +46,7 @@ t_env	*create_texport(char *s, int index)
 	e = malloc(sizeof(t_env));
 	if (!e)
 		exit(1);
-	init_texport(e, index);
+	init_tenv(e, index);
 	//	printf("get export value %s\n", s);
 	if (is_quote(s[i]))
 	{
@@ -62,7 +62,7 @@ t_env	*create_texport(char *s, int index)
 	{
 		while (s[i])
 		{
-			if (ft_strchr(";|\n ", s[i]))
+			if (ft_strchr(";|\t\v\n\f\r ", s[i]))
 				break;
 			i++;
 		}
@@ -73,18 +73,36 @@ t_env	*create_texport(char *s, int index)
 	return (e);
 }
 
-t_list	*create_list(char *s)
+int	is_syntax_ok(t_env *e)
+{
+	int	i;
+
+	i = 0;
+	while (e->name[i])
+	{
+	//	printf("%c %d %d\n", e->name[i], ft_isalnum(e->name[i]), ft_isdigit(e->name[i]));
+		if (!ft_isalnum(e->name[i]) && !ft_isdigit(e->name[i]))
+		{
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	ft_export(t_mini *m)
 {
 	int	i;
 	int	index;
-	t_list	*l;
 	char	*p;
 	t_list	*new;
+	t_env	*e;
+	char	*s;
 
 	i = 0;
-	l = 0;
+	s = m->s;
 	index = 0;
-	p = s;
+	p = m->s;
 	if (s)
 	{
 	while (s[i])
@@ -92,14 +110,22 @@ t_list	*create_list(char *s)
 		p = ft_strnstr(p, "export ", ft_strlen(p));
 		if (p)
 		{
-			printf("i %d, p %s\n", i, p);
-			new = ft_lstnew(create_texport(p, index++));
-			ft_lstadd_back(&l, new);
+//			printf("i %d, p %s\n", i, p);
+			e = create_tenv(p, index++);
+			new = ft_lstnew(e);
+			if (new && is_syntax_ok(e))
+				ft_lstadd_back(&m->env_list, new);
+			else if (e)
+			{
+				printf(" export: `%s=%s': not a valid identifier\n", e->name, e->value);
+				return (FAILURE);
+			}
+
 			p++;
 		}
 		else
 			break ;
 	}
 	}
-	return (l);
+	return (SUCCESS);
 }

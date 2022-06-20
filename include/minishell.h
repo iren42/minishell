@@ -130,8 +130,8 @@ char	*get_cmd(char **env, char *cmd);
 void	free_split(char **split);
 void	del_cmdtab(void *o);
 
-char	*expander(char *s);
-t_list	*create_list(char *s);
+char	*expander(t_mini *m);
+//t_list	*create_list(char *s);
 char	*var_substitution(t_list *export_list, char *s);
 char	*rm_superflous(char *s);
 int	matching(char b1, char b2);
@@ -146,4 +146,6 @@ void	print_prompt();
 
 int	ft_pwd(t_list *cmdtab_list);
 int	ft_env(t_mini *m);
+int	ft_export(t_mini *m);
+
 #endif

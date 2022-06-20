@@ -5,6 +5,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "libft.h"
 
@@ -146,4 +147,6 @@ void	print_prompt();
 
 int	ft_pwd(t_list *cmdtab_list);
 int	ft_env(t_mini *m);
+
+int	executor(t_mini *mini);
 #endif

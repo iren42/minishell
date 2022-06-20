@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/20 21:12:43 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/20 23:19:07 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	main(int ac, char **av, char **env)
 	//print_list(mini.env_list, &print_env);
 
 		print_tmini(&mini);
+
+executor(&mini);
 		
 		ft_lstclear(&mini.env_list, del_env);
 		ft_lstclear(&mini.token_list, del_token);

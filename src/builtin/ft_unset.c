@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 05:12:41 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 10:54:03 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 16:35:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,6 @@ t_list	*find_name_from_env(t_list *env_list, char *name) // return prev
 	return (0);
 }
 
-char	*get_arg_value(void *o)
-{
-	t_arg	*a;
-
-	a = (t_arg *)o;
-	return (a->value);
-}
 
 int	ft_unset(t_cmdtab *c)
 {

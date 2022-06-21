@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/20 14:31:53 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 15:38:28 by iren             ###   ########.fr       */
+/*   Created: 2022/06/21 12:07:54 by iren              #+#    #+#             */
+/*   Updated: 2022/06/21 15:36:53 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_cmdtab	*c)
+int	ft_exit(t_cmdtab *c)
 {
-	char	*pwd;
-	char	buf[BUF_SIZE];
-	
-	pwd = getcwd(buf, BUF_SIZE);
-	if (pwd)
+	t_mini *m;
+
+	if (c)
 	{
-		ft_putstr_fd(pwd, STDIN);
-		ft_putstr_fd("\n", STDIN);
-		return (SUCCESS);
+		// exit should not work if arg_list != 0
+		if (c->arg_list != 0)
+		{
+			print_error("shell: exit", NULL, 0, "too many arguments");
+			return (FAILURE);
+		}
+	m = c->m;
+/*		ft_lstclear(&m->token_list, del_token);
+		ft_lstclear(&m->cmdtab_list, del_cmdtab);
+
+		free(m->s);
+		ft_lstclear(&m->env_list, del_env);
+		rl_clear_history();
+	*/	exit(0);
+
 	}
-	print_error("shell: pwd", NULL, 0, "BUF_SIZE too small");
-	return (FAILURE);
+	return (SUCCESS);
 }

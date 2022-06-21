@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 03:40:48 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 16:50:03 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int	little_str_in_list(char *s, t_func_cmd_sub *f)
 
 	if (f->quote_list != 0)
 	{
-		//		printf("ccc %c\n", get_char(ft_lstlast(f->quote_list)->content));
-		q = get_char(ft_lstlast(f->quote_list)->content);
+		//		printf("ccc %c\n", get_quote_char(ft_lstlast(f->quote_list)->content));
+		q = get_quote_char(ft_lstlast(f->quote_list)->content);
 		if (q == '\'')
 			return (0);
 	}
@@ -167,23 +167,6 @@ char	*join_str_in_list(t_func_cmd_sub *f, char *s, int i)
 
 }
 
-char	*ft_getenv(char *name, t_list *env_list)
-{
-	t_list *l;
-
-	l = env_list;
-	if (env_list != 0)
-	{
-		while (l)
-		{
-			if (ft_memcmp(get_env_name(l->content), name, ft_strlen(name)) == 0)
-				return (get_env_name(l->content) + ft_strlen(name) + 1);
-			l = l->next;
-		}
-	}
-	return (0);
-
-}
 
 char	*little_str_is_in_env_or_not(t_func_cmd_sub *f, char *s, int i)
 {
@@ -197,7 +180,7 @@ char	*little_str_is_in_env_or_not(t_func_cmd_sub *f, char *s, int i)
 	if (s)
 	{
 		if (f->quote_list)
-			q = get_char(ft_lstlast(f->quote_list)->content);
+			q = get_quote_char(ft_lstlast(f->quote_list)->content);
 
 		name = ft_substr(s, i + 1, len_word(&s[i]));
 		if (q == '"' || q == 0)
@@ -234,20 +217,10 @@ void pop1(t_list **l, char *s, int *index_close)
 
 	i = 0;
 	tmp = *l;
-	index_open = get_index(tmp->content);
+	index_open = get_quote_index(tmp->content);
 	*l = (*l)->next;
-	ft_lstdelone(tmp, &del_tfunc_rm_quotes);
+	ft_lstdelone(tmp, &del_quote);
 }
-
-void	print_quote(void *o)
-{
-	t_quote *f;
-
-	f = (t_quote *)o;
-	printf("q index %d\n", f->index);
-	printf("q c %c\n", f->c);
-}
-
 char	*var_substitution(t_list *list, char *s)
 {
 	t_func_cmd_sub	f;
@@ -264,7 +237,7 @@ char	*var_substitution(t_list *list, char *s)
 		{
 			if (f.quote_list)
 			{
-				if (matching(get_char(f.quote_list->content), s[i]))
+				if (matching(get_quote_char(f.quote_list->content), s[i]))
 					pop1(&f.quote_list, s, &i);
 				else
 					push(&f.quote_list, s[i], &s[i], i);				
@@ -284,7 +257,7 @@ char	*var_substitution(t_list *list, char *s)
 		i++;
 	}
 	f.res = join_regular_str(&f, i, s);
-	ft_lstclear(&f.quote_list, &del_tfunc_rm_quotes);
+	ft_lstclear(&f.quote_list, &del_quote);
 	//	printf("var_sub() final s %s\n", f.res);
 	}
 	return (f.res);

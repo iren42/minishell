@@ -1,29 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   t_quote_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/20 14:31:53 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 15:38:28 by iren             ###   ########.fr       */
+/*   Created: 2022/06/21 16:24:35 by iren              #+#    #+#             */
+/*   Updated: 2022/06/21 16:25:56 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_cmdtab	*c)
+int	get_quote_index(void *o)
 {
-	char	*pwd;
-	char	buf[BUF_SIZE];
-	
-	pwd = getcwd(buf, BUF_SIZE);
-	if (pwd)
-	{
-		ft_putstr_fd(pwd, STDIN);
-		ft_putstr_fd("\n", STDIN);
-		return (SUCCESS);
-	}
-	print_error("shell: pwd", NULL, 0, "BUF_SIZE too small");
-	return (FAILURE);
+	t_quote	*f;
+
+	f = (t_quote *)o;
+	return (f->index);
+
 }
+
+
+char	get_quote_char(void *o)
+{
+	t_quote	*f;
+
+	f = (t_quote *)o;
+	return (f->c);
+}
+
+void	del_quote(void *o)
+{
+	t_quote *f;
+	f = (t_quote *)o;
+	free(f);
+}
+
+
+void	print_quote(void *o)
+{
+	t_quote *f;
+
+	f = (t_quote *)o;
+	printf("q index %d\n", f->index);
+	printf("q c %c\n", f->c);
+}
+
+

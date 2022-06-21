@@ -6,22 +6,12 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 01:55:11 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 16:23:53 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void	del_tenv(void *o)
-{
-	t_env	*e;
-
-	e = (t_env *)o;
-	free(e->name);
-	free(e->value);
-	free(e);
-}
 
 char	*expander(t_mini *m)
 {

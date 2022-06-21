@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 10:54:35 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 16:30:12 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,6 @@ void	init_cmdtab(t_cmdtab *c, t_mini *m)
 	c->m = m;
 }
 
-int	get_token_type(t_token *t)
-{
-	if (t)
-		return (t->type);
-	return (0);
-}
-char	*get_token_value(t_token *t)
-{
-	if (t)
-		return (t->value);
-	return (0);
-}
 
 int	is_cmd(t_token *t)
 {
@@ -112,36 +100,6 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 		ft_lstadd_back(&c->redir_list, ft_lstnew(new));
 	}
 }
-
-void	del_redir(void *o)
-{
-	t_redir *r;
-
-	r = (t_redir *)o;
-	free(r->filename);
-	free(r);
-}
-
-void	del_arg(void *o)
-{
-	t_arg *a;
-
-	a = (t_arg *)o;
-	free(a->value);
-	free(a);
-}
-
-void	del_cmdtab(void *o)
-{
-	t_cmdtab	*c;
-
-	c = (t_cmdtab *)o;
-	free(c->cmd);
-	ft_lstclear(&c->arg_list, del_arg);
-	ft_lstclear(&c->redir_list, del_redir);
-	free(c);
-}
-
 t_list	*parser(t_mini *m)
 {
 //	printf("\n--IN PARSER--\n");

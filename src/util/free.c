@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/20 14:31:53 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 15:38:28 by iren             ###   ########.fr       */
+/*   Created: 2022/06/15 20:57:54 by isabelle          #+#    #+#             */
+/*   Updated: 2022/06/21 17:00:39 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_cmdtab	*c)
+
+void	free_split(char **split)
 {
-	char	*pwd;
-	char	buf[BUF_SIZE];
-	
-	pwd = getcwd(buf, BUF_SIZE);
-	if (pwd)
+	int	i;
+
+	i = 0;
+	if (split != 0)
 	{
-		ft_putstr_fd(pwd, STDIN);
-		ft_putstr_fd("\n", STDIN);
-		return (SUCCESS);
+		while (split[i] != 0)
+		{
+			free(split[i]);
+			i++;
+		}
+		free(split);
+		split = 0;
 	}
-	print_error("shell: pwd", NULL, 0, "BUF_SIZE too small");
-	return (FAILURE);
 }
+
+

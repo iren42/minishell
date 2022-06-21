@@ -6,25 +6,13 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 11:26:03 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 17:11:06 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_env_name(void *o)
-{
-	t_env	*e;
-	e = (t_env *)o;
-	//	printf("env name %s\n", e->name);
-	return (e->name);
-}
-char	*get_env_value(void *o)
-{
-	t_env	*e;
-	e = (t_env *)o;
-	return (e->value);
-}
+
 void	separate_name_value(t_env *e, char *s)
 {
 	int	i;

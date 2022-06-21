@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/21 09:55:21 by isabelle         ###   ########.fr        #
+#    Updated: 2022/06/21 17:04:08 by isabelle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,21 +19,33 @@ HEADER	= include/minishell.h
 DIR_SOURCES	= src/
 
 SOURCES		=	minishell.c \
-				print.c \
-				parser/lexer.c \
-				parser/parser.c \
-				ft_splitsh.c \
+				signal_handler.c \
 				ft_error.c \
+				\
+				parser/lexer.c \
+				parser/lexer_utils.c \
+				parser/parser.c \
 				parser/get_cmd.c \
-				free.c \
+				\
 				expander/expander.c \
 				expander/var_substitution.c \
 				expander/rm_superflous.c \
-				signal_handler.c \
+				\
 				builtin/ft_pwd.c \
 				builtin/ft_env.c \
 				builtin/ft_export.c \
-				builtin/ft_unset.c
+				builtin/ft_unset.c \
+				builtin/ft_exit.c \
+				builtin/ft_cd.c\
+				\
+				util/t_quote_utils.c \
+				util/t_cmdtab_utils.c \
+				util/t_env_utils.c \
+				util/t_token_utils.c \
+				util/t_redir_utils.c \
+				util/t_arg_utils.c \
+				util/free.c \
+				util/print.c \
 				
 
 

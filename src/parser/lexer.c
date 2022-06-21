@@ -6,32 +6,12 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/18 20:30:27 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/21 16:26:56 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_quote(int c)
-{
-	if (c == '"' || c == '\'')
-		return (c);
-	return (0);
-}
-
-int	is_spe_char(int c)
-{
-	if (c == '>' || c == '<' || c == ';' || c == '|')
-		return (1);
-	return (0);
-}
-
-int	ft_isspace(int c)
-{
-	if (c == '\t' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
-		return (1);
-	return (0);
-}
 
 char	*get_tokenvalue(char *s, int *to_set)
 {

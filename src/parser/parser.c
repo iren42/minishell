@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 16:30:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 17:41:28 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,29 @@ int	is_cmd(t_token *t)
 {
 	char	*buff;
 	int	is_cmd;
+	char	builtins[] =  "export cd pwd echo unset env exit";
+	char	**split_built;
+	int	i;
 
 	buff = 0;
+	i = 0;
+	split_built = ft_split(builtins, ' ');
+	if (!split_built)
+		exit(1);
+	while (split_built[i])
+	{
+		if (ft_memcmp(split_built[i], t->value, ft_strlen(t->value) + 1) == 0)
+		{
+			free_split(split_built);
+			return (1);
+		}
+		i++;
+	}
 	is_cmd = access(t->value, X_OK);
 	if (is_cmd == -1)
 		buff = get_cmd(t->m->env_list, t->value);
 	//	printf("buff %s\n",  buff);
+	free_split(split_built);
 	if (buff == 0 && is_cmd == -1)
 		return (0);
 	free(buff);
@@ -55,6 +72,11 @@ int	fill_cmd(t_token *t, t_cmdtab *ct, int *ret)
 			ct->cmd = get_cmd(t->m->env_list, t->value);
 			if (ct->cmd)
 				(*ret)++;
+			else
+			{
+				ct->cmd = ft_strdup(t->value);
+				(*ret)++;
+			}
 		}
 	}
 	return (0);
@@ -102,7 +124,7 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 }
 t_list	*parser(t_mini *m)
 {
-//	printf("\n--IN PARSER--\n");
+	//	printf("\n--IN PARSER--\n");
 	t_list	*cmd_list;
 	t_cmdtab	*new;
 	t_list	*l;
@@ -116,30 +138,30 @@ t_list	*parser(t_mini *m)
 	init_cmdtab(new, m);
 	if (l)
 	{
-	while (get_token_type(l->content) != NL)
-	{
-		ret = 0;
-		//	print_token(l->content);
-		fill_cmd(l->content, new, &ret);
-		fill_args(l->content, new, &ret);
-		fill_redir(l->content, new, &ret);
-		//	printf("cmd? %s\n",new->cmd);
-		if (get_token_type(l->content) == PIPE || get_token_type(l->content) == SEMI)
+		while (get_token_type(l->content) != NL)
 		{
-	//		printf("add in list\n");
-			ft_lstadd_back(&cmd_list, ft_lstnew(new));
-			new = malloc(sizeof(t_cmdtab));
-			if (!new)
-				exit(1);
-			init_cmdtab(new, m);
-			//	ret = 0;
+			ret = 0;
+			//	print_token(l->content);
+			fill_cmd(l->content, new, &ret);
+			fill_args(l->content, new, &ret);
+			fill_redir(l->content, new, &ret);
+			//	printf("cmd? %s\n",new->cmd);
+			if (get_token_type(l->content) == PIPE || get_token_type(l->content) == SEMI)
+			{
+				//		printf("add in list\n");
+				ft_lstadd_back(&cmd_list, ft_lstnew(new));
+				new = malloc(sizeof(t_cmdtab));
+				if (!new)
+					exit(1);
+				init_cmdtab(new, m);
+				//	ret = 0;
+			}
+			l = l->next;
 		}
-		l = l->next;
-	}
-	ft_lstadd_back(&cmd_list, ft_lstnew(new));
-//	printf("--OUT PARSER--\n");
-	//	print_list(cmd_list, );
-//	ft_lstclear(m->token_list, &del_token);
+		ft_lstadd_back(&cmd_list, ft_lstnew(new));
+		//	printf("--OUT PARSER--\n");
+		//	print_list(cmd_list, );
+		//	ft_lstclear(m->token_list, &del_token);
 	}
 	return (cmd_list);
 

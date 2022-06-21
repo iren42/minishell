@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 15:44:46 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 19:56:01 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	get_len_env_name(char *env)
 	return (i);
 }
 
-t_list	*init_env(char **env)
+t_list	*init_env_list(char **env)
 {
 	t_env	*new;
 	char	*value;
@@ -69,16 +69,6 @@ t_list	*init_env(char **env)
 	return (env_list);
 }
 
-void	del_env(void *o)
-{
-	t_env	*e;
-
-	e = (t_env *)o;
-	free(e->name);
-	free(e->value);
-	free(e);
-}
-
 int	main(int ac, char **av, char **env)
 {
 	char	*s;
@@ -94,7 +84,7 @@ int	main(int ac, char **av, char **env)
 	if (ac > 1)
 		ft_error(TOO_MANY_ARG, 1);
 	signal_handler();
-	env_list = init_env(env);
+	env_list = init_env_list(env);
 //	prompt = ft_strdup(PUR"> "RESET);
 	while (1)
 	{
@@ -117,7 +107,7 @@ int	main(int ac, char **av, char **env)
 	//	ft_unset(mini.cmdtab_list->content);
 //		ft_env(mini.cmdtab_list->content);
 //		ft_pwd(mini.cmdtab_list->content);
-//		ft_export(mini.cmdtab_list->content);
+	//	ft_export(mini.cmdtab_list->content);
 //		ft_exit(mini.cmdtab_list->content);
 		ft_cd(mini.cmdtab_list->content);
 		ft_lstclear(&mini.token_list, del_token);

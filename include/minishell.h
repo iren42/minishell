@@ -72,6 +72,10 @@ char *get_env_value(void *o);
 int get_len_env_name(char *env);
 void del_env(void *o);
 char *ft_getenv(char *name, t_list *env_list);
+t_env	*ft_getenv_ptr(char *name, t_list *env_list);
+t_env	*create_new_env(char *name, char *value);
+t_env	*create_tenv(t_arg *a);
+void	separate_name_value(t_env *e, char *s);
 
 char get_quote_char(void *o);
 void del_quote(void *o);

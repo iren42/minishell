@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 16:26:56 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 01:10:29 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,42 @@
 
 char	*get_tokenvalue(char *s, int *to_set)
 {
-	int		i;
-	int		j;
+	int		len;
+	int		start;
 	char	*value;
+	char	q;
 
-	i = 0;
-	j = 0;
+	len = 0;
+	start = 0;
 	value = 0;
-	if (ft_strchr(";|\n", s[j]))
+	if (ft_strchr("|\n", s[start])) // token for pipe and NL
 	{
-		value = (0);
-		i++;
+		len++;
 	}
 	else
 	{
-		if (ft_strchr("<>", s[i]))
-			j++;
-		if (s[j] == '>')
-			j++;
-		while (ft_isspace(s[j]))
-			j++;
-		while (s[i + j] && !is_spe_char(s[i + j]) && !ft_isspace(s[i + j]))
+		if (ft_strchr("<>", s[0])) // skip <>
+			start++;
+		while (ft_isspace(s[start])) // skip spaces
+			start++;
+		if (is_quote(s[start]))
 		{
-			i++;
+			q = s[start + len++];
+			while (s[start + len] && q != s[start + len])
+				len++;
+			len++;
 		}
-		value = malloc(sizeof(char) * (i + 1));
-		value = ft_memmove(value, &s[j], i);
-		value[i] = 0;
+		else
+		{
+			while (s[len + start] && !is_spe_char(s[len + start]) && !ft_isspace(s[len + start]))
+				len++;
+		}
+		value = malloc(sizeof(char) * (len + 1));
+		value = ft_memmove(value, &s[start], len);
+		value[len] = 0;
 	}
-	//	printf("value %s. i %d, j %d\n", value, i, j);
-	*to_set += i + j;
+	printf("value %s. len %d, start %d\n", value, len, start);
+	*to_set += len + start;
 	return (value);
 }
 
@@ -94,20 +100,20 @@ void create_token_list(char *s, t_list **l, t_mini *m)
 	i = 0;
 	if (s)
 	{
-	while (s[i])
-	{
-		if (!ft_isspace(s[i]))
+		while (s[i])
 		{
-			//	printf("&s[i] %s\n", &s[i]);
-			new = ft_lstnew(create_token(&s[i], &i, m));
-			ft_lstadd_back(l, new);
+			if (!ft_isspace(s[i]))
+			{
+				//	printf("&s[i] %s\n", &s[i]);
+				new = ft_lstnew(create_token(&s[i], &i, m));
+				ft_lstadd_back(l, new);
 
+			}
+			else
+				i++;
 		}
-		else
-			i++;
-	}
-	new = ft_lstnew(create_token("\n", &i, m));
-	ft_lstadd_back(l, new);
+		new = ft_lstnew(create_token("\n", &i, m));
+		ft_lstadd_back(l, new);
 	}
 }
 
@@ -116,6 +122,7 @@ t_list	*lexer(t_mini *m)
 	t_list	*l;
 
 	l = 0;
+	printf("lexer s %s\n", m->s);
 	create_token_list(m->s, &l, m);
 	//	print_lst(l);
 	return (l);

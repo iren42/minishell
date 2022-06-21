@@ -23,6 +23,7 @@
 # define YEL "\x1B[33m"
 # define BLU "\x1B[34m"
 # define PUR "\x1B[35m"
+# define WHITE "\e[0;37m"
 struct s_mini;
 typedef enum e_token_type
 {

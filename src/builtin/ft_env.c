@@ -6,23 +6,24 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 14:24:27 by iren              #+#    #+#             */
-/*   Updated: 2022/06/20 16:00:05 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 04:35:02 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //int	ft_env(t_list *cmdtab_list)
-int	ft_env(t_mini *mini)
+int	ft_env(t_cmdtab *c)
 {
 	int	i;
+	t_list	*l;
 
 	i = 0;
-	while (mini->env[i])
+	l = c->m->env_list;
+	while (l)
 	{
-		printf("%s\n", mini->env[i]);
-		i++;
+		printf("%s=%s\n", get_env_name(l->content), get_env_value(l->content));
+		l = l->next;
 	}
-	// print list texport
 	return (SUCCESS);
 }

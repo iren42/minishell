@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 20:53:42 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 02:30:47 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 04:47:43 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ static char	*find_path(t_list *env_list)
 	{
 		while (l)
 		{
-			if (ft_memcmp(get_env_name(l->content), "PATH=", 5) == 0)
-				return (get_env_name(l->content) + 5);
+			if (ft_memcmp(get_env_name(l->content), "PATH", 5) == 0)
+			{
+				return (get_env_value(l->content));
+			}
 			l = l->next;
 		}
 	}

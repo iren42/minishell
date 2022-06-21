@@ -68,6 +68,7 @@ typedef struct	s_cmdtab
 	char		*cmd;
 	t_list		*arg_list;
 	t_list		*redir_list;
+	struct s_mini	*m;
 } t_cmdtab;
 
 typedef struct	s_mini
@@ -145,10 +146,11 @@ void	del_env(void *o);
 void	signal_handler();
 void	print_prompt();
 
-int	ft_pwd(t_list *cmdtab_list);
-int	ft_env(t_mini *m);
-int	ft_export(t_mini *m);
+int	ft_pwd(t_cmdtab *c);
+int	ft_env(t_cmdtab *c);
+int	ft_export(t_cmdtab *c);
 char	*get_env_name(void *o);
 char	*get_env_value(void *o);
+int	get_len_env_name(char *env);
 
 #endif

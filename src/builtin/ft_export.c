@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 02:14:23 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 04:36:12 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,54 +35,28 @@ void	separate_name_value(t_env *e, char *s)
 		i++;
 	}
 	//	printf("s[i] %c, i %d\n", s[i], i);
-	e->name = ft_substr(s, 0, i);
-	e->value = ft_substr(s, i + 1, ft_strlen(s));
 }
 
-void	init_tenv(t_env *e, int index)
+void	init_tenv(t_env *e)
 {
 	e->value = 0;
 	e->name = 0;
-	e->index = index;
 }
 
-t_env	*create_tenv(char *s, int index)
+t_env	*create_tenv(t_arg *a)
 {
-	int	i;
+	int	len;
 	t_env	*e;
-	char	q;
-	char	*namevalue;
 
-	i = 0;
-	s += 7;
-	q = 0;
 	e = malloc(sizeof(t_env));
 	if (!e)
 		exit(1);
-	init_tenv(e, index);
+	init_tenv(e);
+	len = get_len_env_name(a->value);
+	e->name = ft_substr(a->value, 0, len);
+	e->value = ft_substr(a->value, len + 1, ft_strlen(a->value));
+
 	//	printf("get export value %s\n", s);
-	if (is_quote(s[i]))
-	{
-		q = s[i++];
-		while (s[i] && q)
-		{
-			if (s[i] == q)
-				break;
-			i++;
-		}
-	}
-	else
-	{
-		while (s[i])
-		{
-			if (ft_strchr(";|\t\v\n\f\r ", s[i]))
-				break;
-			i++;
-		}
-	}
-	namevalue = ft_substr(s, 0, i);
-	separate_name_value(e, namevalue);
-	free(namevalue);
 	return (e);
 }
 
@@ -137,40 +111,29 @@ void	add_in_list_or_replace(t_mini *m, t_env *e)
 	}
 }
 
-int	ft_export(t_mini *m)
+int	ft_export(t_cmdtab *c)
 {
-	int	i;
-	int	index;
 	char	*p;
+	t_list	*l;
 	t_env	*e;
-	char	*s;
 
-	i = 0;
-	s = m->s;
-	index = 0;
-	p = m->s;
-	if (s)
+	if (c)
 	{
-		while (s[i])
+		l = c->arg_list;
+		while (l)
 		{
-			p = ft_strnstr(p, "export ", ft_strlen(p));
-			if (p)
+			//			printf("i %d, p %s\n", i, p);
+			e = create_tenv(l->content);
+			if (e && is_syntax_ok(e))
+				add_in_list_or_replace(c->m, e);
+			else if (e)
 			{
-				//			printf("i %d, p %s\n", i, p);
-				e = create_tenv(p, index++);
-				if (e && is_syntax_ok(e))
-					add_in_list_or_replace(m, e);
-				else if (e)
-				{
-					printf(" export: `%s=%s': not a valid identifier\n", e->name, e->value);
-					return (FAILURE);
-				}
-				else
-					return (FAILURE);
-				p++;
+				printf(" export: `%s=%s': not a valid identifier\n", e->name, e->value);
+				return (FAILURE);
 			}
 			else
-				break ;
+				return (FAILURE);
+			l = l->next;	
 		}
 	}
 	return (SUCCESS);

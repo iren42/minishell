@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 03:38:55 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 04:58:51 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	main(int ac, char **av, char **env)
 	t_mini	mini;
 	char	*prompt;
 	t_list	*env_list;
+	t_cmdtab *c;
 
 	(void)ac;
 	(void)av;
@@ -110,15 +111,16 @@ int	main(int ac, char **av, char **env)
 		mini.s = expander(&mini);
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
-//	print_list(mini.env_list, &print_env);
+	print_list(mini.env_list, &print_env);
 
 		print_tmini(&mini);
 		
+//		ft_env(mini.cmdtab_list->content);
+	//	ft_pwd(mini.cmdtab_list->content);
+	//	ft_export(mini.cmdtab_list->content);
 		ft_lstclear(&mini.token_list, del_token);
 		ft_lstclear(&mini.cmdtab_list, del_cmdtab);
-	//	ft_pwd(mini.cmdtab_list);
-	//	ft_env(&mini);
-		ft_export(&mini);
+
 		free(mini.s);
 		free(s);	
 	}

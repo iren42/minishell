@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/18 20:31:21 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/21 01:43:14 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	is_cmd(t_token *t)
 	buff = 0;
 	is_cmd = access(t->value, X_OK);
 	if (is_cmd == -1)
-		buff = get_cmd(t->m->env, t->value);
+		buff = get_cmd(t->m->env_list, t->value);
 	//	printf("buff %s\n",  buff);
 	if (buff == 0 && is_cmd == -1)
 		return (0);
@@ -63,7 +63,7 @@ int	fill_cmd(t_token *t, t_cmdtab *ct, int *ret)
 		}
 		else
 		{
-			ct->cmd = get_cmd(t->m->env, t->value);
+			ct->cmd = get_cmd(t->m->env_list, t->value);
 			if (ct->cmd)
 				(*ret)++;
 		}

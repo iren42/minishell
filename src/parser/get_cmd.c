@@ -6,21 +6,24 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 20:53:42 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/15 20:53:53 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/21 02:30:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*find_path(char **env)
+static char	*find_path(t_list *env_list)
 {
-	if (env != 0)
+	t_list	*l;
+
+	l = env_list;
+	if (env_list != 0)
 	{
-		while (*env != 0)
+		while (l)
 		{
-			if (ft_strncmp("PATH=", *env, 5) == 0)
-				return (*env + 5);
-			env++;
+			if (ft_memcmp(get_env_name(l->content), "PATH=", 5) == 0)
+				return (get_env_name(l->content) + 5);
+			l = l->next;
 		}
 	}
 	return (0);
@@ -33,13 +36,13 @@ static void	init_get_cmd(char **res, char ***splitpaths, int *i)
 	*i = 0;
 }
 
-static char	**get_splitpaths(char **env)
+static char	**get_splitpaths(t_list *env_list)
 {
 	char	**res;
 	char	*path;
 
 	res = 0;
-	path = find_path(env);
+	path = find_path(env_list);
 	if (path == 0)
 		return (0);
 	res = ft_split(path, ':');
@@ -70,14 +73,14 @@ static char	*join(int i, char **splitpaths, char *cmd)
 	return (res);
 }
 
-char	*get_cmd(char **env, char *cmd)
+char	*get_cmd(t_list *env_list, char *cmd)
 {
 	char	*res;
 	char	**splitpaths;
 	int		i;
 
 	init_get_cmd(&res, &splitpaths, &i);
-	splitpaths = get_splitpaths(env);
+	splitpaths = get_splitpaths(env_list);
 	if (splitpaths != 0)
 	{
 		while (splitpaths[i])

@@ -126,7 +126,7 @@ void	del_token(void *token);
 void	ft_error(char *m, int code);
 
 t_list	*parser(t_mini *m);
-char	*get_cmd(char **env, char *cmd);
+char	*get_cmd(t_list *env_list, char *cmd);
 void	free_split(char **split);
 void	del_cmdtab(void *o);
 
@@ -139,6 +139,7 @@ char	get_char(void *o);
 void	del_tfunc_rm_quotes(void *o);
 int	get_index(void *o);
 void	push(t_list **l, char c, char *s, int i);
+void	del_env(void *o);
 
 
 void	signal_handler();
@@ -147,5 +148,7 @@ void	print_prompt();
 int	ft_pwd(t_list *cmdtab_list);
 int	ft_env(t_mini *m);
 int	ft_export(t_mini *m);
+char	*get_env_name(void *o);
+char	*get_env_value(void *o);
 
 #endif

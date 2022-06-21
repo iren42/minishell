@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 00:05:24 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 01:55:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*expander(t_mini *m)
 
 	m->s = rm_superflous(m->s);
 //	create_list(m);
-		print_list(m->env_list, print_env);
+//		print_list(m->env_list, print_env);
 		
 	res = var_substitution(m->env_list, m->s);
 //	ft_lstclear(&env_list, del_tenv);

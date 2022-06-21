@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/21 18:41:02 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/21 19:35:48 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ char	**ft_split_cmd(t_mini *mini, int cmd_num)
 	split_cmd = (char **)malloc(sizeof(char *) * (size + 2));
 	if (!split_cmd)
 		exit(1); // malloc error
-	split_cmd[0] = ((t_cmdtab *)(tmp_cmdtab_list->content))->cmd;
+	split_cmd[0] = ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd);
+	if (!split_cmd[i])
+		exit(1); // malloc error
 //	split_cmd[0] = ft_strdup("ls");
 	tmp_arg_list = ((t_cmdtab *)(tmp_cmdtab_list->content))->arg_list;
 	i = 1;
@@ -93,12 +95,16 @@ int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
 	if (pid == 0)
 	{
 		close(pipefd[0]);
+//		dup2(pipefd[1], STDOUT_FILENO);
+//		close(pipefd[1]);
 		execve(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd, split_cmd, split_env);
 		exit(126); // execve error
 	}
 	else
 	{
 		close(pipefd[1]);
+//		dup2(pipefd[0], STDIN_FILENO);
+//		close(pipefd[0]);
 		if (waitpid(pid, &status, 0) == -1)
 			exit(1); // waitpid error
 	}
@@ -138,9 +144,15 @@ int	executor(t_mini *mini)
 				exit(1); // waitpid error
 		}
 */		tmp_cmdtab_list = tmp_cmdtab_list->next;
-//		free_split(split_cmd);
+		free_split(split_cmd);
 		i++;
 	}
-	free_split(split_env);
+/*	i = 0;
+	while (i < nb_cmd)
+	{
+		waitpid(-1, &status, 0);
+		i++;
+	}
+*/	free_split(split_env);
 	return (status);
 }

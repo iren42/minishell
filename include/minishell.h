@@ -97,7 +97,7 @@ typedef struct s_quote
 } t_quote;
 typedef struct s_func_cmd_sub
 {
-	t_list	*l;
+	t_list	*env_list;
 	t_list	*quote_list;
 	char	*res;
 	char	*tenv_value;

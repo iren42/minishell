@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 02:30:22 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 03:38:55 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,32 @@ void	init_tmini(char *s,t_list *env_list, t_mini *mini)
 	mini->env_list = env_list;
 	mini->fd = 0;
 }
+
+int	get_len_env_name(char *env)
+{
+	int	i;
+
+	i = 0;
+	if (env)
+	{
+	while (env[i])
+	{
+		if (env[i] == '=')
+		{
+			return (i);
+		}
+		i++;
+	}
+	}
+	return (i);
+}
+
 t_list	*init_env(char **env)
 {
 	t_env	*new;
 	char	*value;
 	t_list	*env_list;
+	int	len;
 	int	i;
 
 	env_list = 0;
@@ -37,11 +58,10 @@ t_list	*init_env(char **env)
 			new = malloc(sizeof(t_env));
 			if (!new)
 				exit(1);
-			new->name = ft_strdup(env[i]);
-			new->value = 0;
-			value = getenv(env[i]);
-			if (value)
-				new->value = ft_strdup(value);
+			len = get_len_env_name(env[i]);
+				new->name = ft_substr(env[i], 0,len);
+				new->value = ft_substr(env[i], len + 1, ft_strlen(env[i]));
+		//	print_env(new);
 			ft_lstadd_back(&env_list, ft_lstnew(new));
 			i++;
 		}

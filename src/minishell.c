@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 19:56:01 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 23:15:34 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,6 @@ void	init_tmini(char *s,t_list *env_list, t_mini *mini)
 	mini->cmdtab_list = 0;
 	mini->env_list = env_list;
 	mini->fd = 0;
-}
-
-int	get_len_env_name(char *env)
-{
-	int	i;
-
-	i = 0;
-	if (env)
-	{
-	while (env[i])
-	{
-		if (env[i] == '=')
-		{
-			return (i);
-		}
-		i++;
-	}
-	}
-	return (i);
 }
 
 t_list	*init_env_list(char **env)
@@ -101,15 +82,15 @@ int	main(int ac, char **av, char **env)
 		mini.s = expander(&mini);
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
-//	print_list(mini.env_list, &print_env);
 
 		print_tmini(&mini);
-	//	ft_unset(mini.cmdtab_list->content);
-//		ft_env(mini.cmdtab_list->content);
+		ft_unset(mini.cmdtab_list->content);
 //		ft_pwd(mini.cmdtab_list->content);
-	//	ft_export(mini.cmdtab_list->content);
+//		ft_export(mini.cmdtab_list->content);
+		ft_env(mini.cmdtab_list->content);
 //		ft_exit(mini.cmdtab_list->content);
-		ft_cd(mini.cmdtab_list->content);
+	//	ft_cd(mini.cmdtab_list->content);
+//		ft_echo(mini.cmdtab_list->content);
 		ft_lstclear(&mini.token_list, del_token);
 		ft_lstclear(&mini.cmdtab_list, del_cmdtab);
 

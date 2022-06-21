@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 16:23:02 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 20:12:10 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 22:44:56 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_getenv(char *name, t_list *env_list)
 		while (l)
 		{
 			if (ft_memcmp(get_env_name(l->content), name, ft_strlen(name) + 1) == 0)
-			//	return (get_env_name(l->content) + ft_strlen(name) + 1);
+				//	return (get_env_name(l->content) + ft_strlen(name) + 1);
 				return (get_env_value(l->content));
 			l = l->next;
 		}
@@ -62,7 +62,10 @@ char	*get_env_name(void *o)
 
 	e = (t_env *)o;
 	//	printf("env name %s\n", e->name);
+	if (e)
 	return (e->name);
+	else
+		return (0);
 }
 
 char	*get_env_value(void *o)
@@ -80,27 +83,34 @@ int	is_syntax_ok(char *s)
 	i = 0;
 	if (s)
 	{
-	while (s[i])
-	{
-		if (!ft_isalnum(s[i]) && !ft_isdigit(s[i]))
-			return (0);
-		i++;
-	}
+		while (s[i])
+		{
+			if (!ft_isalnum(s[i]) && !ft_isdigit(s[i]) && s[i] != '_')
+				return (0);
+			i++;
+		}
 	}
 	return (1);
 }
 
 
-void	separate_name_value(t_env *e, char *s)
+int	get_len_env_name(char *env)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] && s[i] != '=')
+	if (env)
 	{
-		i++;
+		while (env[i])
+		{
+			if (env[i] == '=')
+			{
+				return (i);
+			}
+			i++;
+		}
 	}
-	//	printf("s[i] %c, i %d\n", s[i], i);
+	return (0);
 }
 
 t_env	*create_tenv(t_arg *a)
@@ -114,9 +124,16 @@ t_env	*create_tenv(t_arg *a)
 	e->value = 0;
 	e->name = 0;
 	len = get_len_env_name(a->value);
-	e->name = ft_substr(a->value, 0, len);
-	e->value = ft_substr(a->value, len + 1, ft_strlen(a->value));
-
+	if (len != 0)
+	{
+		e->name = ft_substr(a->value, 0, len);
+		e->value = ft_substr(a->value, len + 1, ft_strlen(a->value));
+	}
+	else
+	{
+		del_env(e);
+		return (0);
+	}
 	//	printf("get export value %s\n", s);
 	return (e);
 }

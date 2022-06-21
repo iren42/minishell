@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 20:02:05 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 22:41:39 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	add_in_list_or_replace(t_mini *m, t_env *e)
 {
 	t_list	*l;
 	t_list	*new;
-	t_list	*prev;
+	t_env *e_from_envl;
 	int	add;
 
 	add = 0;
@@ -28,15 +28,16 @@ void	add_in_list_or_replace(t_mini *m, t_env *e)
 		{
 			if (ft_memcmp(get_env_name(l->content), e->name, ft_strlen(e->name) + 1) == 0)
 			{
-				// replace
-				prev->next = l->next;
-				ft_lstdelone(l, del_env);
-				new = ft_lstnew(e);
-				ft_lstadd_back(&m->env_list, new);
+				e_from_envl	= l->content;
+				//	print_env(e_from_envl);
+				free(e_from_envl->value);
+				e_from_envl->value = ft_strdup(e->value);
+				if (!e_from_envl)
+					exit(1);
+				del_env(e);
 				add = 1;
 				break ;
 			}
-			prev = l;
 			l = l->next;
 		}
 		if (add == 0)
@@ -60,15 +61,23 @@ int	ft_export(t_cmdtab *c)
 		{
 			//			printf("i %d, p %s\n", i, p);
 			e = create_tenv(l->content);
-			if (e && is_syntax_ok(e->name))
-				add_in_list_or_replace(c->m, e);
-			else if (e)
+			if (e)
 			{
-				printf(" export: `%s=%s': not a valid identifier\n", e->name, e->value);
-				return (FAILURE);
+				if (is_syntax_ok(e->name))
+					add_in_list_or_replace(c->m, e);
+				else
+				{
+					print_error("shell: export", get_arg_value(l->content), 0, "not a valid identifier");
+					del_env(e);
+					return (FAILURE);
+				}
 			}
 			else
+			{
+				if (!is_syntax_ok(get_arg_value(l->content)))
+				print_error("shell: export", get_arg_value(l->content), 0, "not a valid identifier");
 				return (FAILURE);
+			}
 			l = l->next;	
 		}
 	}

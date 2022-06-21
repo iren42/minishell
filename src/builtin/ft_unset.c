@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 05:12:41 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 16:35:11 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 23:23:33 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,16 @@ int	ft_unset(t_cmdtab *c)
 		while (l1)
 		{
 			name = get_arg_value(l1->content);
-		//		printf("name %s\n", name); 
 			if (!is_syntax_ok(name))
-			{
-				printf("unset: `%s': not a valid identifier\n", name);
-				return (FAILURE);
-
-			}
+				print_error("shell: unset", name, 0, "not a valid identifier");
 			prev = find_name_from_env(c->m->env_list , name);
 			if (prev)
 			{
-				//			print_env(prev->content);
 				if (ft_memcmp(name, get_env_name(prev->next->content), ft_strlen(name) + 1) == 0)
 				{
-					// delete
 					tmp = prev->next;
-					//			printf("found\n"); 
 					prev->next = prev->next->next;
 					ft_lstdelone(tmp, del_env);
-					return (SUCCESS);
 				}
 			}
 			l1 = l1->next;

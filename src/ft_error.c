@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 22:52:57 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 15:08:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 22:32:53 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	ft_error(char *msg, int code)
 
 void	print_error(char *where, char *file, int err, char *msg)
 {
-	if (!msg)
-		ft_putstr_fd("minishell: ", STDERR);
 	if (where)
 	{
 		ft_putstr_fd(where, STDERR);
@@ -29,7 +27,9 @@ void	print_error(char *where, char *file, int err, char *msg)
 	}
 	if (file)
 	{
+		ft_putstr_fd("`", STDERR);
 		ft_putstr_fd(file, STDERR);
+		ft_putstr_fd("'", STDERR);
 		ft_putstr_fd(": ", STDERR);
 	}
 	if (msg)

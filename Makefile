@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/21 17:04:08 by isabelle         ###   ########.fr        #
+#    Updated: 2022/06/21 23:41:42 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SOURCES		=	minishell.c \
 				builtin/ft_unset.c \
 				builtin/ft_exit.c \
 				builtin/ft_cd.c\
+				builtin/ft_echo.c\
 				\
 				util/t_quote_utils.c \
 				util/t_cmdtab_utils.c \

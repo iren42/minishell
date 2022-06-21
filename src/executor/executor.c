@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/21 19:35:48 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/21 23:19:27 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,31 +80,62 @@ char	**ft_split_env(t_mini *mini)
 	return (split_env);
 }
 
-int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
+int	ft_exec_pipe(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list, int cmd_num, int nb_cmd)
 {
 	int		status;
 	int		pipefd[2];
 	pid_t	pid;
 
 	status = 0;
+if (cmd_num != nb_cmd - 1)
+{
 	if (pipe(pipefd) == -1)
 		exit(1); // pipe error
+}
 	pid = fork();
 	if (pid == -1)
 		exit(1); // fork error
 	if (pid == 0)
 	{
+if (cmd_num != nb_cmd - 1)
+{
 		close(pipefd[0]);
-//		dup2(pipefd[1], STDOUT_FILENO);
-//		close(pipefd[1]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+}
 		execve(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd, split_cmd, split_env);
 		exit(126); // execve error
 	}
 	else
 	{
+if (cmd_num != nb_cmd - 1)
+{
 		close(pipefd[1]);
-//		dup2(pipefd[0], STDIN_FILENO);
-//		close(pipefd[0]);
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+}
+		if (waitpid(pid, &status, 0) == -1)
+			exit(1); // waitpid error
+	}
+	return (status);
+}
+
+int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
+{
+	int		status;
+	pid_t	pid;
+
+	status = 0;
+	pid = fork();
+	if (pid == -1)
+		exit(1); // fork error
+	if (pid == 0)
+	{
+		execve(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd, split_cmd, split_env);
+		exit(126); // execve error
+	}
+	else
+	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit(1); // waitpid error
 	}
@@ -121,6 +152,8 @@ int	executor(t_mini *mini)
 	int		i;
 	t_list	*tmp_cmdtab_list;
 
+	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
+		return (0); // ?
 //	status = 0;
 	split_env = ft_split_env(mini);
 	nb_cmd = ft_lstsize(mini->cmdtab_list);
@@ -129,7 +162,10 @@ int	executor(t_mini *mini)
 	while (i < nb_cmd)
 	{
 		split_cmd = ft_split_cmd(mini, i);
-		status = ft_exec(split_cmd, split_env, tmp_cmdtab_list);
+		if (nb_cmd == 1)
+			status = ft_exec(split_cmd, split_env, tmp_cmdtab_list);
+		else
+			status = ft_exec_pipe(split_cmd, split_env, tmp_cmdtab_list, i, nb_cmd);
 /*		pid = fork();
 		if (pid == -1)
 			exit(1); // fork error

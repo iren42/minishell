@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 10:48:30 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 11:26:03 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ int	is_syntax_ok(char *s)
 	int	i;
 
 	i = 0;
+	if (s)
+	{
 	while (s[i])
 	{
-		//	printf("%c %d %d\n", s[i], ft_isalnum(s[i]), ft_isdigit(s[i]));
 		if (!ft_isalnum(s[i]) && !ft_isdigit(s[i]))
-		{
 			return (0);
-		}
 		i++;
+	}
 	}
 	return (1);
 }

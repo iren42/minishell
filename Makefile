@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/21 01:20:28 by isabelle         ###   ########.fr        #
+#    Updated: 2022/06/21 09:55:21 by isabelle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ SOURCES		=	minishell.c \
 				signal_handler.c \
 				builtin/ft_pwd.c \
 				builtin/ft_env.c \
-				builtin/ft_export.c
+				builtin/ft_export.c \
+				builtin/ft_unset.c
 				
 
 

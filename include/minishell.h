@@ -152,5 +152,8 @@ int	ft_export(t_cmdtab *c);
 char	*get_env_name(void *o);
 char	*get_env_value(void *o);
 int	get_len_env_name(char *env);
+int	is_syntax_ok(char *s);
+int	ft_unset(t_cmdtab *c);
+char	*get_arg_value(void *o);
 
 #endif

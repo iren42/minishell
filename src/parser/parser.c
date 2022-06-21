@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 04:47:55 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 10:54:35 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	is_cmd(t_token *t)
 	is_cmd = access(t->value, X_OK);
 	if (is_cmd == -1)
 		buff = get_cmd(t->m->env_list, t->value);
-		printf("buff %s\n",  buff);
+	//	printf("buff %s\n",  buff);
 	if (buff == 0 && is_cmd == -1)
 		return (0);
 	free(buff);

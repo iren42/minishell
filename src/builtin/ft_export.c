@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 04:36:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/21 10:48:30 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,15 @@ t_env	*create_tenv(t_arg *a)
 	return (e);
 }
 
-int	is_syntax_ok(t_env *e)
+int	is_syntax_ok(char *s)
 {
 	int	i;
 
 	i = 0;
-	while (e->name[i])
+	while (s[i])
 	{
-		//	printf("%c %d %d\n", e->name[i], ft_isalnum(e->name[i]), ft_isdigit(e->name[i]));
-		if (!ft_isalnum(e->name[i]) && !ft_isdigit(e->name[i]))
+		//	printf("%c %d %d\n", s[i], ft_isalnum(s[i]), ft_isdigit(s[i]));
+		if (!ft_isalnum(s[i]) && !ft_isdigit(s[i]))
 		{
 			return (0);
 		}
@@ -124,7 +124,7 @@ int	ft_export(t_cmdtab *c)
 		{
 			//			printf("i %d, p %s\n", i, p);
 			e = create_tenv(l->content);
-			if (e && is_syntax_ok(e))
+			if (e && is_syntax_ok(e->name))
 				add_in_list_or_replace(c->m, e);
 			else if (e)
 			{

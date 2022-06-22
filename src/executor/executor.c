@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/21 23:19:27 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/21 23:45:04 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int	executor(t_mini *mini)
 	t_list	*tmp_cmdtab_list;
 
 	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
-		return (0); // ?
+		return (0); // cmd =(null)
 //	status = 0;
 	split_env = ft_split_env(mini);
 	nb_cmd = ft_lstsize(mini->cmdtab_list);
@@ -190,5 +190,6 @@ int	executor(t_mini *mini)
 		i++;
 	}
 */	free_split(split_env);
+printf("yo\n");
 	return (status);
 }

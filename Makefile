@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/22 15:28:47 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/22 15:43:28 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,6 @@ SOURCES		=	minishell.c \
 				expander/expander.c \
 				expander/var_substitution.c \
 				expander/rm_superflous.c \
-				signal_handler.c \
 				\
 			executor/executor.c \
 				\

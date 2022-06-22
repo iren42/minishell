@@ -31,6 +31,12 @@
 
 #define BUF_SIZE 254
 
+void	print_tmini(t_mini *mini);
+void print_split(char **split);
+void print_list(t_list *head, void (*f)(void *));
+void print_cmdtab(void *o);
+void print_token(void *t);
+void print_env(void *e);
 int	executor(t_mini *mini);
 
 // IN PARSER

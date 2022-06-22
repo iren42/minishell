@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 22:49:22 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 00:42:38 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 09:31:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	ft_echo(t_cmdtab *c)
 					nl = 0;
 				else
 				{
-				//	ft_putstr_fd(opt, STDIN);
 					print_without_first_quote(opt);
 					if (l->next)
 						ft_putstr_fd(" ", STDIN);

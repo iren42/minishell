@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/22 00:28:50 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 11:27:35 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,7 @@ char	*join_str_in_list(t_func_cmd_sub *f, char *s, int i)
 {
 	char	*res;
 
-	//			printf("buff %s|\n", buff);
-	printf("HERE\n");
+//	printf("HERE\n");
 	res = ft_strjoin(f->res, f->tenv_value);
 	free(f->res);
 	f->start = f->end + len_word(&s[i]) + 1;

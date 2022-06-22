@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 16:52:36 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 09:14:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ char	*rm_superflous(char *s) // verify quotes closed and rm useless quotes
 		i++;
 	}
 	if (quote_list != 0)
-		printf("error syntax\n");
+	{
+		printf("error syntax quotes\n");
+	}
 	//	printf("LIST\n");
 	//	print_list(quote_list, &print_char);
 	//	printf("LIST\n");

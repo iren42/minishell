@@ -37,7 +37,13 @@ void print_list(t_list *head, void (*f)(void *));
 void print_cmdtab(void *o);
 void print_token(void *t);
 void print_env(void *e);
+
+// IN EXECUTOR
 int	executor(t_mini *mini);
+int	**init_pipes(int n);
+void	open_pipes(int **fd, int n);
+void	free_pipes(int **ends, int n);
+void	close_all_pipes(int **ends, int n);
 
 // IN PARSER
 t_list *lexer(t_mini *m);
@@ -98,5 +104,7 @@ int is_syntax_ok(char *s);
 int matching(char b1, char b2);
 char *get_cmd(t_list *env_list, char *cmd);
 void free_split(char **split);
+
+
 
 #endif

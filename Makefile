@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/22 15:43:28 by iren             ###   ########.fr        #
+#    Updated: 2022/06/22 23:52:50 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SOURCES		=	minishell.c \
 				expander/rm_superflous.c \
 				\
 			executor/executor.c \
+			executor/pipes_utils.c \
 				\
 				builtin/ft_pwd.c \
 				builtin/ft_env.c \

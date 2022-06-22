@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/22 23:35:43 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 23:55:52 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,57 +109,6 @@ int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
 	return (status);
 }
 
-void	free_loop(int **fd, int i)
-{
-	int	j;
-
-	j = 0;
-	while (j < i)
-	{
-		free(fd[j]);
-		j++;
-	}
-}
-
-int	**init_pipes(int n)
-{
-	int	i;
-	int	**fd;
-
-	i = 0;
-	fd = 0;
-	if (n > 1)
-	{
-		fd = (int **)malloc(sizeof(int *) * (n - 1));
-		if (!fd)
-			exit(1); // error malloc
-		while (i < (n - 1))
-		{
-			fd[i] = (int *)malloc(sizeof(int) * 2);
-			if (!fd[i])
-			{
-				free_loop(fd, i);
-				exit(1);
-			}
-			i++;
-		}
-	}
-	return (fd);
-}
-
-void	open_pipes(int **fd, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < (n - 1))
-	{
-		if (pipe(fd[i]) < 0)
-			exit(1); // pipe error
-		i++;
-	}
-}
-
 int	executor(t_mini *mini)
 {
 	//	pid_t	pid;
@@ -168,7 +117,7 @@ int	executor(t_mini *mini)
 	char	**split_env;
 	int		nb_cmd;
 	int		i;
-	t_list	*tmp_cmdtab_list;
+	t_list	*l;
 	pid_t	*pids;
 	int	**ends; // pipes
 	int	err;
@@ -178,12 +127,13 @@ int	executor(t_mini *mini)
 	//	status = 0;
 	split_env = ft_split_env(mini);
 	nb_cmd = ft_lstsize(mini->cmdtab_list);
-	tmp_cmdtab_list = mini->cmdtab_list;
+	l = mini->cmdtab_list;
 	i = 0;
 	if (nb_cmd == 1)
 	{
 		split_cmd = ft_split_cmd(mini, i);
-		status = ft_exec(split_cmd, split_env, tmp_cmdtab_list);
+		status = ft_exec(split_cmd, split_env, l);
+		free_split(split_cmd);
 	}
 	else
 	{
@@ -204,22 +154,16 @@ int	executor(t_mini *mini)
 					if (dup2(ends[i][1], 1) == -1)
 						exit(1);
 				}
-				if (i  > 0)
+				if (i > 0)
 				{
 					if (dup2(ends[i - 1][0], 0) == -1)
 						exit(1); // error dup2
 				}
-				i = 0;
-				while (i < nb_cmd - 1)
-				{
-					close(ends[i][0]);
-					close(ends[i][1]);
-					i++;
-				}
-				ft_execve((t_cmdtab *)(tmp_cmdtab_list->content), split_cmd, split_env);
+				close_all_pipes(ends, nb_cmd);
+				ft_execve((t_cmdtab *)(l->content), split_cmd, split_env);
 				exit(126); // execve error
 			}
-			tmp_cmdtab_list = tmp_cmdtab_list->next;
+			l = l->next;
 			free_split(split_cmd);
 			i++;
 		}
@@ -229,10 +173,12 @@ int	executor(t_mini *mini)
 		{
 			close(ends[i][0]);
 			close(ends[i][1]);
-			if (waitpid(-1, &status, 0) == pids[nb_cmd - 1])
+			if (waitpid(-1, &status, 0) == pids[nb_cmd - 1]) // ??
 				err = WEXITSTATUS(status);
 			i++;
 		}
+		free_pipes(ends, nb_cmd);
+		free(pids);
 	}
 	free_split(split_env);
 	return (status);

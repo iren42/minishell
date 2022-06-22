@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 17:41:28 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 16:16:23 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ int	is_cmd(t_token *t)
 	split_built = ft_split(builtins, ' ');
 	if (!split_built)
 		exit(1);
-	while (split_built[i])
+	while (split_built[i] != 0 && t->value)
 	{
+	//	printf("builtin %s, t value %s, len %ld\n", split_built[i], t->value, ft_strlen(t->value));
 		if (ft_memcmp(split_built[i], t->value, ft_strlen(t->value) + 1) == 0)
 		{
 			free_split(split_built);

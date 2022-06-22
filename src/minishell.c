@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 15:48:35 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 23:37:17 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ char	*ft_readline(void)
 int	main(int ac, char **av, char **env)
 {
 	char	*s;
+	int	ret;
 	t_mini	mini;
 	t_list	*env_list;
 	t_cmdtab *c;
@@ -114,10 +115,10 @@ int	main(int ac, char **av, char **env)
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 
-		print_tmini(&mini);
+//		print_tmini(&mini);
 
-		executor(&mini);
-		
+		ret = executor(&mini);
+	//	printf("ret executor %d\n", ret);	
 		//	ft_unset(mini.cmdtab_list->content);
 		//		ft_pwd(mini.cmdtab_list->content);
 		//		ft_export(mini.cmdtab_list->content);

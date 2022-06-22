@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 11:26:29 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 19:34:25 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,12 @@ t_token	*create_token(char *p, int *to_set, t_mini *m)
 
 	}
 	else if (*p == '<')
-		t->type = LESS;
+	{
+		if (*(p + 1) == '<')
+			t->type = DOUBLE_LESS;
+		else
+			t->type = LESS;
+	}
 	else if (*p == ';')
 		t->type = SEMI;
 	else if (*p == '|')

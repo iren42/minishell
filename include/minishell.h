@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <fcntl.h>
 
 #include "libft.h"
 #include "minishell_struct.h"
@@ -38,6 +39,8 @@ void print_cmdtab(void *o);
 void print_token(void *t);
 void print_env(void *e);
 int	executor(t_mini *mini);
+
+int	ft_heredoc(char *eof);
 
 // IN PARSER
 t_list *lexer(t_mini *m);

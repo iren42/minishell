@@ -9,6 +9,7 @@ typedef enum e_token_type
 	GREAT,
 	LESS,
 	DOUBLE_GREAT,
+	DOUBLE_LESS,
 	PIPE,
 	NL,
 }	t_token_type;
@@ -25,6 +26,7 @@ typedef enum e_redir_type{
 	RE_GREAT,
 	RE_DOUBLE_GREAT,
 	RE_LESS,
+	RE_DOUBLE_LESS,
 }	t_redir_type;
 
 typedef struct s_redir

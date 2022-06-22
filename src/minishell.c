@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 15:48:35 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 16:43:25 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,13 @@ int	main(int ac, char **av, char **env)
 
 		print_tmini(&mini);
 
-		executor(&mini);
+	//	executor(&mini);
 		
 		//	ft_unset(mini.cmdtab_list->content);
 		//		ft_pwd(mini.cmdtab_list->content);
 		//		ft_export(mini.cmdtab_list->content);
 		//	ft_env(mini.cmdtab_list->content);
-	//			ft_exit(mini.cmdtab_list->content);
+				ft_exit(mini.cmdtab_list->content);
 		//	ft_cd(mini.cmdtab_list->content);
 //		ft_echo(mini.cmdtab_list->content);
 		ft_lstclear(&mini.token_list, del_token);

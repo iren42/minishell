@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/20 00:23:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 09:14:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,6 @@ int		matching(char b1, char b2)
 	return (0);
 }
 
-char	get_char(void *o)
-{
-	t_quote	*f;
-
-	f = (t_quote *)o;
-	return (f->c);
-}
-
-void	del_tfunc_rm_quotes(void *o)
-{
-	t_quote *f;
-	f = (t_quote *)o;
-	free(f);
-}
-
 void	push(t_list **l, char c, char *s, int i)
 {
 	t_quote	*new;
@@ -44,15 +29,6 @@ void	push(t_list **l, char c, char *s, int i)
 	new->c = c;
 	new->index = i;
 	ft_lstadd_front(l, ft_lstnew(new));
-}
-
-int	get_index(void *o)
-{
-	t_quote	*f;
-
-	f = (t_quote *)o;
-	return (f->index);
-
 }
 
 void pop(t_list **l, char *s, int *index_close)
@@ -65,9 +41,9 @@ void pop(t_list **l, char *s, int *index_close)
 	i = 0;
 	metacharacter = 0;
 	tmp = *l;
-	index_open = get_index(tmp->content);
+	index_open = get_quote_index(tmp->content);
 	*l = (*l)->next;
-	ft_lstdelone(tmp, &del_tfunc_rm_quotes);
+	ft_lstdelone(tmp, &del_quote);
 	while (s[index_open + i] && index_open + i < *index_close)
 	{
 		if (ft_strchr("$ |<>\t\n\v\f\r", s[index_open + i]) != 0)
@@ -101,7 +77,7 @@ char	*rm_superflous(char *s) // verify quotes closed and rm useless quotes
 		{
 			if (quote_list)
 			{
-				if (matching(get_char(quote_list->content), s[i]))
+				if (matching(get_quote_char(quote_list->content), s[i]))
 					pop(&quote_list, s, &i);
 				else
 					push(&quote_list, s[i], &s[i], i);				
@@ -112,11 +88,13 @@ char	*rm_superflous(char *s) // verify quotes closed and rm useless quotes
 		i++;
 	}
 	if (quote_list != 0)
-		printf("error syntax\n");
+	{
+		printf("error syntax quotes\n");
+	}
 	//	printf("LIST\n");
 	//	print_list(quote_list, &print_char);
 	//	printf("LIST\n");
-	ft_lstclear(&quote_list, &del_tfunc_rm_quotes);
+	ft_lstclear(&quote_list, &del_quote);
 //	printf("rm_superflous() final s %s\n", s);
 	}
 	return (s);

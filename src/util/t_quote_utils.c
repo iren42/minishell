@@ -1,34 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   t_quote_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/19 20:21:24 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 10:31:34 by iren             ###   ########.fr       */
+/*   Created: 2022/06/21 16:24:35 by iren              #+#    #+#             */
+/*   Updated: 2022/06/21 16:25:56 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_prompt(int signum)
+int	get_quote_index(void *o)
 {
-	if (signum == SIGINT)
-	{
-		ft_putendl_fd("", STDIN);
-		//printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	//	ft_putendl_fd("after ctrl c", STDIN);	
-		//	signal(SIGINT, &sig_prompt); A quoi ca sert ?
-	}
+	t_quote	*f;
+
+	f = (t_quote *)o;
+	return (f->index);
+
 }
 
-void	signal_handler()
+
+char	get_quote_char(void *o)
 {
-	signal(SIGINT, sig_prompt);
-	signal(SIGQUIT, SIG_IGN);
+	t_quote	*f;
+
+	f = (t_quote *)o;
+	return (f->c);
 }
+
+void	del_quote(void *o)
+{
+	t_quote *f;
+	f = (t_quote *)o;
+	free(f);
+}
+
+
+void	print_quote(void *o)
+{
+	t_quote *f;
+
+	f = (t_quote *)o;
+	printf("q index %d\n", f->index);
+	printf("q c %c\n", f->c);
+}
+
 

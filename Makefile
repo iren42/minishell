@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/20 23:19:41 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/22 15:28:47 by gufestin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,19 +19,37 @@ HEADER	= include/minishell.h
 DIR_SOURCES	= src/
 
 SOURCES		=	minishell.c \
-				print.c \
-				parser/lexer.c \
-				parser/parser.c \
-				ft_splitsh.c \
+				signal_handler.c \
 				ft_error.c \
+				\
+				parser/lexer.c \
+				parser/lexer_utils.c \
+				parser/parser.c \
 				parser/get_cmd.c \
-				free.c \
+				\
 				expander/expander.c \
-				expander/create_list.c  \
 				expander/var_substitution.c \
 				expander/rm_superflous.c \
 				signal_handler.c \
-			executor/executor.c
+				\
+			executor/executor.c \
+				\
+				builtin/ft_pwd.c \
+				builtin/ft_env.c \
+				builtin/ft_export.c \
+				builtin/ft_unset.c \
+				builtin/ft_exit.c \
+				builtin/ft_cd.c\
+				builtin/ft_echo.c\
+				\
+				util/t_quote_utils.c \
+				util/t_cmdtab_utils.c \
+				util/t_env_utils.c \
+				util/t_token_utils.c \
+				util/t_redir_utils.c \
+				util/t_arg_utils.c \
+				util/free.c \
+				util/print.c \
 				
 
 

@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/19 20:21:24 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 10:31:34 by iren             ###   ########.fr       */
+/*   Created: 2022/06/20 14:24:27 by iren              #+#    #+#             */
+/*   Updated: 2022/06/21 10:39:20 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_prompt(int signum)
+int	ft_env(t_cmdtab *c)
 {
-	if (signum == SIGINT)
+	t_list	*l;
+
+	if (c->m->env_list)
 	{
-		ft_putendl_fd("", STDIN);
-		//printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	//	ft_putendl_fd("after ctrl c", STDIN);	
-		//	signal(SIGINT, &sig_prompt); A quoi ca sert ?
+		l = c->m->env_list;
+		while (l)
+		{
+			printf("%s=%s\n", get_env_name(l->content), get_env_value(l->content));
+			l = l->next;
+		}
+		return (SUCCESS);
 	}
+	return (FAILURE);
 }
-
-void	signal_handler()
-{
-	signal(SIGINT, sig_prompt);
-	signal(SIGQUIT, SIG_IGN);
-}
-

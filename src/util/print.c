@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 00:33:11 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/22 15:27:40 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ void	print_tmini(t_mini *mini)
 	//	printf("s = %s\n", mini->s);
 	printf(BLU "----TOKEN LIST START----\n");
 	print_list(mini->token_list, &print_token);
-	printf("----TOKEN LIST END----\n" RESET);
-	printf(PUR "----CMD TABLE LIST START----\n");
+	printf( "----TOKEN LIST END----\n" );
+	printf(PUR "----CMD TABLE LIST START----\n" );
 	print_list(mini->cmdtab_list, &print_cmdtab);
-	printf("----CMD TABLE LIST END----\n" WHITE);
+	printf( "----CMD TABLE LIST END----\n" RESET);
 }
 
 void	print_token(void *o)

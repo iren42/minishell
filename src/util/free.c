@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 16:23:53 by iren             ###   ########.fr       */
+/*   Created: 2022/06/15 20:57:54 by isabelle          #+#    #+#             */
+/*   Updated: 2022/06/21 17:00:39 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-char	*expander(t_mini *m)
+void	free_split(char **split)
 {
-	char	*res;
+	int	i;
 
-	m->s = rm_superflous(m->s);
-//	create_list(m);
-//		print_list(m->env_list, print_env);
-		
-	res = var_substitution(m->env_list, m->s);
-//	ft_lstclear(&env_list, del_tenv);
-//	printf("final res %s|\n", res);
-//	free(res);
-	return (res);
+	i = 0;
+	if (split != 0)
+	{
+		while (split[i] != 0)
+		{
+			free(split[i]);
+			i++;
+		}
+		free(split);
+		split = 0;
+	}
 }
+
+

@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/19 20:21:24 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 10:31:34 by iren             ###   ########.fr       */
+/*   Created: 2022/06/21 16:27:15 by iren              #+#    #+#             */
+/*   Updated: 2022/06/22 01:04:14 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_prompt(int signum)
+int	is_quote(char c)
 {
-	if (signum == SIGINT)
-	{
-		ft_putendl_fd("", STDIN);
-		//printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	//	ft_putendl_fd("after ctrl c", STDIN);	
-		//	signal(SIGINT, &sig_prompt); A quoi ca sert ?
-	}
+	if (c == '"' || c == '\'')
+		return (c);
+	return (0);
 }
 
-void	signal_handler()
+int	is_spe_char(char c)
 {
-	signal(SIGINT, sig_prompt);
-	signal(SIGQUIT, SIG_IGN);
+	if (c == '>' || c == '<' || c == '|')
+		return (1);
+	return (0);
 }
+
+int	ft_isspace(char c)
+{
+	if (c == '\t' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
+		return (1);
+	return (0);
+}
+
 

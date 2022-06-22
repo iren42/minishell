@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/19 20:21:24 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 10:31:34 by iren             ###   ########.fr       */
+/*   Created: 2022/06/20 14:31:53 by iren              #+#    #+#             */
+/*   Updated: 2022/06/21 15:38:28 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_prompt(int signum)
+int	ft_pwd(t_cmdtab	*c)
 {
-	if (signum == SIGINT)
+	char	*pwd;
+	char	buf[BUF_SIZE];
+	
+	pwd = getcwd(buf, BUF_SIZE);
+	if (pwd)
 	{
-		ft_putendl_fd("", STDIN);
-		//printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	//	ft_putendl_fd("after ctrl c", STDIN);	
-		//	signal(SIGINT, &sig_prompt); A quoi ca sert ?
+		ft_putstr_fd(pwd, STDIN);
+		ft_putstr_fd("\n", STDIN);
+		return (SUCCESS);
 	}
+	print_error("shell: pwd", NULL, 0, "BUF_SIZE too small");
+	return (FAILURE);
 }
-
-void	signal_handler()
-{
-	signal(SIGINT, sig_prompt);
-	signal(SIGQUIT, SIG_IGN);
-}
-

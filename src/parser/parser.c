@@ -6,42 +6,48 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/18 20:31:21 by isabelle         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:41:28 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_cmdtab(t_cmdtab *c)
+void	init_cmdtab(t_cmdtab *c, t_mini *m)
 {
 	c->cmd = 0;
 	c->arg_list = 0;
 	c->redir_list = 0;
+	c->m = m;
 }
 
-int	get_token_type(t_token *t)
-{
-	if (t)
-		return (t->type);
-	return (0);
-}
-char	*get_token_value(t_token *t)
-{
-	if (t)
-		return (t->value);
-	return (0);
-}
 
 int	is_cmd(t_token *t)
 {
 	char	*buff;
 	int	is_cmd;
+	char	builtins[] =  "export cd pwd echo unset env exit";
+	char	**split_built;
+	int	i;
 
 	buff = 0;
+	i = 0;
+	split_built = ft_split(builtins, ' ');
+	if (!split_built)
+		exit(1);
+	while (split_built[i])
+	{
+		if (ft_memcmp(split_built[i], t->value, ft_strlen(t->value) + 1) == 0)
+		{
+			free_split(split_built);
+			return (1);
+		}
+		i++;
+	}
 	is_cmd = access(t->value, X_OK);
 	if (is_cmd == -1)
-		buff = get_cmd(t->m->env, t->value);
+		buff = get_cmd(t->m->env_list, t->value);
 	//	printf("buff %s\n",  buff);
+	free_split(split_built);
 	if (buff == 0 && is_cmd == -1)
 		return (0);
 	free(buff);
@@ -63,9 +69,14 @@ int	fill_cmd(t_token *t, t_cmdtab *ct, int *ret)
 		}
 		else
 		{
-			ct->cmd = get_cmd(t->m->env, t->value);
+			ct->cmd = get_cmd(t->m->env_list, t->value);
 			if (ct->cmd)
 				(*ret)++;
+			else
+			{
+				ct->cmd = ft_strdup(t->value);
+				(*ret)++;
+			}
 		}
 	}
 	return (0);
@@ -111,39 +122,9 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 		ft_lstadd_back(&c->redir_list, ft_lstnew(new));
 	}
 }
-
-void	del_redir(void *o)
-{
-	t_redir *r;
-
-	r = (t_redir *)o;
-	free(r->filename);
-	free(r);
-}
-
-void	del_arg(void *o)
-{
-	t_arg *a;
-
-	a = (t_arg *)o;
-	free(a->value);
-	free(a);
-}
-
-void	del_cmdtab(void *o)
-{
-	t_cmdtab	*c;
-
-	c = (t_cmdtab *)o;
-	free(c->cmd);
-	ft_lstclear(&c->arg_list, del_arg);
-	ft_lstclear(&c->redir_list, del_redir);
-	free(c);
-}
-
 t_list	*parser(t_mini *m)
 {
-//	printf("\n--IN PARSER--\n");
+	//	printf("\n--IN PARSER--\n");
 	t_list	*cmd_list;
 	t_cmdtab	*new;
 	t_list	*l;
@@ -154,33 +135,33 @@ t_list	*parser(t_mini *m)
 	new = malloc(sizeof(t_cmdtab));
 	if (!new)
 		exit(1);
-	init_cmdtab(new);
+	init_cmdtab(new, m);
 	if (l)
 	{
-	while (get_token_type(l->content) != NL)
-	{
-		ret = 0;
-		//	print_token(l->content);
-		fill_cmd(l->content, new, &ret);
-		fill_args(l->content, new, &ret);
-		fill_redir(l->content, new, &ret);
-		//	printf("cmd? %s\n",new->cmd);
-		if (get_token_type(l->content) == PIPE || get_token_type(l->content) == SEMI)
+		while (get_token_type(l->content) != NL)
 		{
-	//		printf("add in list\n");
-			ft_lstadd_back(&cmd_list, ft_lstnew(new));
-			new = malloc(sizeof(t_cmdtab));
-			if (!new)
-				exit(1);
-			init_cmdtab(new);
-			//	ret = 0;
+			ret = 0;
+			//	print_token(l->content);
+			fill_cmd(l->content, new, &ret);
+			fill_args(l->content, new, &ret);
+			fill_redir(l->content, new, &ret);
+			//	printf("cmd? %s\n",new->cmd);
+			if (get_token_type(l->content) == PIPE || get_token_type(l->content) == SEMI)
+			{
+				//		printf("add in list\n");
+				ft_lstadd_back(&cmd_list, ft_lstnew(new));
+				new = malloc(sizeof(t_cmdtab));
+				if (!new)
+					exit(1);
+				init_cmdtab(new, m);
+				//	ret = 0;
+			}
+			l = l->next;
 		}
-		l = l->next;
-	}
-	ft_lstadd_back(&cmd_list, ft_lstnew(new));
-//	printf("--OUT PARSER--\n");
-	//	print_list(cmd_list, );
-//	ft_lstclear(m->token_list, &del_token);
+		ft_lstadd_back(&cmd_list, ft_lstnew(new));
+		//	printf("--OUT PARSER--\n");
+		//	print_list(cmd_list, );
+		//	ft_lstclear(m->token_list, &del_token);
 	}
 	return (cmd_list);
 

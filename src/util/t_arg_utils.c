@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   t_arg_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/19 20:21:24 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 10:31:34 by iren             ###   ########.fr       */
+/*   Created: 2022/06/21 16:28:49 by iren              #+#    #+#             */
+/*   Updated: 2022/06/21 16:35:23 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_prompt(int signum)
+char	*get_arg_value(void *o)
 {
-	if (signum == SIGINT)
-	{
-		ft_putendl_fd("", STDIN);
-		//printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	//	ft_putendl_fd("after ctrl c", STDIN);	
-		//	signal(SIGINT, &sig_prompt); A quoi ca sert ?
-	}
-}
+	t_arg	*a;
 
-void	signal_handler()
+	a = (t_arg *)o;
+	return (a->value);
+}
+void	del_arg(void *o)
 {
-	signal(SIGINT, sig_prompt);
-	signal(SIGQUIT, SIG_IGN);
-}
+	t_arg *a;
 
+	a = (t_arg *)o;
+	free(a->value);
+	free(a);
+}

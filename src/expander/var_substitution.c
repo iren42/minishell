@@ -6,21 +6,11 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/20 19:40:53 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/22 11:27:35 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*get_name_e(t_env *e)
-{
-	return (e->name);
-}
-
-char	*get_value_e(t_env *e)
-{
-	return (e->value);
-}
 
 int	len_word(char *s)
 {
@@ -75,24 +65,23 @@ int	little_str_in_list(char *s, t_func_cmd_sub *f)
 
 	if (f->quote_list != 0)
 	{
-		//		printf("ccc %c\n", get_char(ft_lstlast(f->quote_list)->content));
-		q = get_char(ft_lstlast(f->quote_list)->content);
+		//		printf("ccc %c\n", get_quote_char(ft_lstlast(f->quote_list)->content));
+		q = get_quote_char(ft_lstlast(f->quote_list)->content);
 		if (q == '\'')
 			return (0);
 	}
-	l = f->l;
-	index = f->list_index;
+	l = f->env_list;
 	name = str_tenvname(s);
 	//	printf("name %s\n", name);
 	if (!name)
 		exit(1);
-	while (index-- >= 0)
+	while (l)
 	{
-		//		printf("name %s, get name %s\n", name, get_name_e(l->content));
-		if (ft_strncmp(name, get_name_e(l->content),
-					ft_strlen(name)) == 0)
+		//		printf("name %s, get name %s\n", name, get_env_name(l->content));
+		if (ft_memcmp(name, get_env_name(l->content),
+					ft_strlen(name) + 1) == 0)
 		{
-			f->tenv_value = get_value_e(l->content);
+			f->tenv_value = get_env_value(l->content);
 			free(name);
 			return (1);
 		}
@@ -154,7 +143,7 @@ char	*join_regular_str(t_func_cmd_sub *f, int i, char *s)
 
 void	init_cmd_sub(t_func_cmd_sub *f, t_list *l)
 {
-	f->l = l;
+	f->env_list = l;
 	f->start = 0;
 	f->end = 0;
 	f->tenv_value = 0;
@@ -169,13 +158,14 @@ char	*join_str_in_list(t_func_cmd_sub *f, char *s, int i)
 {
 	char	*res;
 
-	//			printf("buff %s|\n", buff);
+//	printf("HERE\n");
 	res = ft_strjoin(f->res, f->tenv_value);
 	free(f->res);
 	f->start = f->end + len_word(&s[i]) + 1;
 	return (res);
 
 }
+
 
 char	*little_str_is_in_env_or_not(t_func_cmd_sub *f, char *s, int i)
 {
@@ -189,12 +179,12 @@ char	*little_str_is_in_env_or_not(t_func_cmd_sub *f, char *s, int i)
 	if (s)
 	{
 		if (f->quote_list)
-			q = get_char(ft_lstlast(f->quote_list)->content);
+			q = get_quote_char(ft_lstlast(f->quote_list)->content);
 
 		name = ft_substr(s, i + 1, len_word(&s[i]));
 		if (q == '"' || q == 0)
 		{
-			p = getenv(name);
+			p = ft_getenv(name, f->env_list);
 			if (p)
 			{
 				res = ft_strjoin(f->res, p);
@@ -226,20 +216,10 @@ void pop1(t_list **l, char *s, int *index_close)
 
 	i = 0;
 	tmp = *l;
-	index_open = get_index(tmp->content);
+	index_open = get_quote_index(tmp->content);
 	*l = (*l)->next;
-	ft_lstdelone(tmp, &del_tfunc_rm_quotes);
+	ft_lstdelone(tmp, &del_quote);
 }
-
-void	print_quote(void *o)
-{
-	t_quote *f;
-
-	f = (t_quote *)o;
-	printf("q index %d\n", f->index);
-	printf("q c %c\n", f->c);
-}
-
 char	*var_substitution(t_list *list, char *s)
 {
 	t_func_cmd_sub	f;
@@ -256,7 +236,7 @@ char	*var_substitution(t_list *list, char *s)
 		{
 			if (f.quote_list)
 			{
-				if (matching(get_char(f.quote_list->content), s[i]))
+				if (matching(get_quote_char(f.quote_list->content), s[i]))
 					pop1(&f.quote_list, s, &i);
 				else
 					push(&f.quote_list, s[i], &s[i], i);				
@@ -271,11 +251,12 @@ char	*var_substitution(t_list *list, char *s)
 				f.res = join_str_in_list(&f, s, i);
 			else
 				f.res = little_str_is_in_env_or_not(&f, s, i);
+			//	printf("env not found\n");
 		}
 		i++;
 	}
 	f.res = join_regular_str(&f, i, s);
-	ft_lstclear(&f.quote_list, &del_tfunc_rm_quotes);
+	ft_lstclear(&f.quote_list, &del_quote);
 	//	printf("var_sub() final s %s\n", f.res);
 	}
 	return (f.res);

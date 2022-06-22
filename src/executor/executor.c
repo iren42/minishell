@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/22 23:55:52 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 00:39:04 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,23 @@ int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
 	}
 	return (status);
 }
+static int	ft_wait(pid_t *pids, int n)
+{
+	int	status;
+	int	i;
+	int	err;
 
+	i = 0;
+	err = 0;
+	while (i < n)
+	{
+		waitpid(pids[i], &status, 0);
+		i++;
+	}
+	if (WIFEXITED(status))
+		err = WEXITSTATUS(status);
+	return (err);
+}
 int	executor(t_mini *mini)
 {
 	//	pid_t	pid;
@@ -167,16 +183,8 @@ int	executor(t_mini *mini)
 			free_split(split_cmd);
 			i++;
 		}
-
-		i = 0;
-		while (i < nb_cmd - 1)
-		{
-			close(ends[i][0]);
-			close(ends[i][1]);
-			if (waitpid(-1, &status, 0) == pids[nb_cmd - 1]) // ??
-				err = WEXITSTATUS(status);
-			i++;
-		}
+		close_all_pipes(ends, nb_cmd);
+		err = ft_wait(pids, nb_cmd);
 		free_pipes(ends, nb_cmd);
 		free(pids);
 	}

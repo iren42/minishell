@@ -53,6 +53,8 @@ void	open_pipes(int **fd, int n);
 void	free_pipes(int **ends, int n);
 void	close_all_pipes(int **ends, int n);
 
+int	ft_heredoc(char *eof);
+
 // IN PARSER
 t_list *lexer(t_mini *m);
 t_list *parser(t_mini *m);

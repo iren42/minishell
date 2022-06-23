@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 23:56:04 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 17:58:50 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/23 21:58:04 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ int	ft_heredoc(char *eof)
 	filename = ft_strjoin(eof, ".heredoc");
 	if (!filename)
 		exit(1); // malloc error
-//	fd = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
-//	fd = open(".heredoc", O_CREAT | O_WRONLY, 0777);
+	//	fd = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
+	//	fd = open(".heredoc", O_CREAT | O_WRONLY, 0777);
 	fd = open(filename, O_CREAT | O_WRONLY, 0777);
 
-// unlink(.heredoc) quelque part (pas dans cette fonction)
+
+	// unlink(.heredoc) quelque part (pas dans cette fonction)
 
 	if (fd == -1)
 		exit(1); // open error
@@ -50,11 +51,11 @@ int	ft_heredoc(char *eof)
 	}
 	else
 		ft_putstr_fd("Warning: here-document delimited by end of file\n", 2);
-		// g_errno = 0;
+	// g_errno = 0;
 	free(read);
 	close(fd);
 	fd = open(filename, O_RDONLY);
 	free(filename);
 	return (fd);
-//	return (42);
+	//	return (42);
 }

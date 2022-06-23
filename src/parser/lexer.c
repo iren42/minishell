@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 21:22:51 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 21:56:01 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*get_tokenvalue(char *s, int *to_set)
 		value[len] = 0;
 	}
 	*to_set += len + start;
-//	printf("value %s. len %d, start %d, to_set %d\n", value, len, start, *to_set);
+	//	printf("value %s. len %d, start %d, to_set %d\n", value, len, start, *to_set);
 	return (value);
 }
 
@@ -121,7 +121,7 @@ void create_token_list(char *s, t_list **l, t_mini *m)
 			}
 			else
 				i++;
-	//	printf("s[i %d] = %c, len %ld\n", i, s[i], ft_strlen(s));
+			//	printf("s[i %d] = %c, len %ld\n", i, s[i], ft_strlen(s));
 		}
 		new = ft_lstnew(create_token("\n", &i, m));
 		ft_lstadd_back(l, new);
@@ -133,9 +133,9 @@ t_list	*lexer(t_mini *m)
 	t_list	*l;
 
 	l = 0;
-//	printf("before lexer s %s\n", m->s);
+	//	printf("before lexer s %s\n", m->s);
 	create_token_list(m->s, &l, m);
-//	printf("after lexer\n");
+	//	printf("after lexer\n");
 	//	print_lst(l);
 	return (l);
 }

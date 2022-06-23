@@ -30,10 +30,13 @@
 #define SUCCESS 1
 #define FAILURE 0
 #define STDERR 2
-#define STDIN 1
+#define STDIN 0
+#define STDOUT 1
 
 #define OUT 1
 #define IN 0
+#define WRITE 1
+#define READ 0
 #define BUF_SIZE 254
 
 void	print_tmini(t_mini *mini);

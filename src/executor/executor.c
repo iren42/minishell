@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 13:20:45 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 15:37:41 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,16 +213,18 @@ int	redir_error(t_redir *redir, t_exec *e)
 	return (1);
 }
 
-int	redir_great(int *fd, t_redir *redir, t_exec *e)
+int	redir_great(int *ends, int *fd, t_redir *redir, t_exec *e)
 {
 	*fd = open(redir->filename, O_CREAT | O_TRUNC | O_RDWR, 0664);
 	if ((*fd) < 0)
 		return (redir_error(redir, e));
-	dup2((*fd), STDOUT_FILENO);
-	close((*fd));
+//	dup2((*fd), STDOUT_FILENO); // ddup2(fd_pipe[out], fd);
+	dup2(ends[OUT], (*fd));
+	close(ends[OUT]);
+//	close((*fd));
 	return (0);
 }
-
+/*
 int	redir_less(int *fd, t_redir *redir, t_exec *e)
 {
 	*fd = open(redir->filename, O_RDONLY);
@@ -241,19 +243,19 @@ int	redir_double_great(int *fd, t_redir *redir, t_exec *e)
 	dup2((*fd), STDOUT_FILENO);
 	close((*fd));
 	return (0);
-}
+}*/
 
-void	ft_redir(t_exec *e, t_list *redirl)
+void	ft_redir(int *ends, t_exec *e, t_list *redirl)
 {
 	while (redirl)
 	{
 		if (get_redir_type(redirl->content) == RE_GREAT)
 		{
-			if (redir_great(&e->redir_fd[OUT], redirl->content, e))
+			if (redir_great(ends, &e->redir_fd[OUT], redirl->content, e))
 				return ;
 			//	printf("RE GREAT\n");
 		}
-		else if (get_redir_type(redirl->content) == RE_LESS)
+	/*	else if (get_redir_type(redirl->content) == RE_LESS)
 		{
 			if (redir_less(&e->redir_fd[IN], redirl->content, e))
 				return ;
@@ -264,10 +266,70 @@ void	ft_redir(t_exec *e, t_list *redirl)
 			if (redir_double_great(&e->redir_fd[OUT], redirl->content, e))
 				return ;
 			//	printf("RE GREAT\n");
-		}
+		}*/
 		redirl = redirl->next;
 	}
 }
+int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
+{
+	t_list	*tmp;
+
+	if (child > 0)
+	{
+		fd_in = fd[child - 1][IN];
+		close(fd[child - 1][OUT]);
+	}
+	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
+//	tmp = (ex_get_cmd_child(cmd, child))->infile;
+	while (tmp)
+	{
+		if (fd_in != STDIN)
+			close(fd_in);
+		if (get_redir_type(tmp->content) == LESS)
+		//	fd_in = open(&(tmp->content[2]), O_RDONLY);
+		fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
+//		else
+//			fd_in = bi_heredoc(&(tmp->content[2]), 0, "> ");
+		if (fd_in < 0)
+		{
+//			error_handler(e_file);
+			print_error("shell:", 0, 0, "redirection");
+			exit(1);
+		}
+		tmp = tmp->next;
+	}
+	return (fd_in);// return le dernier infile ouvert
+}
+
+int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
+{
+	t_list	*tp;
+
+	if (child != e->nb_cmd - 1)
+	{
+		fd_out = fd[child][WRITE];
+		close(fd[child][READ]);
+	}
+	tp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
+	while (tp)
+	{
+		if (fd_out != STDOUT)
+			close(fd_out);
+	//	if (tp->content[1] == ' ')
+		if (get_redir_type(tp->content) == RE_LESS)
+			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
+		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
+			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
+		if (fd_out < 0)
+		{
+			print_error("shell:", 0, 0, "redirection");
+			exit(1);
+		}
+		tp = tp->next;
+	}
+	return (fd_out);
+}
+
 
 void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 {
@@ -284,7 +346,10 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
-			ft_redir(e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
+			e->redir_fd[IN] = ex_infile(e, e->redir_fd[IN], i, ends);
+			e->redir_fd[OUT] = ex_outfile(e, e->redir_fd[OUT], i, ends);
+	//		ft_redir(e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
+//			ft_redir(ends[i - 1], e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;

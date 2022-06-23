@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 17:24:12 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/23 20:40:01 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ char	*get_tokenvalue(char *s, int *to_set)
 	}
 	else
 	{
-		if (ft_strchr("<>", s[0])) // skip <>
+		if (ft_strchr("<>", s[start])) // skip <>
+			start++;
+		if (ft_strchr("<>", s[start])) // skip <>
 			start++;
 		while (ft_isspace(s[start])) // skip spaces
 			start++;
@@ -51,7 +53,7 @@ char	*get_tokenvalue(char *s, int *to_set)
 		value[len] = 0;
 	}
 	*to_set += len + start;
-//	printf("value %s. len %d, start %d, to_set %d\n", value, len, start, *to_set);
+	printf("value %s. len %d, start %d, to_set %d\n", value, len, start, *to_set);
 	return (value);
 }
 

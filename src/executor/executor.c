@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 18:57:17 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 20:19:07 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
 		if (fd_out != STDOUT)
 			close(fd_out);
 		if (get_redir_type(tp->content) == RE_GREAT)
-			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
+			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0777);
 		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
 			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 		if (fd_out < 0)
@@ -207,17 +207,17 @@ void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 //	printf("cmd type %d\n", c->type);
 	if (c->type == EXPORT)
 		ft_export(c);
-	if (c->type == UNSET)
+	else if (c->type == UNSET)
 		ft_unset(c);
-	if (c->type == CD)
+	else if (c->type == CD)
 		ft_cd(c);
-	if (c->type == ECHO)
+	else if (c->type == ECHO)
 		ft_echo(c);
-	if (c->type == ENV)
+	else if (c->type == ENV)
 		ft_env(c);
-	if (c->type == PWD)
+	else if (c->type == PWD)
 		ft_pwd(c);
-	if (c->type == EXIT)
+	else if (c->type == EXIT)
 		ft_exit(c);
 	else
 		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
@@ -249,6 +249,7 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 
 	close_all_pipes(ends, e->nb_cmd);
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
+	exit(0);
 	//	print_split(split_cmd);
 	/*	if (p = is_builtin(split_cmd[0], e->m))
 		{
@@ -314,6 +315,8 @@ int	executor(t_mini *mini)
 	int		**ends; // pipes
 	int		err;
 	t_exec	e;
+	int	child;
+	int	status;
 	t_cmdtab	*ptr;
 
 	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
@@ -333,6 +336,18 @@ int	executor(t_mini *mini)
 		exec_cmdtab_list(&e, pids, ends);
 		close_all_pipes(ends, e.nb_cmd);
 		err = ft_wait(pids, e.nb_cmd);
+/*		child = 0;
+	while (child < e.nb_cmd)
+	{
+		if (child != (e.nb_cmd - 1))
+		{
+			close(ends[child][0]);
+			close(ends[child][1]);
+		}
+		if (waitpid(-1, &status, 0) == pids[e.nb_cmd - 1])
+			err = WEXITSTATUS(status);
+		child++;
+	}*/
 		free_pipes(ends, e.nb_cmd);
 		free(pids);
 	}

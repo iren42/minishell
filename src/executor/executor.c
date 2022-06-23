@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 16:37:35 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/23 16:59:08 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 		if (get_redir_type(tmp->content) == RE_LESS)
 			//	fd_in = open(&(tmp->content[2]), O_RDONLY);
 			fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
-		//		else
-		//			fd_in = bi_heredoc(&(tmp->content[2]), 0, "> ");
+		else
+			fd_in = ft_heredoc(((t_redir *)(tmp->content))->filename);
 		if (fd_in < 0)
 		{
 			//			error_handler(e_file);

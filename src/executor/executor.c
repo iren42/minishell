@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 22:15:40 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 22:29:07 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ char	*is_builtin(char *cmd, t_mini *m) // renvoie un ptr sur split_builtin
 
 void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 {
-	//	printf("cmd type %d\n", c->type);
+//	printf("cmd type %d\n", c->type);
 	if (c->type == EXPORT)
 		ft_export(c);
 	else if (c->type == UNSET)
@@ -217,7 +217,10 @@ void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 	else if (c->type == CD)
 		ft_cd(c);
 	else if (c->type == ECHO)
+	{
+//		ft_putstr_fd("echo built\n", 2);
 		ft_echo(c);
+	}
 	else if (c->type == ENV)
 		ft_env(c);
 	else if (c->type == PWD)

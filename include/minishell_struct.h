@@ -54,6 +54,7 @@ typedef struct	s_mini
 	t_list	*token_list;
 	t_list	*cmdtab_list;
 	t_list	*env_list;
+	char	**split_builtin;
 	char	*s;
 	char	**env;
 	int	fd;

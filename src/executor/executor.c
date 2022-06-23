@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 05:55:09 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 10:21:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,44 @@ static int	ft_wait(pid_t *pids, int n)
 	return (err);
 }
 
+char	*is_builtin(char *cmd, t_mini *m) // renvoie un ptr sur split_builtin
+{
+	int	i;
+
+	i = 0;
+	if (m->split_builtin)
+	{
+		while (m->split_builtin[i])
+		{
+			if (ft_memcmp(cmd, m->split_builtin[i], ft_strlen(cmd) + 1) == 0)
+				return (m->split_builtin[i]);
+			i++;
+		}
+	}
+	return (0);
+}
+
+void	exec_builtin(char **split_cmd, char *cmd, t_cmdtab *c)
+{
+	if (ft_memcmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
+		ft_export(c);
+	else if (ft_memcmp(cmd, "unset", ft_strlen(cmd) + 1) == 0)
+		ft_unset(c);
+	else if (ft_memcmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
+		ft_cd(c);
+	else if (ft_memcmp(cmd, "echo", ft_strlen(cmd) + 1) == 0)
+		ft_echo(c);
+	else if (ft_memcmp(cmd, "env", ft_strlen(cmd) + 1) == 0)
+		ft_env(c);
+	else if (ft_memcmp(cmd, "pwd", ft_strlen(cmd) + 1) == 0)
+		ft_pwd(c);
+	else if (ft_memcmp(cmd, "exit", ft_strlen(cmd) + 1) == 0)
+		ft_exit(c);
+}
+
 void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 {
+	char	*p;
 	if (i < e->nb_cmd - 1)
 	{
 		if (dup2(ends[i][1], 1) == -1)
@@ -140,8 +176,15 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 			exit(1); // error dup2
 	}
 	close_all_pipes(ends, e->nb_cmd);
-	ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
-	exit(126); // execve error
+	print_split(split_cmd);
+	if (p = is_builtin(split_cmd[0], e->m))
+	//	printf("builtins cmd %s!!\n", split_cmd[0]);
+			exec_builtin(split_cmd, p, e->cmdtabl->content);
+	else
+	{
+		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
+		exit(126); // execve error
+	}
 }
 
 

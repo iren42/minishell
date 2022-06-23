@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 16:23:53 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 09:36:48 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ char	*expander(t_mini *m)
 {
 	char	*res;
 
+//	printf("expander before rm superflous %s\n", m->s);
 	m->s = rm_superflous(m->s);
+//	printf("expander after rm superflous %s\n", m->s);
 //	create_list(m);
 //		print_list(m->env_list, print_env);
 		
 	res = var_substitution(m->env_list, m->s);
 //	ft_lstclear(&env_list, del_tenv);
-//	printf("final res %s|\n", res);
+//	printf("expander after var subtitution s :%s|\n", res);
 //	free(res);
 	return (res);
 }

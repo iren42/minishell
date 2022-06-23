@@ -6,19 +6,18 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 05:47:04 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 10:35:16 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_tmini(char *s,t_list *env_list, t_mini *mini)
+void	update_tmini(char *s, t_mini *mini)
 {
-	mini->s = s;
-	//	mini->env = env;
 	mini->token_list = 0;
 	mini->cmdtab_list = 0;
-	mini->env_list = env_list;
+
+	mini->s = s;
 	mini->fd = 0;
 }
 
@@ -75,13 +74,29 @@ char	*ft_readline(void)
 	if (!input_empty(input))
 	{
 		add_history(input);
-	//	ft_putstr_fd("added in history\n", STDIN);
+		//	ft_putstr_fd("added in history\n", STDIN);
 	}
 	trimed = ft_strtrim(input, " ");
 	free(input);
-//	ft_putendl_fd(trimed, STDIN);
+	//	ft_putendl_fd(trimed, STDIN);
 	return (trimed);
-//	return (input);
+	//	return (input);
+}
+
+void	init_tmini(char **env, t_mini *mini)
+{
+	t_list	*env_list;
+	char	builtins[] =  "export cd pwd echo unset env exit";
+
+	env_list = init_env_list(env);
+	mini->env_list = env_list;
+	mini->split_builtin = ft_split(builtins, ' ');
+	//	print_split(mini->split_builtin);
+	if (!mini->split_builtin)
+		exit(1);
+	mini->token_list = 0;
+	mini->cmdtab_list = 0;
+
 }
 
 int	main(int ac, char **av, char **env)
@@ -89,43 +104,43 @@ int	main(int ac, char **av, char **env)
 	char	*s;
 	int	ret;
 	t_mini	mini;
-	t_list	*env_list;
-	t_cmdtab *c;
 
-	(void)ac;
 	(void)av;
-	(void)env;
-	env_list = 0;
 	if (ac > 1)
 		ft_error(TOO_MANY_ARG, 1);
 	signal_handler();
-	env_list = init_env_list(env);
+	init_tmini(env, &mini);
 	while (1)
 	{
 		s = ft_readline();
+		printf("right after readline s %s\n", s);
 		if (s == NULL)
 		{
 			// free all
-			ft_putendl_fd("", STDIN);
-			exit(0);
+			ft_lstclear(&mini.env_list, del_env);
+			rl_clear_history();
+			free_split(mini.split_builtin);
+			ft_putendl_fd("Quit.\n", STDIN);
+			return (0);
 		}
+		printf("after readline s %s\n", s);
 
-		init_tmini(s, env_list, &mini);
+		mini.s = s;
 		mini.s = expander(&mini);
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 
-	//	print_tmini(&mini);
+		print_tmini(&mini);
 
 		ret = executor(&mini);
-	//	printf("ret executor %d\n", ret);	
+		//	printf("ret executor %d\n", ret);	
 		//	ft_unset(mini.cmdtab_list->content);
 		//		ft_pwd(mini.cmdtab_list->content);
 		//		ft_export(mini.cmdtab_list->content);
 		//	ft_env(mini.cmdtab_list->content);
-	//			ft_exit(mini.cmdtab_list->content);
+		//			ft_exit(mini.cmdtab_list->content);
 		//	ft_cd(mini.cmdtab_list->content);
-//		ft_echo(mini.cmdtab_list->content);
+		//		ft_echo(mini.cmdtab_list->content);
 		ft_lstclear(&mini.token_list, del_token);
 		ft_lstclear(&mini.cmdtab_list, del_cmdtab);
 

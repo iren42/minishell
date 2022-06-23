@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 21:51:27 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 23:20:06 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 }
 		else if (get_redir_type(tmp->content) == RE_DOUBLE_LESS)
 		{
-			printf("eof = %s\n", ((t_redir *)(tmp->content))->filename);
 			fd_in = ft_heredoc(((t_redir *)(tmp->content))->filename);
 		}
 		if (fd_in < 0)
@@ -234,6 +233,9 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	int	fd_in;
 	int	fd_out;
 
+	t_list	*tmp;
+	char	*eof;
+
 	fd_in = ex_infile(e, STDIN, i, ends);
 
 			if (fd_in != STDIN )
@@ -249,8 +251,20 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 				close(fd_out);
 			}
 
+	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
+	while (tmp)
+	{
+		eof = ft_strjoin(((t_redir *)(tmp->content))->filename, ".heredoc");
+		if (!eof)
+			exit(1); // malloc error
+		unlink(eof);
+		free(eof);
+		tmp = tmp->next;
+	}
+
 	close_all_pipes(ends, e->nb_cmd);
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
+
 	exit(0);
 
 }

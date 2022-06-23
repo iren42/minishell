@@ -6,12 +6,70 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 15:37:41 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 16:04:12 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
+{
+	t_list	*tmp;
 
+	if (child > 0)
+	{
+		fd_in = fd[child - 1][IN];
+		close(fd[child - 1][OUT]);
+	}
+	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
+	//	tmp = (ex_get_cmd_child(cmd, child))->infile;
+	while (tmp)
+	{
+		if (fd_in != STDIN)
+			close(fd_in);
+		if (get_redir_type(tmp->content) == LESS)
+			//	fd_in = open(&(tmp->content[2]), O_RDONLY);
+			fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
+		//		else
+		//			fd_in = bi_heredoc(&(tmp->content[2]), 0, "> ");
+		if (fd_in < 0)
+		{
+			//			error_handler(e_file);
+			print_error("shell:", 0, 0, "redirection");
+			exit(1);
+		}
+		tmp = tmp->next;
+	}
+	return (fd_in);// return le dernier infile ouvert
+}
+
+int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
+{
+	t_list	*tp;
+
+	if (child != e->nb_cmd - 1)
+	{
+		fd_out = fd[child][WRITE];
+		close(fd[child][READ]);
+	}
+	tp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
+	while (tp)
+	{
+		if (fd_out != STDOUT)
+			close(fd_out);
+		//	if (tp->content[1] == ' ')
+		if (get_redir_type(tp->content) == RE_GREAT)
+			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
+		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
+			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
+		if (fd_out < 0)
+		{
+			print_error("shell:", 0, 0, "redirection");
+			exit(1);
+		}
+		tp = tp->next;
+	}
+	return (fd_out);
+}
 
 char	**ft_split_cmd(t_mini *mini, int cmd_num)
 {
@@ -165,22 +223,44 @@ void	exec_builtin(char **split_cmd, char *cmd, t_cmdtab *c)
 void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 {
 	char	*p;
-	if (i < e->nb_cmd - 1)
-	{
+	int	fd_in;
+	int	fd_out;
+
+
+/*		if (i < e->nb_cmd - 1)
+		{
 		if (dup2(ends[i][1], 1) == -1)
-			exit(1);
-	}
-	if (i > 0)
-	{
+		exit(1);
+		}
+		if (i > 0)
+		{
 		if (dup2(ends[i - 1][0], 0) == -1)
-			exit(1); // error dup2
-	}
+		exit(1); // error dup2
+		}
+*/
+	fd_in = ex_infile(e, fd_in, i, ends);
+
+			if (fd_in != STDIN )
+				//if (fd_in != STDIN && (ex_get_cmd_child(cmd, child))->argc > 0)
+			{
+				dup2(fd_in, STDIN);
+				close(fd_in);
+		}
+			fd_out = ex_outfile(e, fd_out, i, ends);
+
+			if (fd_out != STDOUT )
+				//if (fd_out != STDOUT && (ex_get_cmd_child(cmd, child))->argc > 0)
+			{
+			dup2(fd_out, STDOUT);
+				close(fd_out);
+			}
+
 	close_all_pipes(ends, e->nb_cmd);
-//	print_split(split_cmd);
+	//	print_split(split_cmd);
 	if (p = is_builtin(split_cmd[0], e->m))
 	{
-	//	printf("builtins cmd %s!!\n", split_cmd[0]);
-			exec_builtin(split_cmd, p, e->cmdtabl->content);
+		//	printf("builtins cmd %s!!\n", split_cmd[0]);
+		exec_builtin(split_cmd, p, e->cmdtabl->content);
 		//	exit(126);
 		//	waitpid(-1, 0, 0);
 	}
@@ -218,32 +298,32 @@ int	redir_great(int *ends, int *fd, t_redir *redir, t_exec *e)
 	*fd = open(redir->filename, O_CREAT | O_TRUNC | O_RDWR, 0664);
 	if ((*fd) < 0)
 		return (redir_error(redir, e));
-//	dup2((*fd), STDOUT_FILENO); // ddup2(fd_pipe[out], fd);
+	//	dup2((*fd), STDOUT_FILENO); // ddup2(fd_pipe[out], fd);
 	dup2(ends[OUT], (*fd));
 	close(ends[OUT]);
-//	close((*fd));
+	//	close((*fd));
 	return (0);
 }
 /*
-int	redir_less(int *fd, t_redir *redir, t_exec *e)
-{
-	*fd = open(redir->filename, O_RDONLY);
-	if (*fd < 0)
-		return (redir_error(redir, e));
-	dup2((*fd), STDIN_FILENO);
-	close((*fd));
-	return (0);
-}
+   int	redir_less(int *fd, t_redir *redir, t_exec *e)
+   {
+ *fd = open(redir->filename, O_RDONLY);
+ if (*fd < 0)
+ return (redir_error(redir, e));
+ dup2((*fd), STDIN_FILENO);
+ close((*fd));
+ return (0);
+ }
 
-int	redir_double_great(int *fd, t_redir *redir, t_exec *e)
-{
-	*fd = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
-	if (*fd < 0)
-		return (redir_error(redir, e));
-	dup2((*fd), STDOUT_FILENO);
-	close((*fd));
-	return (0);
-}*/
+ int	redir_double_great(int *fd, t_redir *redir, t_exec *e)
+ {
+ *fd = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
+ if (*fd < 0)
+ return (redir_error(redir, e));
+ dup2((*fd), STDOUT_FILENO);
+ close((*fd));
+ return (0);
+ }*/
 
 void	ft_redir(int *ends, t_exec *e, t_list *redirl)
 {
@@ -255,87 +335,28 @@ void	ft_redir(int *ends, t_exec *e, t_list *redirl)
 				return ;
 			//	printf("RE GREAT\n");
 		}
-	/*	else if (get_redir_type(redirl->content) == RE_LESS)
-		{
+		/*	else if (get_redir_type(redirl->content) == RE_LESS)
+			{
 			if (redir_less(&e->redir_fd[IN], redirl->content, e))
-				return ;
-			//	printf("RE GREAT\n");
+			return ;
+		//	printf("RE GREAT\n");
 		}
 		else if (get_redir_type(redirl->content) == RE_DOUBLE_GREAT)
 		{
-			if (redir_double_great(&e->redir_fd[OUT], redirl->content, e))
-				return ;
-			//	printf("RE GREAT\n");
+		if (redir_double_great(&e->redir_fd[OUT], redirl->content, e))
+		return ;
+		//	printf("RE GREAT\n");
 		}*/
 		redirl = redirl->next;
 	}
 }
-int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
-{
-	t_list	*tmp;
 
-	if (child > 0)
-	{
-		fd_in = fd[child - 1][IN];
-		close(fd[child - 1][OUT]);
-	}
-	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
-//	tmp = (ex_get_cmd_child(cmd, child))->infile;
-	while (tmp)
-	{
-		if (fd_in != STDIN)
-			close(fd_in);
-		if (get_redir_type(tmp->content) == LESS)
-		//	fd_in = open(&(tmp->content[2]), O_RDONLY);
-		fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
-//		else
-//			fd_in = bi_heredoc(&(tmp->content[2]), 0, "> ");
-		if (fd_in < 0)
-		{
-//			error_handler(e_file);
-			print_error("shell:", 0, 0, "redirection");
-			exit(1);
-		}
-		tmp = tmp->next;
-	}
-	return (fd_in);// return le dernier infile ouvert
-}
-
-int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
-{
-	t_list	*tp;
-
-	if (child != e->nb_cmd - 1)
-	{
-		fd_out = fd[child][WRITE];
-		close(fd[child][READ]);
-	}
-	tp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
-	while (tp)
-	{
-		if (fd_out != STDOUT)
-			close(fd_out);
-	//	if (tp->content[1] == ' ')
-		if (get_redir_type(tp->content) == RE_LESS)
-			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
-		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
-			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
-		if (fd_out < 0)
-		{
-			print_error("shell:", 0, 0, "redirection");
-			exit(1);
-		}
-		tp = tp->next;
-	}
-	return (fd_out);
-}
 
 
 void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 {
 	int		i;
 	char	**split_cmd;
-
 	i = 0;
 	while (i < e->nb_cmd)
 	{
@@ -346,10 +367,7 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
-			e->redir_fd[IN] = ex_infile(e, e->redir_fd[IN], i, ends);
-			e->redir_fd[OUT] = ex_outfile(e, e->redir_fd[OUT], i, ends);
-	//		ft_redir(e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
-//			ft_redir(ends[i - 1], e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
+			//		ft_redir(e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;
@@ -373,8 +391,8 @@ void	exec_no_fork(t_exec *e, t_cmdtab *ptr)
 	char	**split_cmd;
 
 	split_cmd = ft_split_cmd(e->m, 0);
-//	print_split(split_cmd);
-		exec_builtin(split_cmd, ptr->cmd, ptr);
+	//	print_split(split_cmd);
+	exec_builtin(split_cmd, ptr->cmd, ptr);
 	free_split(split_cmd);
 }
 
@@ -391,20 +409,20 @@ int	executor(t_mini *mini)
 	ptr = get_cmdtab_ptr(mini->cmdtab_list->content);
 	init_t_exec(&e, mini);
 	if (e.nb_cmd == 1 && (ptr->type == CD || ptr->type == UNSET
-			|| ptr->type == EXPORT || ptr->type == EXIT))
+				|| ptr->type == EXPORT || ptr->type == EXIT))
 		exec_no_fork(&e, ptr);
 	else
 	{
-	pids = malloc(sizeof(pid_t) * e.nb_cmd);
-	if (!pids)
-		exit(1); // malloc error
-	ends = init_pipes(e.nb_cmd);
-	open_pipes(ends, e.nb_cmd);
-	exec_cmdtab_list(&e, pids, ends);
-	close_all_pipes(ends, e.nb_cmd);
-	err = ft_wait(pids, e.nb_cmd);
-	free_pipes(ends, e.nb_cmd);
-	free(pids);
+		pids = malloc(sizeof(pid_t) * e.nb_cmd);
+		if (!pids)
+			exit(1); // malloc error
+		ends = init_pipes(e.nb_cmd);
+		open_pipes(ends, e.nb_cmd);
+		exec_cmdtab_list(&e, pids, ends);
+		close_all_pipes(ends, e.nb_cmd);
+		err = ft_wait(pids, e.nb_cmd);
+		free_pipes(ends, e.nb_cmd);
+		free(pids);
 	}
 	free_split(e.split_env);
 	return (err);

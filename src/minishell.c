@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 21:56:42 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 22:16:37 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	main(int ac, char **av, char **env)
 		ret = executor(&mini);
 		//	printf("ret executor %d\n", ret);	
 	//	executor(&mini);
-		ft_heredoc("EOF");
+//		ft_heredoc("EOF");
 		
 		//	ft_unset(mini.cmdtab_list->content);
 		//		ft_pwd(mini.cmdtab_list->content);

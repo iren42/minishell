@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 21:51:27 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 22:15:40 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 		if (fd_in != STDIN)
 			close(fd_in);
 		if (get_redir_type(tmp->content) == RE_LESS)
-{
+		{
 			//	fd_in = open(&(tmp->content[2]), O_RDONLY);
 			fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
-}
+		}
 		else if (get_redir_type(tmp->content) == RE_DOUBLE_LESS)
 		{
 			printf("eof = %s\n", ((t_redir *)(tmp->content))->filename);
@@ -209,7 +209,7 @@ char	*is_builtin(char *cmd, t_mini *m) // renvoie un ptr sur split_builtin
 
 void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 {
-//	printf("cmd type %d\n", c->type);
+	//	printf("cmd type %d\n", c->type);
 	if (c->type == EXPORT)
 		ft_export(c);
 	else if (c->type == UNSET)
@@ -236,19 +236,19 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 
 	fd_in = ex_infile(e, STDIN, i, ends);
 
-			if (fd_in != STDIN )
-			{
-				dup2(fd_in, STDIN);
-				close(fd_in);
-		}
-			fd_out = ex_outfile(e, STDOUT, i, ends);
+	if (fd_in != STDIN )
+	{
+		dup2(fd_in, STDIN);
+		close(fd_in);
+	}
+	fd_out = ex_outfile(e, STDOUT, i, ends);
 
-			if (fd_out != STDOUT )
-			{
-			dup2(fd_out, STDOUT);
-				close(fd_out);
-			}
-
+	if (fd_out != STDOUT )
+	{
+		dup2(fd_out, STDOUT);
+		close(fd_out);
+	}
+	p = is_builtin(split_cmd[0], e->m);
 	close_all_pipes(ends, e->nb_cmd);
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
 	exit(0);

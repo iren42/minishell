@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 05:46:51 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 05:55:09 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,24 +145,24 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 }
 
 
-int	redir_error(t_redir *redirect, t_exec *e)
+int	redir_error(t_redir *redir, t_exec *e)
 {
 	struct stat		buf;
 
-	if (stat(redirect->filename, &buf) == 0)
+	if (stat(redir->filename, &buf) == 0)
 	{
 		if (buf.st_mode & S_IFDIR)
 		{
-			print_error("shell", redirect->filename, 0, "Is a directory");
+			print_error("shell", redir->filename, 0, "Is a directory");
+			return (1);
+		}
+		else if ((buf.st_mode & S_IXUSR) == 0)
+		{
+			print_error("shell", redir->filename, 0, "Permission denied");
 			return (1);
 		}
 	}
-	else if ((buf.st_mode & S_IXUSR) == 0)
-	{
-		print_error("shell", redirect->filename, 0, "Permission denied");
-		return (1);
-	}
-	print_error("shell", redirect->filename, 0, "No such file or directory");
+	print_error("shell", redir->filename, 0, "No such file or directory");
 	return (1);
 }
 

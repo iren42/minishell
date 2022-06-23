@@ -6,11 +6,33 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 16:37:35 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/23 18:57:17 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	redir_error(t_redir *redir, t_exec *e)
+{
+	struct stat		buf;
+
+	if (stat(redir->filename, &buf) == 0)
+	{
+		if (buf.st_mode & S_IFDIR)
+		{
+			print_error("shell", redir->filename, 0, "Is a directory");
+			return (1);
+		}
+		else if ((buf.st_mode & S_IXUSR) == 0)
+		{
+			print_error("shell", redir->filename, 0, "Permission denied");
+			return (1);
+		}
+	}
+	print_error("shell", redir->filename, 0, "No such file or directory");
+	return (1);
+}
+
 
 int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 {
@@ -35,7 +57,7 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 		if (fd_in < 0)
 		{
 			//			error_handler(e_file);
-			print_error("shell:", 0, 0, "redirection");
+			redir_error(tmp->content, e);
 			exit(1);
 		}
 		tmp = tmp->next;
@@ -57,14 +79,13 @@ int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
 	{
 		if (fd_out != STDOUT)
 			close(fd_out);
-		//	if (tp->content[1] == ' ')
 		if (get_redir_type(tp->content) == RE_GREAT)
 			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
 		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
 			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 		if (fd_out < 0)
 		{
-			print_error("shell:", 0, 0, "redirection");
+			redir_error(tp->content, e);
 			exit(1);
 		}
 		tp = tp->next;
@@ -145,28 +166,6 @@ void	ft_execve(t_cmdtab *cmdtab, char **split_cmd, char **split_env)
 {
 	execve(cmdtab->cmd, split_cmd, split_env);
 }
-/*
-   int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
-   {
-   int		status;
-   pid_t	pid;
-
-   status = 0;
-   pid = fork();
-   if (pid == -1)
-   exit(1); // fork error
-   if (pid == 0)
-   {
-   ft_execve((t_cmdtab *)(tmp_cmdtab_list->content), split_cmd, split_env);
-   exit(126); // execve error
-   }
-   else
-   {
-   if (waitpid(pid, &status, 0) == -1)
-   exit(1); // waitpid error
-   }
-   return (status);
-   }*/
 
 static int	ft_wait(pid_t *pids, int n)
 {
@@ -203,22 +202,25 @@ char	*is_builtin(char *cmd, t_mini *m) // renvoie un ptr sur split_builtin
 	return (0);
 }
 
-void	exec_builtin(char **split_cmd, char *cmd, t_cmdtab *c)
+void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 {
-	if (ft_memcmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
+//	printf("cmd type %d\n", c->type);
+	if (c->type == EXPORT)
 		ft_export(c);
-	else if (ft_memcmp(cmd, "unset", ft_strlen(cmd) + 1) == 0)
+	if (c->type == UNSET)
 		ft_unset(c);
-	else if (ft_memcmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
+	if (c->type == CD)
 		ft_cd(c);
-	else if (ft_memcmp(cmd, "echo", ft_strlen(cmd) + 1) == 0)
+	if (c->type == ECHO)
 		ft_echo(c);
-	else if (ft_memcmp(cmd, "env", ft_strlen(cmd) + 1) == 0)
+	if (c->type == ENV)
 		ft_env(c);
-	else if (ft_memcmp(cmd, "pwd", ft_strlen(cmd) + 1) == 0)
+	if (c->type == PWD)
 		ft_pwd(c);
-	else if (ft_memcmp(cmd, "exit", ft_strlen(cmd) + 1) == 0)
+	if (c->type == EXIT)
 		ft_exit(c);
+	else
+		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
 }
 
 void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
@@ -227,132 +229,41 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	int	fd_in;
 	int	fd_out;
 
-
-/*		if (i < e->nb_cmd - 1)
-		{
-		if (dup2(ends[i][1], 1) == -1)
-		exit(1);
-		}
-		if (i > 0)
-		{
-		if (dup2(ends[i - 1][0], 0) == -1)
-		exit(1); // error dup2
-		}
-*/
 	fd_in = ex_infile(e, fd_in, i, ends);
 
-			if (fd_in != STDIN )
-				//if (fd_in != STDIN && (ex_get_cmd_child(cmd, child))->argc > 0)
-			{
-				dup2(fd_in, STDIN);
-				close(fd_in);
-		}
-			fd_out = ex_outfile(e, fd_out, i, ends);
-
-			if (fd_out != STDOUT )
-				//if (fd_out != STDOUT && (ex_get_cmd_child(cmd, child))->argc > 0)
-			{
-			dup2(fd_out, STDOUT);
-				close(fd_out);
-			}
+//	if (fd_in != STDIN && i > 0)
+	if (fd_in != STDIN )
+		//if (fd_in != STDIN && (ex_get_cmd_child(cmd, child))->argc > 0)
+	{
+		dup2(fd_in, STDIN);
+		close(fd_in);
+	}
+	fd_out = ex_outfile(e, fd_out, i, ends);
+//	if (fd_out != STDOUT && i < e->nb_cmd - 1)
+	if (fd_out != STDOUT )
+		//if (fd_out != STDOUT && (ex_get_cmd_child(cmd, child))->argc > 0)
+	{
+		dup2(fd_out, STDOUT);
+		close(fd_out);
+	}
 
 	close_all_pipes(ends, e->nb_cmd);
+	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
 	//	print_split(split_cmd);
-	if (p = is_builtin(split_cmd[0], e->m))
-	{
-		//	printf("builtins cmd %s!!\n", split_cmd[0]);
-		exec_builtin(split_cmd, p, e->cmdtabl->content);
-		//	exit(126);
-		//	waitpid(-1, 0, 0);
+	/*	if (p = is_builtin(split_cmd[0], e->m))
+		{
+	//	printf("builtins cmd %s!!\n", split_cmd[0]);
+	execute_cmd(split_cmd, p, e->cmdtabl->content);
+	//	exit(126);
+	//	waitpid(-1, 0, 0);
 	}
 	else
 	{
-		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
-		exit(126); // execve error
+	ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
+	exit(126); // execve error
 	}
+	 */
 }
-
-
-int	redir_error(t_redir *redir, t_exec *e)
-{
-	struct stat		buf;
-
-	if (stat(redir->filename, &buf) == 0)
-	{
-		if (buf.st_mode & S_IFDIR)
-		{
-			print_error("shell", redir->filename, 0, "Is a directory");
-			return (1);
-		}
-		else if ((buf.st_mode & S_IXUSR) == 0)
-		{
-			print_error("shell", redir->filename, 0, "Permission denied");
-			return (1);
-		}
-	}
-	print_error("shell", redir->filename, 0, "No such file or directory");
-	return (1);
-}
-
-int	redir_great(int *ends, int *fd, t_redir *redir, t_exec *e)
-{
-	*fd = open(redir->filename, O_CREAT | O_TRUNC | O_RDWR, 0664);
-	if ((*fd) < 0)
-		return (redir_error(redir, e));
-	//	dup2((*fd), STDOUT_FILENO); // ddup2(fd_pipe[out], fd);
-	dup2(ends[OUT], (*fd));
-	close(ends[OUT]);
-	//	close((*fd));
-	return (0);
-}
-/*
-   int	redir_less(int *fd, t_redir *redir, t_exec *e)
-   {
- *fd = open(redir->filename, O_RDONLY);
- if (*fd < 0)
- return (redir_error(redir, e));
- dup2((*fd), STDIN_FILENO);
- close((*fd));
- return (0);
- }
-
- int	redir_double_great(int *fd, t_redir *redir, t_exec *e)
- {
- *fd = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
- if (*fd < 0)
- return (redir_error(redir, e));
- dup2((*fd), STDOUT_FILENO);
- close((*fd));
- return (0);
- }*/
-
-void	ft_redir(int *ends, t_exec *e, t_list *redirl)
-{
-	while (redirl)
-	{
-		if (get_redir_type(redirl->content) == RE_GREAT)
-		{
-			if (redir_great(ends, &e->redir_fd[OUT], redirl->content, e))
-				return ;
-			//	printf("RE GREAT\n");
-		}
-		/*	else if (get_redir_type(redirl->content) == RE_LESS)
-			{
-			if (redir_less(&e->redir_fd[IN], redirl->content, e))
-			return ;
-		//	printf("RE GREAT\n");
-		}
-		else if (get_redir_type(redirl->content) == RE_DOUBLE_GREAT)
-		{
-		if (redir_double_great(&e->redir_fd[OUT], redirl->content, e))
-		return ;
-		//	printf("RE GREAT\n");
-		}*/
-		redirl = redirl->next;
-	}
-}
-
-
 
 void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 {
@@ -393,7 +304,7 @@ void	exec_no_fork(t_exec *e, t_cmdtab *ptr)
 
 	split_cmd = ft_split_cmd(e->m, 0);
 	//	print_split(split_cmd);
-	exec_builtin(split_cmd, ptr->cmd, ptr);
+	execute_cmd(split_cmd, ptr->cmd, ptr, e);
 	free_split(split_cmd);
 }
 

@@ -6,11 +6,12 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 16:04:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 16:37:35 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 {
 	t_list	*tmp;
@@ -26,7 +27,7 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 	{
 		if (fd_in != STDIN)
 			close(fd_in);
-		if (get_redir_type(tmp->content) == LESS)
+		if (get_redir_type(tmp->content) == RE_LESS)
 			//	fd_in = open(&(tmp->content[2]), O_RDONLY);
 			fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
 		//		else

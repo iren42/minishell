@@ -96,6 +96,7 @@ char	*get_token_value(t_token *t);
 int	get_token_type(t_token *t);
 
 void del_cmdtab(void *o);
+t_cmdtab	*get_cmdtab_ptr(void *o);
 
 void	del_redir(void *o);
 t_redir_type	get_redir_type(t_redir *r);

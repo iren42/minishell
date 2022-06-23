@@ -40,6 +40,17 @@ typedef struct s_arg{
 	char			*value;
 }	t_arg;
 
+typedef enum e_cmd_type{
+	PWD,
+	ECHO,
+	CD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXIT,
+	OTHER,
+}	t_cmd_type;
+
 typedef struct	s_cmdtab
 {
 	int			is_in_quotes;
@@ -47,6 +58,7 @@ typedef struct	s_cmdtab
 	t_list		*arg_list;
 	t_list		*redir_list;
 	struct s_mini	*m;
+	t_cmd_type	type;
 } t_cmdtab;
 
 typedef struct	s_mini

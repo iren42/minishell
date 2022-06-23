@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 16:29:20 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 16:29:30 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 11:57:50 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,11 @@ void	del_cmdtab(void *o)
 	free(c);
 }
 
+t_cmdtab	*get_cmdtab_ptr(void *o)
+{
+	t_cmdtab	*c;
 
+	c = (t_cmdtab *)o;
+	return (c);
+
+}

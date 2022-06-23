@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 15:27:40 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/23 11:52:43 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	print_cmdtab(void *o)
 
 	c = (t_cmdtab *)o;
 	printf("cmd =%s\n", c->cmd);
+	printf("type = %d\n", c->type);
 	print_list(c->arg_list, &print_arg);
 	print_list(c->redir_list, &print_redir);
 }

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 10:35:16 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 12:21:59 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,18 +113,17 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		s = ft_readline();
-		printf("right after readline s %s\n", s);
+	//	printf("right after readline s %s\n", s);
 		if (s == NULL)
 		{
 			// free all
 			ft_lstclear(&mini.env_list, del_env);
 			rl_clear_history();
 			free_split(mini.split_builtin);
-			ft_putendl_fd("Quit.\n", STDIN);
+			ft_putendl_fd("Quit.", STDIN);
 			return (0);
 		}
-		printf("after readline s %s\n", s);
-
+	//	printf("after readline s %s\n", s);
 		mini.s = s;
 		mini.s = expander(&mini);
 		mini.token_list = lexer(&mini);

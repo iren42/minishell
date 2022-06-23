@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/22 16:16:23 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 12:10:36 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	is_cmd(t_token *t)
 		exit(1);
 	while (split_built[i] != 0 && t->value)
 	{
-	//	printf("builtin %s, t value %s, len %ld\n", split_built[i], t->value, ft_strlen(t->value));
+		//	printf("builtin %s, t value %s, len %ld\n", split_built[i], t->value, ft_strlen(t->value));
 		if (ft_memcmp(split_built[i], t->value, ft_strlen(t->value) + 1) == 0)
 		{
 			free_split(split_built);
@@ -55,6 +55,26 @@ int	is_cmd(t_token *t)
 	return (1);
 
 }
+
+t_cmd_type	get_cmd_type(char *type)
+{
+	if (ft_memcmp(type, "export", ft_strlen(type) + 1) == 0)
+		return (EXPORT);
+	if (ft_memcmp(type, "pwd", ft_strlen(type) + 1) == 0)
+		return (PWD);
+	if (ft_memcmp(type, "echo", ft_strlen(type) + 1) == 0)
+		return (ECHO);
+	if (ft_memcmp(type, "cd", ft_strlen(type) + 1) == 0)
+		return (CD);
+	if (ft_memcmp(type, "unset", ft_strlen(type) + 1) == 0)
+		return (UNSET);
+	if (ft_memcmp(type, "env", ft_strlen(type) + 1) == 0)
+		return (ENV);
+	if (ft_memcmp(type, "exit", ft_strlen(type) + 1) == 0)
+		return (EXIT);
+	return (OTHER);
+}
+
 int	fill_cmd(t_token *t, t_cmdtab *ct, int *ret)
 {
 	int	a;
@@ -73,12 +93,13 @@ int	fill_cmd(t_token *t, t_cmdtab *ct, int *ret)
 			ct->cmd = get_cmd(t->m->env_list, t->value);
 			if (ct->cmd)
 				(*ret)++;
-			else
+			else // builtins
 			{
 				ct->cmd = ft_strdup(t->value);
 				(*ret)++;
 			}
 		}
+		ct->type = get_cmd_type(t->value);
 	}
 	return (0);
 }

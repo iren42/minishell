@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 10:21:11 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 12:22:10 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,12 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	close_all_pipes(ends, e->nb_cmd);
 	print_split(split_cmd);
 	if (p = is_builtin(split_cmd[0], e->m))
+	{
 	//	printf("builtins cmd %s!!\n", split_cmd[0]);
 			exec_builtin(split_cmd, p, e->cmdtabl->content);
+		//	exit(126);
+		//	waitpid(-1, 0, 0);
+	}
 	else
 	{
 		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
@@ -301,17 +305,33 @@ void	*init_t_exec(t_exec *e, t_mini *m)
 		exit(1);
 }
 
+void	exec_no_fork(t_exec *e, t_cmdtab *ptr)
+{
+	char	**split_cmd;
+
+	split_cmd = ft_split_cmd(e->m, 0);
+//	print_split(split_cmd);
+		exec_builtin(split_cmd, ptr->cmd, ptr);
+	free_split(split_cmd);
+}
+
 int	executor(t_mini *mini)
 {
 	pid_t	*pids;
 	int		**ends; // pipes
 	int		err;
 	t_exec	e;
+	t_cmdtab	*ptr;
 
 	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
 		return (0); // cmd =(null)
-	//	status = 0;
+	ptr = get_cmdtab_ptr(mini->cmdtab_list->content);
 	init_t_exec(&e, mini);
+	if (e.nb_cmd == 1 && (ptr->type == CD || ptr->type == UNSET
+			|| ptr->type == EXPORT || ptr->type == EXIT))
+		exec_no_fork(&e, ptr);
+	else
+	{
 	pids = malloc(sizeof(pid_t) * e.nb_cmd);
 	if (!pids)
 		exit(1); // malloc error
@@ -322,6 +342,7 @@ int	executor(t_mini *mini)
 	err = ft_wait(pids, e.nb_cmd);
 	free_pipes(ends, e.nb_cmd);
 	free(pids);
+	}
 	free_split(e.split_env);
 	return (err);
 }

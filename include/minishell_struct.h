@@ -95,6 +95,7 @@ typedef struct s_exec
 //	int		err;
 	t_mini	*m;
 	t_list	*cmdtabl;
+	int	redir_fd[2];
 
 } t_exec;
 #endif

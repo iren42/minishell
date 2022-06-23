@@ -8,6 +8,9 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "libft.h"
 #include "minishell_struct.h"
@@ -95,6 +98,7 @@ int	get_token_type(t_token *t);
 void del_cmdtab(void *o);
 
 void	del_redir(void *o);
+t_redir_type	get_redir_type(t_redir *r);
 
 int is_quote(char c);
 int ft_isspace(char c);

@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 03:47:41 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 05:46:51 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,86 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	exit(126); // execve error
 }
 
+
+int	redir_error(t_redir *redirect, t_exec *e)
+{
+	struct stat		buf;
+
+	if (stat(redirect->filename, &buf) == 0)
+	{
+		if (buf.st_mode & S_IFDIR)
+		{
+			print_error("shell", redirect->filename, 0, "Is a directory");
+			return (1);
+		}
+	}
+	else if ((buf.st_mode & S_IXUSR) == 0)
+	{
+		print_error("shell", redirect->filename, 0, "Permission denied");
+		return (1);
+	}
+	print_error("shell", redirect->filename, 0, "No such file or directory");
+	return (1);
+}
+
+int	redir_great(int *fd, t_redir *redir, t_exec *e)
+{
+	*fd = open(redir->filename, O_CREAT | O_TRUNC
+			| O_RDONLY | O_WRONLY, 0644);
+	if ((*fd) < 0)
+		return (redir_error(redir, e));
+	dup2((*fd), STDOUT_FILENO);
+	close((*fd));
+	return (0);
+}
+
+int	redir_less(int *fd, t_redir *redir, t_exec *e)
+{
+	*fd = open(redir->filename, O_RDONLY);
+	if (*fd < 0)
+		return (redir_error(redir, e));
+	dup2((*fd), STDIN_FILENO);
+	close((*fd));
+	return (0);
+}
+
+int	redir_double_great(int *fd, t_redir *redir, t_exec *e)
+{
+	*fd = open(redir->filename, O_CREAT | O_RDONLY
+			| O_WRONLY | O_APPEND, 0644);
+	if (*fd < 0)
+		return (redir_error(redir, e));
+	dup2((*fd), STDOUT_FILENO);
+	close((*fd));
+	return (0);
+}
+
+void	ft_redir(t_exec *e, t_list *redirl)
+{
+	while (redirl)
+	{
+		if (get_redir_type(redirl->content) == RE_GREAT)
+		{
+			if (redir_great(&e->redir_fd[1], redirl->content, e))
+				return ;
+			//	printf("RE GREAT\n");
+		}
+		else if (get_redir_type(redirl->content) == RE_LESS)
+		{
+			if (redir_less(&e->redir_fd[1], redirl->content, e))
+				return ;
+			//	printf("RE GREAT\n");
+		}
+		else if (get_redir_type(redirl->content) == RE_DOUBLE_GREAT)
+		{
+			if (redir_double_great(&e->redir_fd[1], redirl->content, e))
+				return ;
+			//	printf("RE GREAT\n");
+		}
+		redirl = redirl->next;
+	}
+}
+
 void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 {
 	int		i;
@@ -159,6 +239,7 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
+			ft_redir(e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;

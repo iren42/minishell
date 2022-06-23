@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/23 12:10:36 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 17:25:05 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 {
 	t_redir	*new;
 
-	if (t->type == GREAT || t->type == DOUBLE_GREAT || t->type == LESS)
+	if (t->type == GREAT || t->type == DOUBLE_GREAT || t->type == LESS || t->type == DOUBLE_LESS)
 	{	new = malloc(sizeof(t_redir));
 		if (!new)
 			exit(1);
@@ -136,6 +136,8 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 			new->type = RE_DOUBLE_GREAT;
 		else if (t->type == LESS)
 			new->type = RE_LESS;
+		else if (t->type == DOUBLE_LESS)
+			new->type = RE_DOUBLE_LESS;
 		else
 			;
 		new->filename = ft_strdup(t->value);

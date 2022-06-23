@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 09:35:55 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 21:22:51 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ char	*get_tokenvalue(char *s, int *to_set)
 	}
 	else
 	{
-		if (ft_strchr("<>", s[0])) // skip <>
+		if (ft_strchr("<>", s[start])) // skip <>
+			start++;
+		if (ft_strchr("<>", s[start])) // skip <>
 			start++;
 		while (ft_isspace(s[start])) // skip spaces
 			start++;
@@ -79,7 +81,12 @@ t_token	*create_token(char *p, int *to_set, t_mini *m)
 
 	}
 	else if (*p == '<')
-		t->type = LESS;
+	{
+		if (*(p + 1) == '<')
+			t->type = DOUBLE_LESS;
+		else
+			t->type = LESS;
+	}
 	else if (*p == ';')
 		t->type = SEMI;
 	else if (*p == '|')

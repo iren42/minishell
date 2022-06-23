@@ -115,6 +115,8 @@ int matching(char b1, char b2);
 char *get_cmd(t_list *env_list, char *cmd);
 void free_split(char **split);
 
+// OTHER
 
+int	ft_heredoc(char *eof);
 
 #endif

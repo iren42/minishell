@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 20:57:27 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/23 21:51:27 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,15 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 		if (fd_in != STDIN)
 			close(fd_in);
 		if (get_redir_type(tmp->content) == RE_LESS)
+{
 			//	fd_in = open(&(tmp->content[2]), O_RDONLY);
 			fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
-		//		else
-		//			fd_in = bi_heredoc(&(tmp->content[2]), 0, "> ");
+}
+		else if (get_redir_type(tmp->content) == RE_DOUBLE_LESS)
+		{
+			printf("eof = %s\n", ((t_redir *)(tmp->content))->filename);
+			fd_in = ft_heredoc(((t_redir *)(tmp->content))->filename);
+		}
 		if (fd_in < 0)
 		{
 			//			error_handler(e_file);
@@ -80,7 +85,7 @@ int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
 		if (fd_out != STDOUT)
 			close(fd_out);
 		if (get_redir_type(tp->content) == RE_GREAT)
-			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
+			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC,  0664);
 		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
 			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 		if (fd_out < 0)
@@ -231,39 +236,23 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 
 	fd_in = ex_infile(e, STDIN, i, ends);
 
-//	if (fd_in != STDIN && i > 0)
-	if (fd_in != STDIN )
-		//if (fd_in != STDIN && (ex_get_cmd_child(cmd, child))->argc > 0)
-	{
-		dup2(fd_in, STDIN);
-		close(fd_in);
-	}
-	fd_out = ex_outfile(e, STDOUT, i, ends);
-//	if (fd_out != STDOUT && i < e->nb_cmd - 1)
-	if (fd_out != STDOUT )
-		//if (fd_out != STDOUT && (ex_get_cmd_child(cmd, child))->argc > 0)
-	{
-		dup2(fd_out, STDOUT);
-		close(fd_out);
-	}
+			if (fd_in != STDIN )
+			{
+				dup2(fd_in, STDIN);
+				close(fd_in);
+		}
+			fd_out = ex_outfile(e, STDOUT, i, ends);
+
+			if (fd_out != STDOUT )
+			{
+			dup2(fd_out, STDOUT);
+				close(fd_out);
+			}
 
 	close_all_pipes(ends, e->nb_cmd);
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
 	exit(0);
-	//	print_split(split_cmd);
-	/*	if (p = is_builtin(split_cmd[0], e->m))
-		{
-	//	printf("builtins cmd %s!!\n", split_cmd[0]);
-	execute_cmd(split_cmd, p, e->cmdtabl->content);
-	//	exit(126);
-	//	waitpid(-1, 0, 0);
-	}
-	else
-	{
-	ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
-	exit(126); // execve error
-	}
-	 */
+
 }
 
 void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
@@ -280,7 +269,6 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
-			//		ft_redir(e, ((t_cmdtab *)(e->cmdtabl->content))->redir_list);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;
@@ -336,18 +324,7 @@ int	executor(t_mini *mini)
 		exec_cmdtab_list(&e, pids, ends);
 		close_all_pipes(ends, e.nb_cmd);
 		err = ft_wait(pids, e.nb_cmd);
-/*		child = 0;
-	while (child < e.nb_cmd)
-	{
-		if (child != (e.nb_cmd - 1))
-		{
-			close(ends[child][0]);
-			close(ends[child][1]);
-		}
-		if (waitpid(-1, &status, 0) == pids[e.nb_cmd - 1])
-			err = WEXITSTATUS(status);
-		child++;
-	}*/
+
 		free_pipes(ends, e.nb_cmd);
 		free(pids);
 	}

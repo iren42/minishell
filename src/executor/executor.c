@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 12:22:10 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 13:20:45 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 			exit(1); // error dup2
 	}
 	close_all_pipes(ends, e->nb_cmd);
-	print_split(split_cmd);
+//	print_split(split_cmd);
 	if (p = is_builtin(split_cmd[0], e->m))
 	{
 	//	printf("builtins cmd %s!!\n", split_cmd[0]);
@@ -215,8 +215,7 @@ int	redir_error(t_redir *redir, t_exec *e)
 
 int	redir_great(int *fd, t_redir *redir, t_exec *e)
 {
-	*fd = open(redir->filename, O_CREAT | O_TRUNC
-			| O_RDONLY | O_WRONLY, 0644);
+	*fd = open(redir->filename, O_CREAT | O_TRUNC | O_RDWR, 0664);
 	if ((*fd) < 0)
 		return (redir_error(redir, e));
 	dup2((*fd), STDOUT_FILENO);
@@ -236,8 +235,7 @@ int	redir_less(int *fd, t_redir *redir, t_exec *e)
 
 int	redir_double_great(int *fd, t_redir *redir, t_exec *e)
 {
-	*fd = open(redir->filename, O_CREAT | O_RDONLY
-			| O_WRONLY | O_APPEND, 0644);
+	*fd = open(redir->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 	if (*fd < 0)
 		return (redir_error(redir, e));
 	dup2((*fd), STDOUT_FILENO);
@@ -251,19 +249,19 @@ void	ft_redir(t_exec *e, t_list *redirl)
 	{
 		if (get_redir_type(redirl->content) == RE_GREAT)
 		{
-			if (redir_great(&e->redir_fd[1], redirl->content, e))
+			if (redir_great(&e->redir_fd[OUT], redirl->content, e))
 				return ;
 			//	printf("RE GREAT\n");
 		}
 		else if (get_redir_type(redirl->content) == RE_LESS)
 		{
-			if (redir_less(&e->redir_fd[1], redirl->content, e))
+			if (redir_less(&e->redir_fd[IN], redirl->content, e))
 				return ;
 			//	printf("RE GREAT\n");
 		}
 		else if (get_redir_type(redirl->content) == RE_DOUBLE_GREAT)
 		{
-			if (redir_double_great(&e->redir_fd[1], redirl->content, e))
+			if (redir_double_great(&e->redir_fd[OUT], redirl->content, e))
 				return ;
 			//	printf("RE GREAT\n");
 		}

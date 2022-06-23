@@ -32,6 +32,8 @@
 #define STDERR 2
 #define STDIN 1
 
+#define OUT 1
+#define IN 0
 #define BUF_SIZE 254
 
 void	print_tmini(t_mini *mini);

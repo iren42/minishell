@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 00:39:04 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 03:47:41 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,28 +86,29 @@ void	ft_execve(t_cmdtab *cmdtab, char **split_cmd, char **split_env)
 {
 	execve(cmdtab->cmd, split_cmd, split_env);
 }
+/*
+   int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
+   {
+   int		status;
+   pid_t	pid;
 
-int	ft_exec(char **split_cmd, char **split_env, t_list *tmp_cmdtab_list)
-{
-	int		status;
-	pid_t	pid;
+   status = 0;
+   pid = fork();
+   if (pid == -1)
+   exit(1); // fork error
+   if (pid == 0)
+   {
+   ft_execve((t_cmdtab *)(tmp_cmdtab_list->content), split_cmd, split_env);
+   exit(126); // execve error
+   }
+   else
+   {
+   if (waitpid(pid, &status, 0) == -1)
+   exit(1); // waitpid error
+   }
+   return (status);
+   }*/
 
-	status = 0;
-	pid = fork();
-	if (pid == -1)
-		exit(1); // fork error
-	if (pid == 0)
-	{
-		ft_execve((t_cmdtab *)(tmp_cmdtab_list->content), split_cmd, split_env);
-		exit(126); // execve error
-	}
-	else
-	{
-		if (waitpid(pid, &status, 0) == -1)
-			exit(1); // waitpid error
-	}
-	return (status);
-}
 static int	ft_wait(pid_t *pids, int n)
 {
 	int	status;
@@ -125,69 +126,78 @@ static int	ft_wait(pid_t *pids, int n)
 		err = WEXITSTATUS(status);
 	return (err);
 }
+
+void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
+{
+	if (i < e->nb_cmd - 1)
+	{
+		if (dup2(ends[i][1], 1) == -1)
+			exit(1);
+	}
+	if (i > 0)
+	{
+		if (dup2(ends[i - 1][0], 0) == -1)
+			exit(1); // error dup2
+	}
+	close_all_pipes(ends, e->nb_cmd);
+	ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
+	exit(126); // execve error
+}
+
+void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
+{
+	int		i;
+	char	**split_cmd;
+
+	i = 0;
+	while (i < e->nb_cmd)
+	{
+		split_cmd = ft_split_cmd(e->m, i);
+		//		print_split(split_cmd);
+		pids[i] = fork();
+		if (pids[i] == -1)
+			exit(1); // fork error
+		if (pids[i] == 0) // child
+		{
+			exec_child(e, ends, split_cmd, i);
+		}
+		e->cmdtabl = e->cmdtabl->next;
+		free_split(split_cmd);
+		i++;
+	}
+}
+
+void	*init_t_exec(t_exec *e, t_mini *m)
+{
+	e->split_env = ft_split_env(m);
+	e->nb_cmd = ft_lstsize(m->cmdtab_list);
+	e->cmdtabl = m->cmdtab_list;
+	e->m = m;
+	if (!e->split_env || !e->cmdtabl)
+		exit(1);
+}
+
 int	executor(t_mini *mini)
 {
-	//	pid_t	pid;
-	int	status;
-	char	**split_cmd;
-	char	**split_env;
-	int		nb_cmd;
-	int		i;
-	t_list	*l;
 	pid_t	*pids;
-	int	**ends; // pipes
-	int	err;
+	int		**ends; // pipes
+	int		err;
+	t_exec	e;
 
 	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
 		return (0); // cmd =(null)
 	//	status = 0;
-	split_env = ft_split_env(mini);
-	nb_cmd = ft_lstsize(mini->cmdtab_list);
-	l = mini->cmdtab_list;
-	i = 0;
-	if (nb_cmd == 1)
-	{
-		split_cmd = ft_split_cmd(mini, i);
-		status = ft_exec(split_cmd, split_env, l);
-		free_split(split_cmd);
-	}
-	else
-	{
-		pids = malloc(sizeof(pid_t) * nb_cmd);
-		ends = init_pipes(nb_cmd);
-		open_pipes(ends, nb_cmd);
-		while (i < nb_cmd)
-		{
-			split_cmd = ft_split_cmd(mini, i);
-			//	print_split(split_cmd);
-			pids[i] = fork();
-			if (pids[i] == -1)
-				exit(1); // fork error
-			if (pids[i] == 0) // child
-			{
-				if (i < nb_cmd - 1)
-				{
-					if (dup2(ends[i][1], 1) == -1)
-						exit(1);
-				}
-				if (i > 0)
-				{
-					if (dup2(ends[i - 1][0], 0) == -1)
-						exit(1); // error dup2
-				}
-				close_all_pipes(ends, nb_cmd);
-				ft_execve((t_cmdtab *)(l->content), split_cmd, split_env);
-				exit(126); // execve error
-			}
-			l = l->next;
-			free_split(split_cmd);
-			i++;
-		}
-		close_all_pipes(ends, nb_cmd);
-		err = ft_wait(pids, nb_cmd);
-		free_pipes(ends, nb_cmd);
-		free(pids);
-	}
-	free_split(split_env);
-	return (status);
+	init_t_exec(&e, mini);
+	pids = malloc(sizeof(pid_t) * e.nb_cmd);
+	if (!pids)
+		exit(1); // malloc error
+	ends = init_pipes(e.nb_cmd);
+	open_pipes(ends, e.nb_cmd);
+	exec_cmdtab_list(&e, pids, ends);
+	close_all_pipes(ends, e.nb_cmd);
+	err = ft_wait(pids, e.nb_cmd);
+	free_pipes(ends, e.nb_cmd);
+	free(pids);
+	free_split(e.split_env);
+	return (err);
 }

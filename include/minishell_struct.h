@@ -85,4 +85,16 @@ typedef struct s_func_cmd_sub
 	int	end;
 	char	q;
 } t_func_cmd_sub;
+
+typedef struct s_exec
+{
+	char	**split_env;
+	int		nb_cmd;
+//	pid_t	*pids;
+//	int		**ends;
+//	int		err;
+	t_mini	*m;
+	t_list	*cmdtabl;
+
+} t_exec;
 #endif

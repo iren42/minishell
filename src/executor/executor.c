@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 21:53:20 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:08:18 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,12 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 		close(ends[i - 1][0]);
 		close(ends[i - 1][1]);
 	}
+	fd_in = ex_infile(e, STDIN, i, ends);
+	if (fd_in != STDIN)
+	{
+		dup2(fd_in, STDIN);
+		close(fd_in);
+	}
 	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	while (tmp)
 	{
@@ -251,12 +257,6 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 		unlink(eof);
 		free(eof);
 		tmp = tmp->next;
-	}
-	fd_in = ex_infile(e, STDIN, i, ends);
-	if (fd_in != STDIN)
-	{
-		dup2(fd_in, STDIN);
-		close(fd_in);
 	}
 	fd_out = ex_outfile(e, STDOUT, i, ends);
 	if (fd_out != STDOUT)

@@ -6,11 +6,13 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 22:04:16 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:32:42 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_errno = 0;
 
 void	update_tmini(char *s, t_mini *mini)
 {
@@ -129,9 +131,10 @@ int	main(int ac, char **av, char **env)
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 
-//		print_tmini(&mini);
+		print_tmini(&mini);
 
 		ret = executor(&mini);
+//	printf("ret = %d\n", ret);
 		//	printf("ret executor %d\n", ret);	
 	//	executor(&mini);
 	//	ft_heredoc("EOF");

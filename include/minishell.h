@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
+extern int	g_errno;
+
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>

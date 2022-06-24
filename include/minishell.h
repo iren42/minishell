@@ -45,6 +45,8 @@ void print_list(t_list *head, void (*f)(void *));
 void print_cmdtab(void *o);
 void print_token(void *t);
 void print_env(void *e);
+void print_quote(void *e);
+
 
 // IN EXECUTOR
 int	executor(t_mini *mini);
@@ -63,9 +65,10 @@ void ft_error(char *m, int code);
 void print_error(char *where, char *file, int err, char *msg);
 
 // IN EXPANDER
-char *expander(t_mini *m);
+int expander(t_mini *m);
 char *var_substitution(t_list *export_list, char *s);
 char *rm_superflous(char *s);
+int	are_quotes_closed(char *s);
 void push(t_list **l, char c, char *s, int i);
 
 void signal_handler();

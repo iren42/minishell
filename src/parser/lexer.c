@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 08:09:30 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 11:30:25 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*get_tokenvalue(char *s, int *to_set)
 	int	size;
 
 	value = 0;
-//	printf("get token value s :%s.\n", s);
+	//	printf("get token value s :%s.\n", s);
 	if (s)
 	{
 		len = 0;
@@ -51,10 +51,11 @@ char	*get_tokenvalue(char *s, int *to_set)
 			}
 			else
 			{
-				while (s[len + start] && !ft_isspace(s[len + start]) && !is_spe_char(s[len + start]) && !is_quote(s[len + start]))
+				//	while (s[len + start] && !ft_isspace(s[len + start]) && !is_spe_char(s[len + start]) && !is_quote(s[len + start]))
+				while (s[len + start] && !ft_isspace(s[len + start]) && !is_spe_char(s[len + start]))
 					len++;
 			}
-//			printf("len %d\n", len);
+			//			printf("len %d\n", len);
 			if (len == 0)
 				return (0);
 			value = malloc(sizeof(char) * (len + 1));
@@ -79,29 +80,29 @@ t_token	*token_double_great_less(char *p, int *to_set, t_mini *m)
 	t_token	*t;
 	int	len;
 	t = malloc(sizeof(t_token));
-t->m = m;
+	t->m = m;
 
 	t->type = DOUBLE_GREAT;
 	if (p)
 	{
 		start = 1;
 		if (p[start] == '>' && p[start + 1] == '>')
-	t->type = DOUBLE_GREAT;
-	else
-	t->type = DOUBLE_LESS;
+			t->type = DOUBLE_GREAT;
+		else
+			t->type = DOUBLE_LESS;
 
 		len = 0;
 		while (ft_isspace(p[start]) && p[start])
 			start++;
 		if (!ft_isspace(p[start]))
 		{
-			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]) && !is_quote(p[len + start]))
+			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]))
 				len++;
 			if (len == 0)
 			{
 				free(t);
 				*to_set += 1;
-//				printf("syntax error token great\n");
+				//				printf("syntax error token great\n");
 				return (0);
 			}	
 
@@ -123,7 +124,7 @@ t_token	*token_great_less(char *p, int *to_set, t_mini *m)
 
 	if (p)
 	{
-			t->m = m;
+		t->m = m;
 		start = 1;
 		if (p[0] == '>')
 			t->type = GREAT;
@@ -134,14 +135,14 @@ t_token	*token_great_less(char *p, int *to_set, t_mini *m)
 			start++;
 		if (!ft_isspace(p[start]))
 		{
-//			printf("p start %c %d\n", p[start], start);
-			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]) && !is_quote(p[len + start]))
+			//			printf("p start %c %d\n", p[start], start);
+			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]))
 				len++;
 			if (len == 0)
 			{
 				free(t);
 				*to_set += 1;
-//				printf("syntax error token great\n");
+				//				printf("syntax error token great\n");
 				return (0);
 			}	
 
@@ -162,13 +163,13 @@ t_token	*token_pipe_nl(char *p, int *to_set, t_mini *m)
 
 	if (p)
 	{
-			t->m = m;
+		t->m = m;
 		if (p[0] == '|')
 			t->type = PIPE;
 		else
 			t->type = NL;
-			t->value = 0;
-			*to_set += 1;
+		t->value = 0;
+		*to_set += 1;
 	}
 	return (t);
 }
@@ -182,21 +183,21 @@ t_token	*token_word(char *p, int *to_set, t_mini *m)
 	if (p)
 	{
 		start = 0;
-			t->type = WORD;
-			t->m = m;
+		t->type = WORD;
+		t->m = m;
 		len = 0;
 		while (ft_isspace(p[start]) && p[start])
 			start++;
 		if (!ft_isspace(p[start]))
 		{
-//			printf("p start %c %d\n", p[start], start);
-			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]) && !is_quote(p[len + start]))
+			//			printf("p start %c %d\n", p[start], start);
+			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]))
 				len++;
 			if (len == 0)
 			{
 				free(t);
 				*to_set += 1;
-//				printf("syntax error token great\n");
+				//				printf("syntax error token great\n");
 				return (0);
 			}	
 
@@ -259,11 +260,11 @@ int create_token_list(char *s, t_list **l, t_mini *m)
 				{
 					// syntax error
 					print_error("shell", 0, errno, "syntax error");
-				//	ft_putnbr_fd(((t_token *)(ft_lstlast(*l)->content))->type, 2);
-			//		t = ft_lstlast((*l))->content;
-				//	printf("s[i] %s\n", &s[i]);
-			//		printf("token type %d\n", t->type);
-				//	ft_putstr_fd("syntax error, could not create token\n", 2);
+					//	ft_putnbr_fd(((t_token *)(ft_lstlast(*l)->content))->type, 2);
+					//		t = ft_lstlast((*l))->content;
+					//	printf("s[i] %s\n", &s[i]);
+					//		printf("token type %d\n", t->type);
+					//	ft_putstr_fd("syntax error, could not create token\n", 2);
 					return (FAILURE);
 				}
 				new = ft_lstnew(t);
@@ -286,10 +287,10 @@ int	lexer(t_mini *m)
 	int ret;
 
 	l = 0;
-//		printf("before lexer s %s\n", m->s);
+			printf("before lexer s %s\n", m->s);
 	ret = create_token_list(m->s, &l, m);
 	m->token_list = l;
-//	printf("after lexer\n");
-//	print_list(l, print_token);
+		printf("after lexer\n");
+	//	print_list(l, print_token);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 02:24:47 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 09:28:03 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,13 @@ void	print_env(void  *o)
 	//	printf("\te index = %d\n", e->index);
 	printf("\te name = %s\n", e->name);
 	printf("\te value = %s\n\n", e->value);
+}
+
+void	print_quote(void *o)
+{
+	t_quote	*a;
+
+	a = (t_quote *)o;
+	printf("quote c %c\n", a->c);
+	printf("quote index %d\n", a->index);
 }

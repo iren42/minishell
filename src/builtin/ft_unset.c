@@ -6,13 +6,13 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 05:12:41 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 22:24:58 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:25:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*find_name_from_env(t_list *env_list, char *name)
+static t_list	*find_name_from_env(t_list *env_list, char *name)
 {
 	t_list	*l;
 	t_list	*prev;
@@ -32,12 +32,24 @@ t_list	*find_name_from_env(t_list *env_list, char *name)
 	return (0);
 }
 
+static void	del_unset(char *name, t_list *prev)
+{
+	t_list	*tmp;
+
+	if (ft_memcmp(name, get_env_name(prev->next->content),
+			ft_strlen(name) + 1) == 0)
+	{
+		tmp = prev->next;
+		prev->next = prev->next->next;
+		ft_lstdelone(tmp, del_env);
+	}
+}
+
 int	ft_unset(t_cmdtab *c)
 {
 	t_list	*l1;
 	t_list	*prev;
 	char	*name;
-	t_list	*tmp;
 
 	if (c->m->env_list && c && c->arg_list)
 	{
@@ -49,15 +61,7 @@ int	ft_unset(t_cmdtab *c)
 				print_error("shell: unset", name, 0, "not a valid identifier");
 			prev = find_name_from_env(c->m->env_list, name);
 			if (prev)
-			{
-				if (ft_memcmp(name, get_env_name(prev->next->content),
-						ft_strlen(name) + 1) == 0)
-				{
-					tmp = prev->next;
-					prev->next = prev->next->next;
-					ft_lstdelone(tmp, del_env);
-				}
-			}
+				del_unset(name, prev);
 			l1 = l1->next;
 		}
 	}

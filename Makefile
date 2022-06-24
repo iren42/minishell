@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 01:03:48 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/25 01:32:29 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,10 @@ SOURCES		=	main.c \
 				expander/expander.c \
 				expander/var_substitution.c \
 				expander/rm_superflous.c \
+				expander/are_quotes_closed.c \
+				expander/check_if_substitution.c \
+				expander/sub_dollar.c \
+				expander/sub_for_quotes.c \
 				\
 			executor/executor.c \
 			executor/pipes_utils.c \

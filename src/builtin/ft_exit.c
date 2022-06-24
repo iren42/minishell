@@ -6,13 +6,13 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 12:07:54 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 22:23:10 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:31:14 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	str_is_num(char	*value)
+static int	str_is_num(char	*value)
 {
 	int	i;
 
@@ -26,6 +26,23 @@ int	str_is_num(char	*value)
 		i++;
 	}
 	return (42);
+}
+
+static void	error_str_num(t_cmdtab *c)
+{
+	printf("exit\n");
+	print_error("shell: exit", get_arg_value(c->arg_list->content), 0,
+		"numeric argument required");
+	g_errno = 2;
+	exit(2);
+}
+
+static int	error_size(void)
+{
+	printf("exit\n");
+	print_error("shell: exit", NULL, 0, "too many arguments");
+	g_errno = 1;
+	return (FAILURE);
 }
 
 int	ft_exit(t_cmdtab *c)
@@ -44,20 +61,9 @@ int	ft_exit(t_cmdtab *c)
 	{
 		value = get_arg_value(c->arg_list->content);
 		if (!str_is_num(value))
-		{
-			printf("exit\n");
-			print_error("shell: exit", get_arg_value(c->arg_list->content), 0,
-				"numeric argument required");
-			g_errno = 2;
-			exit(2);
-		}
+			error_str_num(c);
 		if (size > 1)
-		{
-			printf("exit\n");
-			print_error("shell: exit", NULL, 0, "too many arguments");
-			g_errno = 1;
-			return (FAILURE);
-		}
+			return (error_size());
 		g_errno = ft_atoi(value);
 	}
 	printf("exit\n");

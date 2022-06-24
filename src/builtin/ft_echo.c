@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 22:49:22 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 22:16:40 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:34:57 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_only_filled_with_n(char *s)
 	return (1);
 }
 
-void	get_index_first_nd_last_quote(char *s, int *f, int *l)
+static void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 {
 	int		i;
 	int		len;
@@ -57,7 +57,7 @@ void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 	}
 }
 
-void	print_without_first_closing_quotes(char *s)
+static void	print_without_first_closing_quotes(char *s)
 {
 	int		i;
 	size_t	len;
@@ -79,6 +79,18 @@ void	print_without_first_closing_quotes(char *s)
 	}
 }
 
+static void	in_loop(char *opt, t_list *l, int *nl)
+{
+	if (opt[0] == '-' && is_only_filled_with_n(opt))
+		*nl = 0;
+	else
+	{
+		print_without_first_closing_quotes(opt);
+		if (l->next)
+			ft_putstr_fd(" ", 1);
+	}
+}
+
 int	ft_echo(t_cmdtab *c)
 {
 	t_list	*l;
@@ -95,16 +107,7 @@ int	ft_echo(t_cmdtab *c)
 		{
 			opt = get_arg_value(l->content);
 			if (opt)
-			{
-				if (opt[0] == '-' && is_only_filled_with_n(opt))
-					nl = 0;
-				else
-				{
-					print_without_first_closing_quotes(opt);
-					if (l->next)
-						ft_putstr_fd(" ", 1);
-				}
-			}
+				in_loop(opt, l, &nl);
 			l = l->next;
 		}
 		if (nl)

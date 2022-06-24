@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 20:50:19 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:13:38 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,14 @@ int				ft_heredoc(char *eof);
 // IN PARSER
 int				lexer(t_mini *m);
 t_list			*parser(t_mini *m);
+void			fill_cmd(t_token *t, t_cmdtab *ct, int *ret);
+void			fill_args(t_token *t, t_cmdtab *c, int *ret);
+void			fill_redir(t_token *t, t_cmdtab *c, int *ret);
+t_token			*create_token(char *p, int *to_set, t_mini *m);
+t_token			*token_word(char *p, int *to_set, t_mini *m);
+t_token			*token_pipe_nl(char *p, int *to_set, t_mini *m);
+t_token			*token_great_less(char *p, int *to_set, t_mini *m);
+t_token			*token_double_great_less(char *p, int *to_set, t_mini *m);
 
 void			ft_error(char *m, int code);
 void			print_error(char *where, char *file, int err, char *msg);

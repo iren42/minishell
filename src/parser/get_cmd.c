@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 20:53:42 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 02:14:15 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 21:31:38 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,6 @@ static char	*find_path(t_list *env_list)
 	return (0);
 }
 
-static void	init_get_cmd(char **res, char ***splitpaths, int *i)
-{
-	*res = 0;
-	*splitpaths = 0;
-	*i = 0;
-}
-
 static char	**get_splitpaths(t_list *env_list)
 {
 	char	**res;
@@ -51,6 +44,15 @@ static char	**get_splitpaths(t_list *env_list)
 	if (!res)
 		return (0);
 	return (res);
+}
+
+static void	init_get_cmd(char **res, char ***splitpaths,
+	int *i, t_list *env_list)
+{
+	*res = 0;
+	*splitpaths = 0;
+	*i = 0;
+	*splitpaths = get_splitpaths(env_list);
 }
 
 static char	*join(int i, char **splitpaths, char *cmd)
@@ -83,8 +85,7 @@ char	*get_cmd(t_list *env_list, char *cmd)
 
 	if (!cmd || !env_list)
 		return (0);
-	init_get_cmd(&res, &splitpaths, &i);
-	splitpaths = get_splitpaths(env_list);
+	init_get_cmd(&res, &splitpaths, &i, env_list);
 	if (splitpaths != 0)
 	{
 		while (splitpaths[i])

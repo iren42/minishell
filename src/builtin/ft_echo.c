@@ -6,30 +6,11 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 22:49:22 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 16:11:55 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 22:16:40 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// echo -nnn salut
-// salut without NL
-
-// echo
-// echo $NOTEXISTING
-// NL
-
-// echo -n -n
-// NOTHING
-
-// echo salut      f
-// salut f
-
-// echo '"$USER"'
-// "$USER"
-
-// echo "'$USER'   "
-// 'iren'   
 
 static int	is_only_filled_with_n(char *s)
 {
@@ -49,15 +30,14 @@ static int	is_only_filled_with_n(char *s)
 
 void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
 	char	q;
 
 	i = 0;
 	len = ft_strlen(s) - 1;
 	while (s[i])
 	{
-	//	if (is_quote(s[i]))
 		if (s[i] == '"' || s[i] == '\'')
 		{
 			q = s[i];
@@ -68,30 +48,27 @@ void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 	}
 	while (len >= 0)
 	{
-	//	printf("slen %c\n", s[len]);
 		if (s[len] == '"' || s[len] == '\'')
 		{
 			*l = len;
 			break ;
 		}
 		len--;
-
 	}
 }
 
 void	print_without_first_closing_quotes(char *s)
 {
-	int	i;
+	int		i;
 	size_t	len;
-	int	first;
-	int	last;
+	int		first;
+	int		last;
 
 	i = 0;
 	len = ft_strlen(s);
 	first = -1;
 	last = -1;
 	get_index_first_nd_last_quote(s, &first, &last);
-//	printf("first %d, last %d\n", first, last);
 	while (i < len && s[i])
 	{
 		if (i == first || i == last)
@@ -100,14 +77,13 @@ void	print_without_first_closing_quotes(char *s)
 			ft_putchar_fd(s[i], 1);
 		i++;
 	}
-
 }
 
 int	ft_echo(t_cmdtab *c)
 {
 	t_list	*l;
 	char	*opt;
-	int	nl;
+	int		nl;
 
 	l = c->arg_list;
 	if (l == 0)

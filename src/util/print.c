@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 09:28:03 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 22:01:49 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ void	print_split(char **s)
 	}
 }
 
-void	 print_list(t_list *l, void (*f)(void *))
+void	print_list(t_list *l, void (*f)(void *))
 {
 	t_list	*head;
+
 	head = l;
 	while (head)
 	{
@@ -45,23 +46,21 @@ void	print_tmini(t_mini *mini)
 	int	i;
 
 	i = 0;
-	//	printf("s = %s\n", mini->s);
 	printf(BLU "----TOKEN LIST START----\n");
 	print_list(mini->token_list, &print_token);
-	printf( "----TOKEN LIST END----\n" );
-	printf(PUR "----CMD TABLE LIST START----\n" );
+	printf("----TOKEN LIST END----\n");
+	printf(PUR "----CMD TABLE LIST START----\n");
 	print_list(mini->cmdtab_list, &print_cmdtab);
-	printf( "----CMD TABLE LIST END----\n" RESET);
+	printf("----CMD TABLE LIST END----\n" RESET);
 }
 
 void	print_token(void *o)
 {
-	t_token *t;
+	t_token	*t;
 
 	t = (t_token *)o;
 	printf("token type %d.\t", t->type);
 	printf("value %s.\n", t->value);
-
 }
 
 void	print_arg(void *o)
@@ -70,7 +69,6 @@ void	print_arg(void *o)
 
 	a = (t_arg *)o;
 	printf("\targ value = %s\n", a->value);
-	//	printf("arg quote = %d\n", a->is_in_quotes);
 }
 
 void	print_redir(void *o)
@@ -80,12 +78,11 @@ void	print_redir(void *o)
 	a = (t_redir *)o;
 	printf("\tredir filename = %s\n", a->filename);
 	printf("\tredir type = %d\n", a->type);
-	//	printf("arg quote = %d\n", a->is_in_quotes);
 }
 
 void	print_cmdtab(void *o)
 {
-	t_cmdtab *c;
+	t_cmdtab	*c;
 
 	c = (t_cmdtab *)o;
 	printf("cmd =%s\n", c->cmd);
@@ -94,12 +91,11 @@ void	print_cmdtab(void *o)
 	print_list(c->redir_list, &print_redir);
 }
 
-void	print_env(void  *o)
+void	print_env(void *o)
 {
-	t_env *e;
+	t_env	*e;
 
 	e = (t_env *)o;
-	//	printf("\te index = %d\n", e->index);
 	printf("\te name = %s\n", e->name);
 	printf("\te value = %s\n\n", e->value);
 }

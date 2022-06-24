@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 23:50:32 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 18:43:10 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 21:29:12 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	**init_pipes(int n)
 	{
 		fd = (int **)malloc(sizeof(int *) * (n - 1));
 		if (!fd)
-			exit(1); // error malloc
+			exit(1);
 		while (i < (n - 1))
 		{
 			fd[i] = (int *)malloc(sizeof(int) * 2);
@@ -58,7 +58,7 @@ void	open_pipes(int **fd, int n)
 	while (i < (n - 1))
 	{
 		if (pipe(fd[i]) < 0)
-			exit(1); // pipe error
+			exit(1);
 		i++;
 	}
 }
@@ -71,7 +71,7 @@ void	free_pipes(int **ends, int n)
 	while (i < n - 1)
 	{
 		free(ends[i]);
-		i++;	
+		i++;
 	}
 	free(ends);
 }
@@ -88,6 +88,7 @@ void	close_all_pipes(int **ends, int n)
 		i++;
 	}
 }
+
 void	close_all_pipes_but_index(int **ends, int n, int index)
 {
 	int	i;
@@ -104,5 +105,4 @@ void	close_all_pipes_but_index(int **ends, int n, int index)
 		}
 		i++;
 	}
-
 }

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 16:28:49 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 17:27:13 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 21:58:15 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ char	*get_arg_value(void *o)
 	a = (t_arg *)o;
 	return (a->value);
 }
+
 void	del_arg(void *o)
 {
-	t_arg *a;
+	t_arg	*a;
 
 	a = (t_arg *)o;
 	free(a->value);

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 21:16:19 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 22:56:57 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	update_tmini(char *s, t_mini *mini)
 {
 	mini->token_list = 0;
 	mini->cmdtab_list = 0;
-
 	mini->s = s;
 	mini->fd = 0;
 }
@@ -41,7 +40,7 @@ t_list	*init_env_list(char **env)
 			if (!new)
 				exit(1);
 			len = get_len_env_name(env[i]);
-			new->name = ft_substr(env[i], 0,len);
+			new->name = ft_substr(env[i], 0, len);
 			new->value = ft_substr(env[i], len + 1, ft_strlen(env[i]));
 			ft_lstadd_back(&env_list, ft_lstnew(new));
 			i++;
@@ -82,16 +81,19 @@ char	*ft_readline(void)
 void	init_tmini(char **env, t_mini *mini)
 {
 	t_list	*env_list;
-	char	builtins[] =  "export cd pwd echo unset env exit";
+	char	*builtins;
 
 	env_list = init_env_list(env);
 	mini->env_list = env_list;
+	builtins = ft_strdup("export cd pwd echo unset env exit");
+	if (!builtins)
+		exit(1);
 	mini->split_builtin = ft_split(builtins, ' ');
+	free(builtins);
 	if (!mini->split_builtin)
 		exit(1);
 	mini->token_list = 0;
 	mini->cmdtab_list = 0;
-
 }
 
 int	main(int ac, char **av, char **env)
@@ -121,8 +123,8 @@ int	main(int ac, char **av, char **env)
 		if (ret == 0)
 		{
 			print_error("shell", 0, errno, "syntax error main");
-			continue;
-	}
+			continue ;
+		}
 		ret = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 //		print_tmini(&mini);

@@ -56,7 +56,7 @@ void	close_all_pipes(int **ends, int n);
 int	ft_heredoc(char *eof);
 
 // IN PARSER
-t_list *lexer(t_mini *m);
+int lexer(t_mini *m);
 t_list *parser(t_mini *m);
 
 void ft_error(char *m, int code);

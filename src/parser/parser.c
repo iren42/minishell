@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/23 21:55:34 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 02:45:30 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init_cmdtab(t_cmdtab *c, t_mini *m)
 	c->arg_list = 0;
 	c->redir_list = 0;
 	c->m = m;
+	c->type = OTHER;
 }
 
 
@@ -44,6 +45,8 @@ int	is_cmd(t_token *t)
 		}
 		i++;
 	}
+	if (t->value == 0)
+		return (0);
 	is_cmd = access(t->value, X_OK);
 	if (is_cmd == -1)
 		buff = get_cmd(t->m->env_list, t->value);
@@ -60,17 +63,17 @@ t_cmd_type	get_cmd_type(char *type)
 {
 	if (ft_memcmp(type, "export", ft_strlen(type) + 1) == 0)
 		return (EXPORT);
-	if (ft_memcmp(type, "pwd", ft_strlen(type) + 1) == 0)
+	else if (ft_memcmp(type, "pwd", ft_strlen(type) + 1) == 0)
 		return (PWD);
-	if (ft_memcmp(type, "echo", ft_strlen(type) + 1) == 0)
+	else if (ft_memcmp(type, "echo", ft_strlen(type) + 1) == 0)
 		return (ECHO);
-	if (ft_memcmp(type, "cd", ft_strlen(type) + 1) == 0)
+	else if (ft_memcmp(type, "cd", ft_strlen(type) + 1) == 0)
 		return (CD);
-	if (ft_memcmp(type, "unset", ft_strlen(type) + 1) == 0)
+	else if (ft_memcmp(type, "unset", ft_strlen(type) + 1) == 0)
 		return (UNSET);
-	if (ft_memcmp(type, "env", ft_strlen(type) + 1) == 0)
+	else if (ft_memcmp(type, "env", ft_strlen(type) + 1) == 0)
 		return (ENV);
-	if (ft_memcmp(type, "exit", ft_strlen(type) + 1) == 0)
+	else if (ft_memcmp(type, "exit", ft_strlen(type) + 1) == 0)
 		return (EXIT);
 	return (OTHER);
 }
@@ -148,31 +151,37 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 }
 t_list	*parser(t_mini *m)
 {
-	//	printf("\n--IN PARSER--\n");
+		printf("\n--IN PARSER--\n");
 	t_list	*cmd_list;
 	t_cmdtab	*new;
 	t_list	*l;
 	int	ret;
 
+	if (m->token_list == 0)
+		return (0);
+	print_list(m->token_list, print_token);
 	l = m->token_list;
 	cmd_list = 0;
 	new = malloc(sizeof(t_cmdtab));
 	if (!new)
 		exit(1);
 	init_cmdtab(new, m);
+	//	new->type = OTHER;
 	if (l)
 	{
-		while (get_token_type(l->content) != NL)
+//		while (get_token_type(l->content) != NL)
+		while (l)
 		{
+		printf("type %d\n", get_token_type(l->content));
 			ret = 0;
 			//	print_token(l->content);
 			fill_cmd(l->content, new, &ret);
 			fill_args(l->content, new, &ret);
 			fill_redir(l->content, new, &ret);
-			//	printf("cmd? %s\n",new->cmd);
+				printf("cmd? %s\n",new->cmd);
 			if (get_token_type(l->content) == PIPE || get_token_type(l->content) == SEMI)
 			{
-				//		printf("add in list\n");
+						printf("add in list\n");
 				ft_lstadd_back(&cmd_list, ft_lstnew(new));
 				new = malloc(sizeof(t_cmdtab));
 				if (!new)
@@ -183,8 +192,8 @@ t_list	*parser(t_mini *m)
 			l = l->next;
 		}
 		ft_lstadd_back(&cmd_list, ft_lstnew(new));
-		//	printf("--OUT PARSER--\n");
-		//	print_list(cmd_list, );
+			printf("--OUT PARSER--\n");
+			print_list(cmd_list, print_cmdtab);
 		//	ft_lstclear(m->token_list, &del_token);
 	}
 	return (cmd_list);

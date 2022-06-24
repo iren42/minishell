@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 22:29:07 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 01:47:42 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,7 +310,7 @@ int	executor(t_mini *mini)
 	int	status;
 	t_cmdtab	*ptr;
 
-	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
+	if ((t_list *)(mini->cmdtab_list) == NULL)
 		return (0); // cmd =(null)
 	ptr = get_cmdtab_ptr(mini->cmdtab_list->content);
 	init_t_exec(&e, mini);

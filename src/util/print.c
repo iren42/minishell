@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 11:52:43 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 02:24:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ void	print_token(void *o)
 	t_token *t;
 
 	t = (t_token *)o;
-	printf("token type %d\t", t->type);
-	printf("value %s\n", t->value);
+	printf("token type %d.\t", t->type);
+	printf("value %s.\n", t->value);
 
 }
 

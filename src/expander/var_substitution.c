@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 17:40:01 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 18:16:48 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ char	*join_str_in_list(t_func_cmd_sub *f, char *s, int i)
 {
 	char	*res;
 
-//	printf("HERE\n");
+	//	printf("HERE\n");
 	res = ft_strjoin(f->res, f->tenv_value);
 	free(f->res);
 	f->start = f->end + len_word(&s[i]) + 1;
@@ -192,7 +192,7 @@ char	*little_str_is_not_found(t_func_cmd_sub *f, char *s, int i)
 			}
 			else
 			{
-			//	res = join_with_dollar(name, f->res);
+				//	res = join_with_dollar(name, f->res);
 				res = ft_strjoin(f->res, "");	
 				f->start = f->end + len_word(&s[i]) + 1;
 			}
@@ -200,7 +200,7 @@ char	*little_str_is_not_found(t_func_cmd_sub *f, char *s, int i)
 		else
 		{
 			res = join_with_dollar(name, f->res);
-		//		res = ft_strjoin(f->res, "");	
+			//		res = ft_strjoin(f->res, "");	
 			f->start = f->end + len_word(&s[i]) + 1;
 		}
 		free(name);
@@ -233,65 +233,64 @@ char	*var_substitution(t_list *list, char *s)
 	i = 0;
 	if (s)
 	{
-	while (s[i])
-	{ // liste des quotes, pour savoir si on doit faire une var subs
-		f.list_index = update_index_value(&s[i], f.list_index);
-		if (is_quote(s[i]))
-		{
-			if (f.quote_list)
+		while (s[i])
+		{ // liste des quotes, pour savoir si on doit faire une var subs
+			f.list_index = update_index_value(&s[i], f.list_index);
+			if (is_quote(s[i]))
 			{
-				if (matching(get_quote_char(f.quote_list->content), s[i]))
-					pop1(&f.quote_list, s, &i);
+				if (f.quote_list)
+				{
+					if (matching(get_quote_char(f.quote_list->content), s[i]))
+						pop1(&f.quote_list, s, &i);
+					else
+						push(&f.quote_list, s[i], &s[i], i);				
+				}
 				else
 					push(&f.quote_list, s[i], &s[i], i);				
 			}
-			else
-				push(&f.quote_list, s[i], &s[i], i);				
+			if (s[i] == '$')
+			{
+
+
+				f.res = join_regular_str(&f, i, s);
+				printf("after regular str %s.\n", f.res);
+				if (s[i + 1] == '\0' || ft_isspace(s[i + 1]))
+					;
+				else if (s[i + 1] == '?')
+				{
+					printf("i %d\n", i);
+					tmp = f.res;
+					printf("f.res = %s.\n", f.res); // echo
+					tmp2 = ft_itoa(g_errno);
+					f.res = ft_strjoin(tmp, tmp2);
+					printf("f.res 2 = %s.\n", f.res); // echo 0
+					i += 1; 
+					printf("g errno %d\n", g_errno);
+					f.start += ft_strlen(f.res) + 1 ;
+					printf("i %d\n", i);
+					free(tmp);
+					free(tmp2);
+				}
+
+				else if (check_if_substitution(&s[i], &f))
+				{
+					f.res = join_str_in_list(&f, s, i);
+					//				printf("is in list\n");
+				}
+				else
+				{
+					f.res = little_str_is_not_found(&f, s, i);
+					//				printf("env not found\n");
+				}
+			}
+			i++;
 		}
-		if (s[i] == '$')
-		{
-
-		/* MODIF */
-			if (s[i + 1] == '\0' || ft_isspace(s[i + 1]))
-				;
-			else if (s[i + 1] == '?')
-			{
-				tmp = f.res;
-printf("f.res = %s\n", f.res);
-				tmp2 = ft_itoa(g_errno);
-				f.res = ft_strjoin(tmp, tmp2);
-printf("f.res 2 = %s\n", f.res);
-				free(tmp);
-				free(tmp2);
-				i++;
-			}
-			else
-			{
-		/* FIN MODIF */
-
-			f.res = join_regular_str(&f, i, s);
-//			printf("after regular str %s.\n", f.res);
-			if (check_if_substitution(&s[i], &f))
-			{
-				f.res = join_str_in_list(&f, s, i);
-//				printf("is in list\n");
-			}
-			else
-			{
-
-
-				f.res = little_str_is_not_found(&f, s, i);
-//				printf("env not found\n");
-			}
-			}
-		}
-		i++;
+		//	i++;
 	}
 	f.res = join_regular_str(&f, i, s);
 	ft_lstclear(&f.quote_list, &del_quote);
-//		printf("var_sub() final s %s\n", f.res);
-	}
+			printf("var_sub() final s %s\n", f.res);
 	return (f.res);
-
-
 }
+
+

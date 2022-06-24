@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 15:10:23 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 16:31:25 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,10 @@ static int	ft_wait(pid_t *pids, int n)
 		i++;
 	}
 	if (WIFEXITED(status))
+	{
 		err = WEXITSTATUS(status);
+		g_errno = err;
+	}
 	return (err);
 }
 

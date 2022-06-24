@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 13:13:32 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 17:40:01 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,8 @@ char	*var_substitution(t_list *list, char *s)
 {
 	t_func_cmd_sub	f;
 	int	i;
+	char	*tmp;
+	char	*tmp2;
 
 	init_cmd_sub(&f, list);
 	i = 0;
@@ -248,6 +250,25 @@ char	*var_substitution(t_list *list, char *s)
 		}
 		if (s[i] == '$')
 		{
+
+		/* MODIF */
+			if (s[i + 1] == '\0' || ft_isspace(s[i + 1]))
+				;
+			else if (s[i + 1] == '?')
+			{
+				tmp = f.res;
+printf("f.res = %s\n", f.res);
+				tmp2 = ft_itoa(g_errno);
+				f.res = ft_strjoin(tmp, tmp2);
+printf("f.res 2 = %s\n", f.res);
+				free(tmp);
+				free(tmp2);
+				i++;
+			}
+			else
+			{
+		/* FIN MODIF */
+
 			f.res = join_regular_str(&f, i, s);
 //			printf("after regular str %s.\n", f.res);
 			if (check_if_substitution(&s[i], &f))
@@ -257,9 +278,11 @@ char	*var_substitution(t_list *list, char *s)
 			}
 			else
 			{
-				
+
+
 				f.res = little_str_is_not_found(&f, s, i);
 //				printf("env not found\n");
+			}
 			}
 		}
 		i++;

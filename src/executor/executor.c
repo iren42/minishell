@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 06:50:29 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 07:06:08 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ char	**ft_split_cmd(t_mini *mini, int cmd_num)
 	split_cmd[0] = 0;
 	if (((t_cmdtab *)(tmp_cmdtab_list->content))->cmd)
 		split_cmd[0] = ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd);
+	else
+		split_cmd[0] = ft_strdup("");
 	if (!split_cmd[0])
 		exit(1); // malloc error
 	//	split_cmd[0] = ft_strdup("ls");
@@ -267,10 +269,12 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 	int		i;
 	char	**split_cmd;
 	i = 0;
+	printf("%d cmdtab\n", e->nb_cmd);
 	while (i < e->nb_cmd)
 	{
+		printf("i %d starts\n", i);
 		split_cmd = ft_split_cmd(e->m, i);
-		//		print_split(split_cmd);
+		print_split(split_cmd);
 		pids[i] = fork();
 		if (pids[i] == -1)
 			exit(1); // fork error

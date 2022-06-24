@@ -6,10 +6,11 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/09 19:32:54 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 20:59:11 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 01:06:57 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "minishell.h"
 
 static char	**ft_free_split(char **split, int i)
@@ -141,3 +142,4 @@ char	**ft_splitsh(char const *str, const char *c)
 	res[id_word] = 0;
 	return (res);
 }
+*/

@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 00:29:14 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 01:00:56 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void			print_cmdtab(void *o);
 void			print_token(void *t);
 void			print_env(void *e);
 void			print_quote(void *e);
+void			print_arg(void *o);
 
 // IN EXECUTOR
 int				executor(t_mini *mini);
@@ -158,6 +159,7 @@ void			*init_t_exec(t_exec *e, t_mini *m);
 
 void			exec_child(t_exec *e, int **ends, char **split_cmd, int i);
 
-void			execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e);
+void			execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c,
+					t_exec *e);
 
 #endif

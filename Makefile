@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 00:15:13 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/25 01:03:48 by gufestin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,11 +56,13 @@ SOURCES		=	main.c \
 				util/t_quote_utils.c \
 				util/t_cmdtab_utils.c \
 				util/t_env_utils.c \
+				util/t_env_utils_2.c \
 				util/t_token_utils.c \
 				util/t_redir_utils.c \
 				util/t_arg_utils.c \
 				util/free.c \
 				util/print.c \
+				util/print_2.c \
 				
 
 

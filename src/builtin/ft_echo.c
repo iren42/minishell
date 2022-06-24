@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 22:49:22 by iren              #+#    #+#             */
-/*   Updated: 2022/06/23 22:28:19 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 14:46:22 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,56 @@ static int	is_only_filled_with_n(char *s)
 	return (1);
 }
 
-void	print_without_first_quote(char *s)
+void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 {
 	int	i;
 	size_t	len;
+	char	q;
+
+	i = 0;
+	len = ft_strlen(s) - 1;
+	while (s[i])
+	{
+		if (is_quote(s[i]))
+		{
+			q = s[i];
+			*f = i;
+			break ;
+		}
+		i++;
+	}
+	while (s[len])
+	{
+	//	printf("slen %c\n", s[len]);
+		if (q == s[len])
+		{
+			*l = len;
+			break ;
+		}
+		len--;
+
+	}
+}
+
+void	print_without_first_closing_quotes(char *s)
+{
+	int	i;
+	size_t	len;
+	int	first;
+	int	last;
 
 	i = 0;
 	len = ft_strlen(s);
-	if (is_quote(s[i]))
-		i++;
-	while (s[i] && i < len - 1)
+	get_index_first_nd_last_quote(s, &first, &last);
+	printf("first %d, last %d\n", first, last);
+	while (i < len)
 	{
-		ft_putchar_fd(s[i], 1);
+		if (i == first || i == last)
+			;
+		else
+			ft_putchar_fd(s[i], 1);
 		i++;
 	}
-	if (!is_quote(s[len - 1]))
-		ft_putchar_fd(s[len - 1], 1);
 
 }
 
@@ -87,7 +121,7 @@ int	ft_echo(t_cmdtab *c)
 					nl = 0;
 				else
 				{
-					print_without_first_quote(opt);
+					print_without_first_closing_quotes(opt);
 					if (l->next)
 						ft_putstr_fd(" ", 1);
 				}

@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 23:56:04 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 21:58:04 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 14:46:52 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,10 @@ int	ft_heredoc(char *eof)
 	filename = ft_strjoin(eof, ".heredoc");
 	if (!filename)
 		exit(1); // malloc error
-	//	fd = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
-	//	fd = open(".heredoc", O_CREAT | O_WRONLY, 0777);
 	fd = open(filename, O_CREAT | O_WRONLY, 0777);
-
-
-	// unlink(.heredoc) quelque part (pas dans cette fonction)
-
 	if (fd == -1)
 		exit(1); // open error
-	eof_len = ft_strlen(eof) + 1; // + 1 ?
+	eof_len = ft_strlen(eof) + 1;
 	read = readline("> ");
 	if (read)
 	{
@@ -57,5 +51,4 @@ int	ft_heredoc(char *eof)
 	fd = open(filename, O_RDONLY);
 	free(filename);
 	return (fd);
-	//	return (42);
 }

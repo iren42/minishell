@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/09 19:32:54 by iren              #+#    #+#             */
-/*   Updated: 2022/06/10 21:42:23 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 14:45:03 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,38 +37,26 @@ static int	ft_nb_words(const char *s, const char *c)
 		while (s[i])
 		{
 			while (ft_strchr(c, s[i]) && s[i])
-			{
-	//			printf("skip %c\n", s[i]);
 				i++;
-			}
 			if (s[i] && !ft_strchr(c, s[i]) )
 			{
 				nb_w++;
 				if (!is_quote(s[i]))
 				{
 					while (s[i] && !ft_strchr(c, s[i]) && !is_quote(s[i]))
-					{
-	//					printf("2c %c\n", s[i]);
 						i++;
-					}
 				}
 				else
 				{
 					q = s[i++];
-	//				printf("q %c\n", q);
 					while (s[i] && s[i] != q)
-					{
-	//					printf("1c %c\n", s[i]);
 						i++;
-					}
-	//				printf("1c %c\n", s[i]);
 					i++;
 
 				}
 			}
 		}
 	}
-//	printf("nb word = %d\n", nb_w);
 	return (nb_w);
 }
 
@@ -83,12 +71,10 @@ static int	word_len(const char *s, const char *c)
 	if (s && c)
 	{
 		q = is_quote(s[i]);
-//		printf("q = %c\n", q);
 		if (!q)
 		{
 			while (!ft_strchr(c, s[i]) && s[i] && !is_quote(s[i]))
 			{
-//				printf("A s[%d] = %c\n", i, s[i]);
 				i++;
 				len++;
 			}
@@ -99,17 +85,14 @@ static int	word_len(const char *s, const char *c)
 			len++;
 			while (s[i] && q != s[i])
 			{
-//				printf("B s[%d] = %c\n", i, s[i]);
 				i++;
 				len++;
 			}
 			len++;
-//			printf("B s[%d] = %c\n", i, s[i]);
 			if (q != s[i])
 				ft_error(ERR_QUOTE, 1);
 		}
 	}
-//	printf("word len %d\n", len);
 	return (len);
 }
 

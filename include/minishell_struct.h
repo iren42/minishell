@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:50:39 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 20:56:54 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 00:22:53 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,15 @@ typedef struct s_exec
 	t_list	*cmdtabl;
 	int		redir_fd[2];
 }	t_exec;
+
+typedef struct s_executor_variables
+{
+	pid_t	*pids;
+	int		**ends;
+	int		err;
+	t_exec	e;
+	int		child;
+	int		status;
+}	t_executor_variables;
 
 #endif

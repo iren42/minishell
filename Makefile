@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/24 23:39:39 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/25 00:15:13 by gufestin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,11 @@ SOURCES		=	main.c \
 				\
 			executor/executor.c \
 			executor/pipes_utils.c \
+			executor/pipes_utils_2.c \
+			executor/ft_split_cmd_env.c \
+			executor/ex_iofile.c \
+			executor/exec_child.c \
+			executor/executor_utils.c \
 				\
 			heredoc.c \
 				\

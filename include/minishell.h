@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 23:41:53 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 00:29:14 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,20 @@ void			free_split(char **split);
 char			*ft_readline(void);
 int				clear_exit(t_mini mini);
 int				call_and_clear(t_mini *mini);
+
+int				ex_infile(t_exec *e, int fd_in, int child, int **fd);
+int				ex_outfile(t_exec *e, int fd_out, int child, int **fd);
+
+char			**ft_split_env(t_mini *mini);
+char			**ft_split_cmd(t_mini *mini, int cmd_num);
+
+int				ft_wait(pid_t *pids, int n);
+int				redir_error(t_redir *redir, t_exec *e);
+char			*is_builtin(char *cmd, t_mini *m);
+void			*init_t_exec(t_exec *e, t_mini *m);
+
+void			exec_child(t_exec *e, int **ends, char **split_cmd, int i);
+
+void			execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e);
 
 #endif

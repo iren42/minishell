@@ -3,15 +3,14 @@
 struct s_mini;
 typedef enum e_token_type
 {
-	NONE,
+	NONE, // 0
 	WORD,
-	SEMI,
-	GREAT,
+	GREAT, // 2
 	LESS,
-	DOUBLE_GREAT,
+	DOUBLE_GREAT , //4
 	DOUBLE_LESS,
-	PIPE,
-	NL,
+	PIPE, //6
+	NL, // 7
 }	t_token_type;
 
 typedef struct	s_token
@@ -43,14 +42,14 @@ typedef struct s_arg{
 }	t_arg;
 
 typedef enum e_cmd_type{
-	PWD,
+	PWD, // 0
 	ECHO,
-	CD,
+	CD, //2
 	EXPORT,
-	UNSET,
+	UNSET, //4
 	ENV,
-	EXIT,
-	OTHER,
+	EXIT, // 6
+	OTHER, //7
 }	t_cmd_type;
 
 typedef struct	s_cmdtab

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 22:49:22 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 09:31:11 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/23 22:28:19 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ void	print_without_first_quote(char *s)
 		i++;
 	while (s[i] && i < len - 1)
 	{
-		ft_putchar_fd(s[i], STDIN);
+		ft_putchar_fd(s[i], 1);
 		i++;
 	}
 	if (!is_quote(s[len - 1]))
-		ft_putchar_fd(s[len - 1], STDIN);
+		ft_putchar_fd(s[len - 1], 1);
 
 }
 
@@ -74,7 +74,7 @@ int	ft_echo(t_cmdtab *c)
 
 	l = c->arg_list;
 	if (l == 0)
-		ft_putstr_fd("\n", STDIN);
+		ft_putstr_fd("\n", 1);
 	else
 	{
 		nl = 1;
@@ -89,13 +89,13 @@ int	ft_echo(t_cmdtab *c)
 				{
 					print_without_first_quote(opt);
 					if (l->next)
-						ft_putstr_fd(" ", STDIN);
+						ft_putstr_fd(" ", 1);
 				}
 			}
 			l = l->next;
 		}
 		if (nl)
-			ft_putstr_fd("\n", STDIN);
+			ft_putstr_fd("\n", 1);
 	}
 	return (SUCCESS);
 }

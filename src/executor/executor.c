@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/23 23:20:06 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 14:32:15 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 		if (fd_in != STDIN)
 			close(fd_in);
 		if (get_redir_type(tmp->content) == RE_LESS)
-{
+		{
 			//	fd_in = open(&(tmp->content[2]), O_RDONLY);
 			fd_in = open(((t_redir *)(tmp->content))->filename, O_RDONLY);
-}
+		}
 		else if (get_redir_type(tmp->content) == RE_DOUBLE_LESS)
 		{
 			fd_in = ft_heredoc(((t_redir *)(tmp->content))->filename);
@@ -117,7 +117,11 @@ char	**ft_split_cmd(t_mini *mini, int cmd_num)
 	if (!split_cmd)
 		exit(1); // malloc error
 	//	printf("split cmd 0 %s\n",ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd));
-	split_cmd[0] = ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd);
+	split_cmd[0] = 0;
+	if (((t_cmdtab *)(tmp_cmdtab_list->content))->cmd)
+		split_cmd[0] = ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd);
+	else
+		split_cmd[0] = ft_strdup("");
 	if (!split_cmd[0])
 		exit(1); // malloc error
 	//	split_cmd[0] = ft_strdup("ls");
@@ -168,7 +172,11 @@ char	**ft_split_env(t_mini *mini)
 
 void	ft_execve(t_cmdtab *cmdtab, char **split_cmd, char **split_env)
 {
-	execve(cmdtab->cmd, split_cmd, split_env);
+	if (execve(cmdtab->cmd, split_cmd, split_env) == -1)
+	{
+		print_error("shell", split_cmd[0], 0, "command not found");
+		g_errno = 127;
+	}
 }
 
 static int	ft_wait(pid_t *pids, int n)
@@ -216,7 +224,10 @@ void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 	else if (c->type == CD)
 		ft_cd(c);
 	else if (c->type == ECHO)
+	{
+//		ft_putstr_fd("echo built\n", 2);
 		ft_echo(c);
+	}
 	else if (c->type == ENV)
 		ft_env(c);
 	else if (c->type == PWD)
@@ -238,18 +249,12 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 
 	fd_in = ex_infile(e, STDIN, i, ends);
 
-			if (fd_in != STDIN )
-			{
-				dup2(fd_in, STDIN);
-				close(fd_in);
-		}
-			fd_out = ex_outfile(e, STDOUT, i, ends);
-
-			if (fd_out != STDOUT )
-			{
-			dup2(fd_out, STDOUT);
-				close(fd_out);
-			}
+	if (fd_in != STDIN )
+	{
+		dup2(fd_in, STDIN);
+		close(fd_in);
+	}
+	fd_out = ex_outfile(e, STDOUT, i, ends);
 
 	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	while (tmp)
@@ -262,10 +267,19 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 		tmp = tmp->next;
 	}
 
+	if (fd_out != STDOUT )
+	{
+		dup2(fd_out, STDOUT);
+		close(fd_out);
+	}
+	p = is_builtin(split_cmd[0], e->m);
 	close_all_pipes(ends, e->nb_cmd);
+//	printf("in exec child\n");
+//	print_split(split_cmd);
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
 
 	exit(0);
+//	printf("after exec child\n");
 
 }
 
@@ -274,19 +288,23 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 	int		i;
 	char	**split_cmd;
 	i = 0;
+//	printf("%d cmdtab\n", e->nb_cmd);
 	while (i < e->nb_cmd)
 	{
+//		printf("i %d starts\n", i);
 		split_cmd = ft_split_cmd(e->m, i);
-		//		print_split(split_cmd);
+//		print_split(split_cmd);
 		pids[i] = fork();
 		if (pids[i] == -1)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
+	//		printf(YEL"inside child %d\n"RESET, i);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;
 		free_split(split_cmd);
+	//	printf("i %d is done\n", i);
 		i++;
 	}
 }
@@ -321,7 +339,8 @@ int	executor(t_mini *mini)
 	int	status;
 	t_cmdtab	*ptr;
 
-	if (((t_cmdtab *)(mini->cmdtab_list->content))->cmd == NULL)
+//	printf("--IN EXECUTOR----\n");
+	if ((t_list *)(mini->cmdtab_list) == NULL)
 		return (0); // cmd =(null)
 	ptr = get_cmdtab_ptr(mini->cmdtab_list->content);
 	init_t_exec(&e, mini);
@@ -330,11 +349,13 @@ int	executor(t_mini *mini)
 		exec_no_fork(&e, ptr);
 	else
 	{
+//		printf("execution of a command line with pipes\n");
 		pids = malloc(sizeof(pid_t) * e.nb_cmd);
 		if (!pids)
 			exit(1); // malloc error
 		ends = init_pipes(e.nb_cmd);
 		open_pipes(ends, e.nb_cmd);
+//		printf("pipes are ready\n");
 		exec_cmdtab_list(&e, pids, ends);
 		close_all_pipes(ends, e.nb_cmd);
 		err = ft_wait(pids, e.nb_cmd);
@@ -343,5 +364,6 @@ int	executor(t_mini *mini)
 		free(pids);
 	}
 	free_split(e.split_env);
+//	printf("--IN EXECUTOR END----\n");
 	return (err);
 }

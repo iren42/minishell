@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 13:38:50 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 14:29:06 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,13 @@ int	main(int ac, char **av, char **env)
 		}
 	//	printf("after readline s %s\n", s);
 		mini.s = s;
-		mini.s = expander(&mini);
-		mini.token_list = lexer(&mini);
+		ret = expander(&mini);
+		if (ret == 0)
+		{
+			ft_putstr_fd("syntax error\n", 1);
+		}
+//		mini.token_list = lexer(&mini);
+		ret = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 
 //		print_tmini(&mini);
@@ -137,7 +142,7 @@ int	main(int ac, char **av, char **env)
 //	printf("ret = %d\n", ret);
 		//	printf("ret executor %d\n", ret);	
 	//	executor(&mini);
-	//	ft_heredoc("EOF");
+//		ft_heredoc("EOF");
 		
 		//	ft_unset(mini.cmdtab_list->content);
 		//		ft_pwd(mini.cmdtab_list->content);
@@ -151,7 +156,7 @@ int	main(int ac, char **av, char **env)
 		ft_lstclear(&mini.cmdtab_list, del_cmdtab);
 
 		free(mini.s);
-		free(s);	
+	//	free(s);	
 	}
 	ft_lstclear(&mini.env_list, del_env);
 	rl_clear_history();

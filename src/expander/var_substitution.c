@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/22 11:27:35 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 13:13:32 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*str_tenvname(char *s)
 	return (name);
 }
 
-int	little_str_in_list(char *s, t_func_cmd_sub *f)
+int	check_if_substitution(char *s, t_func_cmd_sub *f)
 {
 	t_list	*l;
 	char	*name;
@@ -167,7 +167,7 @@ char	*join_str_in_list(t_func_cmd_sub *f, char *s, int i)
 }
 
 
-char	*little_str_is_in_env_or_not(t_func_cmd_sub *f, char *s, int i)
+char	*little_str_is_not_found(t_func_cmd_sub *f, char *s, int i)
 {
 	char	*res;
 	char	*name;
@@ -192,13 +192,15 @@ char	*little_str_is_in_env_or_not(t_func_cmd_sub *f, char *s, int i)
 			}
 			else
 			{
-				res = join_with_dollar(name, f->res);
+			//	res = join_with_dollar(name, f->res);
+				res = ft_strjoin(f->res, "");	
 				f->start = f->end + len_word(&s[i]) + 1;
 			}
 		}
 		else
 		{
 			res = join_with_dollar(name, f->res);
+		//		res = ft_strjoin(f->res, "");	
 			f->start = f->end + len_word(&s[i]) + 1;
 		}
 		free(name);
@@ -230,7 +232,7 @@ char	*var_substitution(t_list *list, char *s)
 	if (s)
 	{
 	while (s[i])
-	{
+	{ // liste des quotes, pour savoir si on doit faire une var subs
 		f.list_index = update_index_value(&s[i], f.list_index);
 		if (is_quote(s[i]))
 		{
@@ -247,17 +249,26 @@ char	*var_substitution(t_list *list, char *s)
 		if (s[i] == '$')
 		{
 			f.res = join_regular_str(&f, i, s);
-			if (little_str_in_list(&s[i], &f))
+//			printf("after regular str %s.\n", f.res);
+			if (check_if_substitution(&s[i], &f))
+			{
 				f.res = join_str_in_list(&f, s, i);
+//				printf("is in list\n");
+			}
 			else
-				f.res = little_str_is_in_env_or_not(&f, s, i);
-			//	printf("env not found\n");
+			{
+				
+				f.res = little_str_is_not_found(&f, s, i);
+//				printf("env not found\n");
+			}
 		}
 		i++;
 	}
 	f.res = join_regular_str(&f, i, s);
 	ft_lstclear(&f.quote_list, &del_quote);
-	//	printf("var_sub() final s %s\n", f.res);
+//		printf("var_sub() final s %s\n", f.res);
 	}
 	return (f.res);
+
+
 }

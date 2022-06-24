@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 16:21:16 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 17:44:11 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ int create_token_list(char *s, t_list **l, t_mini *m)
 					//	printf("s[i] %s\n", &s[i]);
 					//		printf("token type %d\n", t->type);
 					//	ft_putstr_fd("syntax error, could not create token\n", 2);
-ft_lstclear(l, del_token);
+					ft_lstclear(l, del_token);
 					return (FAILURE);
 				}
 				new = ft_lstnew(t);
@@ -280,6 +280,50 @@ ft_lstclear(l, del_token);
 	return (SUCCESS);
 }
 
+// verifie qu'il y a un token WORD entre chaque token PIPE
+int check_syntax_token(t_list *tokens)
+{
+	t_list *l;
+	int	i;
+	int size;
+	t_list *prev;
+
+	i = 0;
+	l = tokens;
+	size	= ft_lstsize(l);
+	printf("size %d\n", size);
+	if ((((t_token *)(l->content))->type == PIPE))  // 1er token == PIPE -> error
+	{	
+		print_error("shell", 0, 0, "syntax token |");
+		return (FAILURE);
+	}
+	if (size == 2 && (((t_token *)(l->next->content))->type == PIPE)) 
+	{
+		print_error("shell", 0, 0, "syntax token |");
+		return (FAILURE);
+	}
+
+	if (size > 2)
+	{
+		prev = l;
+		while (l->next)
+		{
+			if (((t_token *)(l->content))->type == PIPE
+					&& (((t_token *)(prev->content))->type != WORD
+						|| ((t_token *)(l->next->content))->type != WORD))
+			{
+				print_error("shell", 0, 0, "syntax token");
+				return (FAILURE);
+			}
+
+			prev = l;
+			l = l->next;
+		}
+	}
+	return (SUCCESS);
+
+}
+
 int	lexer(t_mini *m) // return FAILURE if could not create tokens
 {
 	t_list	*l;
@@ -288,8 +332,12 @@ int	lexer(t_mini *m) // return FAILURE if could not create tokens
 	l = 0;
 	//			printf("before lexer s %s\n", m->s);
 	ret = create_token_list(m->s, &l, m);
-	m->token_list = l;
-	//		printf("after lexer\n");
-	//	print_list(l, print_token);
+	if (ret == SUCCESS)
+	{
+		ret = check_syntax_token(l);
+		m->token_list = l;
+		//		printf("after lexer\n");
+		//	print_list(l, print_token);
+	}
 	return (ret);
 }

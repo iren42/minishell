@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 15:10:23 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 16:44:14 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,12 +252,20 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 
 	fd_in = ex_infile(e, STDIN, i, ends);
 
-	if (fd_in != STDIN )
+	if (fd_in != STDIN)
+//	if (fd_in != STDIN && i < e->nb_cmd - 1)
 	{
 		dup2(fd_in, STDIN);
 		close(fd_in);
 	}
 	fd_out = ex_outfile(e, STDOUT, i, ends);
+
+	if (fd_out != STDOUT)
+//	if (fd_out != STDOUT && i < e->nb_cmd - 1)
+	{
+		dup2(fd_out, STDOUT);
+		close(fd_out);
+	}
 
 	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	while (tmp)
@@ -268,12 +276,6 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 		unlink(eof);
 		free(eof);
 		tmp = tmp->next;
-	}
-
-	if (fd_out != STDOUT )
-	{
-		dup2(fd_out, STDOUT);
-		close(fd_out);
 	}
 	p = is_builtin(split_cmd[0], e->m);
 	close_all_pipes(ends, e->nb_cmd);

@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 07:19:01 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 08:15:29 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,10 +257,10 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	}
 	p = is_builtin(split_cmd[0], e->m);
 	close_all_pipes(ends, e->nb_cmd);
-	printf("in exec child\n");
+//	printf("in exec child\n");
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
 	exit(0);
-	printf("after exec child\n");
+//	printf("after exec child\n");
 
 }
 
@@ -269,24 +269,24 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 	int		i;
 	char	**split_cmd;
 	i = 0;
-//	printf("%d cmdtab\n", e->nb_cmd);
+	printf("%d cmdtab\n", e->nb_cmd);
 	while (i < e->nb_cmd)
 	{
-	//	printf("i %d starts\n", i);
+		printf("i %d starts\n", i);
 		split_cmd = ft_split_cmd(e->m, i);
-	//	print_split(split_cmd);
+		print_split(split_cmd);
 		pids[i] = fork();
 		if (pids[i] == -1)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
-	//		printf("inside child %d\n", i);
+			printf("inside child %d\n", i);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;
 		free_split(split_cmd);
+		printf("i %d is done\n", i);
 		i++;
-	//	printf("i %d is done\n", i);
 	}
 }
 

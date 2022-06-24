@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 07:20:15 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 08:40:03 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int	is_cmd(t_token *t)
 {
 	char	*buff;
 	int	is_cmd;
-	//	char	builtins[] =  "export cd pwd echo unset env exit";
-	//	char	**split_built;
+		char	builtins[] =  "export cd pwd echo unset env exit";
+		char	**split_built;
 	int	i;
 
 	buff = 0;
 	i = 0;
-	/*	split_built = ft_split(builtins, ' ');
+/*		split_built = ft_split(builtins, ' ');
 		if (!split_built)
 		exit(1);
 		while (split_built[i] != 0 && t->value)
@@ -44,21 +44,28 @@ int	is_cmd(t_token *t)
 	return (1);
 	}
 	i++;
-	}*/
-	if (t->type == PWD || t->type == ECHO || t->type == CD || t->type == EXPORT
-			|| t->type == UNSET || t->type == ENV || t->type == EXIT)
-		return (1);
+	}
+//	printf("t type %d");
+//	if (t->type == PWD || t->type == ECHO || t->type == CD || t->type == EXPORT
+//			|| t->type == UNSET || t->type == ENV || t->type == EXIT)
+//	{	printf("here\n");
+//		return (1);
+//	}
 	if (t->value == 0)
 		return (0);
 	is_cmd = access(t->value, X_OK);
 	if (is_cmd == -1)
 		buff = get_cmd(t->m->env_list, t->value);
-	//	printf("buff %s\n",  buff);
-	//free_split(split_built);
+		printf("buff %s\n",  buff);
+	free_split(split_built);
+	if (buff)
+		return (1);
 	if (buff == 0 && is_cmd == -1)
 		return (0);
-	free(buff);
-	return (1);
+	free(buff);*/
+	if (t->type == WORD)
+		return (1);
+	return (0);
 
 }
 
@@ -87,6 +94,8 @@ int	fill_cmd(t_token *t, t_cmdtab *ct, int *ret)
 
 
 	a = is_cmd(t);
+//	print_token(t);
+//	printf(YEL "is command %d\n" RESET, a);
 	if (a == 1 && t->type == WORD && !ct->cmd)
 	{
 		if (access(t->value, X_OK) == 0)
@@ -162,7 +171,7 @@ t_list	*parser(t_mini *m)
 
 	if (m->token_list == 0)
 		return (0);
-	print_list(m->token_list, print_token);
+	// print_list(m->token_list, print_token);
 	l = m->token_list;
 	cmd_list = 0;
 	new = malloc(sizeof(t_cmdtab));
@@ -172,18 +181,24 @@ t_list	*parser(t_mini *m)
 	//	new->type = OTHER;
 	if (l)
 	{
+	//	printf("in list\n");
 		//		while (get_token_type(l->content) != NL)
 		while (l)
 		{
 			if (get_token_type(l->content) == NL)
+			{
+			//	del_cmdtab(new);
+			//	printf("del token\n");
+			//	new = 0;
 				break ;
-	//		printf("type %d\n", get_token_type(l->content));
+			}
+		//	printf("type %d\n", get_token_type(l->content));
 			ret = 0;
-			//	print_token(l->content);
+		//	print_token(l->content);
 			fill_cmd(l->content, new, &ret);
 			fill_args(l->content, new, &ret);
 			fill_redir(l->content, new, &ret);
-	//		printf("cmd? %s\n",new->cmd);
+			//		printf("cmd? %s\n",new->cmd);
 			if (get_token_type(l->content) == PIPE)
 			{
 	//			printf("add in list\n");
@@ -196,10 +211,10 @@ t_list	*parser(t_mini *m)
 			}
 			l = l->next;
 		}
-		del_cmdtab(new);
-		//		ft_lstadd_back(&cmd_list, ft_lstnew(new));
-	//	printf("--OUT PARSER--\n");
-		print_list(cmd_list, print_cmdtab);
+		if (new)
+			ft_lstadd_back(&cmd_list, ft_lstnew(new));
+//		printf("--OUT PARSER--\n");
+		//		print_list(cmd_list, print_cmdtab);
 		//	ft_lstclear(m->token_list, &del_token);
 	}
 	return (cmd_list);

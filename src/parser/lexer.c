@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 07:34:47 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 08:09:30 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,9 @@ t_token	*token_pipe_nl(char *p, int *to_set, t_mini *m)
 	{
 			t->m = m;
 		if (p[0] == '|')
-			t->type = NL;
-		else
 			t->type = PIPE;
+		else
+			t->type = NL;
 			t->value = 0;
 			*to_set += 1;
 	}

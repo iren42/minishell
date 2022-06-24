@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 23:13:38 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 01:24:37 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,11 @@ char			*var_substitution(t_list *export_list, char *s);
 char			*rm_superflous(char *s);
 int				are_quotes_closed(char *s);
 void			push(t_list **l, char c, char *s, int i);
+int				check_if_substitution(char *s, t_func_cmd_sub *f);
+int				len_word(char *s);
+void			sub_dollar(t_func_cmd_sub *f, int *i, char *s);
+char			*join_regular_str(t_func_cmd_sub *f, int i, char *s);
+void			sub_for_quotes(t_func_cmd_sub *f, int *i, char *s);
 
 void			signal_handler(void);
 void			print_prompt(void);

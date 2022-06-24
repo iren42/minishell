@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 11:32:42 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 13:38:50 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int	main(int ac, char **av, char **env)
 		mini.token_list = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 
-		print_tmini(&mini);
+//		print_tmini(&mini);
 
 		ret = executor(&mini);
 //	printf("ret = %d\n", ret);

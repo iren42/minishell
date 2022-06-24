@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 06:54:27 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 07:20:15 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	fill_redir(t_token *t, t_cmdtab *c, int *ret)
 }
 t_list	*parser(t_mini *m)
 {
-	printf("\n--IN PARSER--\n");
+//	printf("\n--IN PARSER--\n");
 	t_list	*cmd_list;
 	t_cmdtab	*new;
 	t_list	*l;
@@ -177,16 +177,16 @@ t_list	*parser(t_mini *m)
 		{
 			if (get_token_type(l->content) == NL)
 				break ;
-			printf("type %d\n", get_token_type(l->content));
+	//		printf("type %d\n", get_token_type(l->content));
 			ret = 0;
 			//	print_token(l->content);
 			fill_cmd(l->content, new, &ret);
 			fill_args(l->content, new, &ret);
 			fill_redir(l->content, new, &ret);
-			printf("cmd? %s\n",new->cmd);
+	//		printf("cmd? %s\n",new->cmd);
 			if (get_token_type(l->content) == PIPE)
 			{
-				printf("add in list\n");
+	//			printf("add in list\n");
 				ft_lstadd_back(&cmd_list, ft_lstnew(new));
 				new = malloc(sizeof(t_cmdtab));
 				if (!new)
@@ -198,7 +198,7 @@ t_list	*parser(t_mini *m)
 		}
 		del_cmdtab(new);
 		//		ft_lstadd_back(&cmd_list, ft_lstnew(new));
-		printf("--OUT PARSER--\n");
+	//	printf("--OUT PARSER--\n");
 		print_list(cmd_list, print_cmdtab);
 		//	ft_lstclear(m->token_list, &del_token);
 	}

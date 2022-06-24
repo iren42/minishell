@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 02:31:56 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 07:34:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*get_tokenvalue(char *s, int *to_set)
 	int	size;
 
 	value = 0;
-	printf("get token value s :%s.\n", s);
+//	printf("get token value s :%s.\n", s);
 	if (s)
 	{
 		len = 0;
@@ -54,7 +54,7 @@ char	*get_tokenvalue(char *s, int *to_set)
 				while (s[len + start] && !ft_isspace(s[len + start]) && !is_spe_char(s[len + start]) && !is_quote(s[len + start]))
 					len++;
 			}
-			printf("len %d\n", len);
+//			printf("len %d\n", len);
 			if (len == 0)
 				return (0);
 			value = malloc(sizeof(char) * (len + 1));
@@ -101,7 +101,7 @@ t->m = m;
 			{
 				free(t);
 				*to_set += 1;
-				printf("syntax error token great\n");
+//				printf("syntax error token great\n");
 				return (0);
 			}	
 
@@ -134,14 +134,14 @@ t_token	*token_great_less(char *p, int *to_set, t_mini *m)
 			start++;
 		if (!ft_isspace(p[start]))
 		{
-			printf("p start %c %d\n", p[start], start);
+//			printf("p start %c %d\n", p[start], start);
 			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]) && !is_quote(p[len + start]))
 				len++;
 			if (len == 0)
 			{
 				free(t);
 				*to_set += 1;
-				printf("syntax error token great\n");
+//				printf("syntax error token great\n");
 				return (0);
 			}	
 
@@ -189,14 +189,14 @@ t_token	*token_word(char *p, int *to_set, t_mini *m)
 			start++;
 		if (!ft_isspace(p[start]))
 		{
-			printf("p start %c %d\n", p[start], start);
+//			printf("p start %c %d\n", p[start], start);
 			while (p[len + start] && !ft_isspace(p[len + start]) && !is_spe_char(p[len + start]) && !is_quote(p[len + start]))
 				len++;
 			if (len == 0)
 			{
 				free(t);
 				*to_set += 1;
-				printf("syntax error token great\n");
+//				printf("syntax error token great\n");
 				return (0);
 			}	
 
@@ -258,7 +258,12 @@ int create_token_list(char *s, t_list **l, t_mini *m)
 				if (!t)
 				{
 					// syntax error
-					ft_putstr_fd("syntax error, could not create token\n", 2);
+					print_error("shell", 0, errno, "syntax error");
+				//	ft_putnbr_fd(((t_token *)(ft_lstlast(*l)->content))->type, 2);
+			//		t = ft_lstlast((*l))->content;
+				//	printf("s[i] %s\n", &s[i]);
+			//		printf("token type %d\n", t->type);
+				//	ft_putstr_fd("syntax error, could not create token\n", 2);
 					return (FAILURE);
 				}
 				new = ft_lstnew(t);
@@ -281,10 +286,10 @@ int	lexer(t_mini *m)
 	int ret;
 
 	l = 0;
-		printf("before lexer s %s\n", m->s);
+//		printf("before lexer s %s\n", m->s);
 	ret = create_token_list(m->s, &l, m);
 	m->token_list = l;
-	printf("after lexer\n");
-	print_list(l, print_token);
+//	printf("after lexer\n");
+//	print_list(l, print_token);
 	return (ret);
 }

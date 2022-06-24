@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 07:06:08 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 07:19:01 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,24 +269,24 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 	int		i;
 	char	**split_cmd;
 	i = 0;
-	printf("%d cmdtab\n", e->nb_cmd);
+//	printf("%d cmdtab\n", e->nb_cmd);
 	while (i < e->nb_cmd)
 	{
-		printf("i %d starts\n", i);
+	//	printf("i %d starts\n", i);
 		split_cmd = ft_split_cmd(e->m, i);
-		print_split(split_cmd);
+	//	print_split(split_cmd);
 		pids[i] = fork();
 		if (pids[i] == -1)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
-			printf("inside child %d\n", i);
+	//		printf("inside child %d\n", i);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;
 		free_split(split_cmd);
 		i++;
-		printf("i %d is done\n", i);
+	//	printf("i %d is done\n", i);
 	}
 }
 
@@ -320,7 +320,7 @@ int	executor(t_mini *mini)
 	int	status;
 	t_cmdtab	*ptr;
 
-	printf("--IN EXECUTOR----\n");
+//	printf("--IN EXECUTOR----\n");
 	if ((t_list *)(mini->cmdtab_list) == NULL)
 		return (0); // cmd =(null)
 	ptr = get_cmdtab_ptr(mini->cmdtab_list->content);
@@ -330,13 +330,13 @@ int	executor(t_mini *mini)
 		exec_no_fork(&e, ptr);
 	else
 	{
-		printf("execution of a command line with pipes\n");
+//		printf("execution of a command line with pipes\n");
 		pids = malloc(sizeof(pid_t) * e.nb_cmd);
 		if (!pids)
 			exit(1); // malloc error
 		ends = init_pipes(e.nb_cmd);
 		open_pipes(ends, e.nb_cmd);
-		printf("pipes are ready\n");
+//		printf("pipes are ready\n");
 		exec_cmdtab_list(&e, pids, ends);
 		close_all_pipes(ends, e.nb_cmd);
 		err = ft_wait(pids, e.nb_cmd);
@@ -345,6 +345,6 @@ int	executor(t_mini *mini)
 		free(pids);
 	}
 	free_split(e.split_env);
-	printf("--IN EXECUTOR END----\n");
+//	printf("--IN EXECUTOR END----\n");
 	return (err);
 }

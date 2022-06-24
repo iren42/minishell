@@ -56,6 +56,7 @@ int		**init_pipes(int n);
 void	open_pipes(int **fd, int n);
 void	free_pipes(int **ends, int n);
 void	close_all_pipes(int **ends, int n);
+void	close_all_pipes_but_index(int **ends, int n, int index);
 
 int		ft_heredoc(char *eof);
 

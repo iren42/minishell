@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 16:31:25 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 19:40:32 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,11 @@ int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
 		if (fd_out != STDOUT)
 			close(fd_out);
 		if (get_redir_type(tp->content) == RE_GREAT)
+		{
+		//	ft_putstr_fd(((t_redir *)(tp->content))->filename, 2);
+		//	exit(0);
 			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_TRUNC,  0664);
+		}
 		else if (get_redir_type(tp->content) == RE_DOUBLE_GREAT)
 			fd_out = open(((t_redir *)(tp->content))->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 		if (fd_out < 0)
@@ -253,14 +257,11 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	t_list	*tmp;
 	char	*eof;
 
-	fd_in = ex_infile(e, STDIN, i, ends);
+//	if (i > 0)
+	fd_out = 0;
+	fd_in = 0;
 
-	if (fd_in != STDIN )
-	{
-		dup2(fd_in, STDIN);
-		close(fd_in);
-	}
-	fd_out = ex_outfile(e, STDOUT, i, ends);
+
 
 	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	while (tmp)
@@ -272,14 +273,23 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 		free(eof);
 		tmp = tmp->next;
 	}
+	fd_in = ex_infile(e, STDIN, i, ends);
 
-	if (fd_out != STDOUT )
+	if (fd_in != STDIN )
+	{
+		dup2(fd_in, STDIN);
+		close(fd_in);
+	}
+//	if (i < e->nb_cmd -1)
+	fd_out = ex_outfile(e, STDOUT, i, ends);
+	if (fd_out != STDOUT)
 	{
 		dup2(fd_out, STDOUT);
 		close(fd_out);
 	}
 	p = is_builtin(split_cmd[0], e->m);
-	close_all_pipes(ends, e->nb_cmd);
+	close_all_pipes_but_index(ends, e->nb_cmd, i);
+//	close_all_pipes(ends, e->nb_cmd);
 //	printf("in exec child\n");
 //	print_split(split_cmd);
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);

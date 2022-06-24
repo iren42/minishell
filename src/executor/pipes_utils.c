@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 23:50:32 by iren              #+#    #+#             */
-/*   Updated: 2022/06/22 23:51:03 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 18:43:10 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,22 @@ void	close_all_pipes(int **ends, int n)
 		close(ends[i][1]);
 		i++;
 	}
+}
+void	close_all_pipes_but_index(int **ends, int n, int index)
+{
+	int	i;
+
+	i = 0;
+	while (i < n - 1)
+	{
+		if (i != index && (i == 0 || i != index - 1))
+		{
+			if (ends[i][0])
+				close(ends[i][0]);
+			if (ends[i][1])
+				close(ends[i][1]);
+		}
+		i++;
+	}
+
 }

@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 13:14:16 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 13:42:00 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	push(t_list **l, char c, char *s, int i)
 	t_quote	*new;
 	t_list	*a;
 
-//	ft_putstr_fd("push\n", 2);
+	//	ft_putstr_fd("push\n", 2);
 	new = malloc(sizeof(*new));
 	new->c = c;
 	new->index = i;
@@ -42,7 +42,7 @@ void pop(t_list **l, char *s, int *index_close)
 	int	metacharacter;
 
 	i = 0;
-//	ft_putstr_fd("pop\n", 2);
+	//	ft_putstr_fd("pop\n", 2);
 	metacharacter = 0;
 	tmp = *l;
 
@@ -93,43 +93,54 @@ return (1);
 int	are_quotes_closed(char *s) // verify quotes closed
 {
 	int	i;
+	size_t	len;
 	int	dquote_closed;
 	int	squote_closed;
 
 	i = 0;
+	len = ft_strlen(s);
 	dquote_closed = 1;
 	squote_closed = 1;
-	while (s[i])
+	if (s)
 	{
-		if (s[i] == '"')
+		while (i < len)
 		{
-			i++;
-			dquote_closed = 0;
-			while (s[i] && s[i] != '"')
-			{
-				i++;
-			}
 			if (s[i] == '"')
-				dquote_closed = 1;
-
-		}
-		if (s[i] == '\'')
-		{
-				squote_closed = 0;
-			i++;
-			while (s[i] && s[i] != '\'')
 			{
 				i++;
+				dquote_closed = 0;
+				if (i < len)
+				{
+					while (s[i] && s[i] != '"')
+					{
+						i++;
+					}
+					if (s[i] == '"')
+						dquote_closed = 1;
+				}
+
 			}
 			if (s[i] == '\'')
-				squote_closed = 1;
-		}
-		i++;
+			{
+				squote_closed = 0;
+				i++;
+				if (i < len)
+				{
+					while (s[i] && s[i] != '\'')
+					{
+						i++;
+					}
+					if (s[i] == '\'')
+						squote_closed = 1;
+				}
+			}
+			i++;
 
+		}
 	}
 	if (squote_closed == 1 && dquote_closed == 1)
 		return (1);
-return (0);
+	return (0);
 }
 
 char	*rm_superflous(char *s) // rm superflous quotes
@@ -164,9 +175,9 @@ char	*rm_superflous(char *s) // rm superflous quotes
 				if (meta == 0)
 				{
 					ft_memmove(&s[i], &s[i + 1], ft_strlen(s) + 1);
-			//		printf("1st mem %s, %s\n", s, &s[i]);
+					//		printf("1st mem %s, %s\n", s, &s[i]);
 					ft_memmove(&s[start], &s[start + 1], ft_strlen(s) + 1);
-			//		printf("2 mem %s, %s\n", s, &s[start]);
+					//		printf("2 mem %s, %s\n", s, &s[start]);
 					i -= 2;
 				}
 

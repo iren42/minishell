@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 13:37:30 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 20:33:24 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 22:23:50 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,22 @@ t_list	*create_arg_list(char *pwd, char *oldpwd)
 void	update_oldpwd_nd_pwd(t_cmdtab *c)
 {
 	t_cmdtab	*new_c;
-	char	buf[BUF_SIZE];
-	char	*oldpwd;
-	char	*pwd;
-	t_list	*argl;
+	char		buf[BUF_SIZE];
+	char		*oldpwd;
+	char		*pwd;
+	t_list		*argl;
 
 	oldpwd = ft_strjoin("OLDPWD=", ft_getenv("PWD", c->m->env_list));
 	pwd = ft_strjoin("PWD=", getcwd(buf, BUF_SIZE));
 	if (!oldpwd || !pwd)
-		exit(1);	
+		exit(1);
 	argl = create_arg_list(pwd, oldpwd);
 	if (!argl)
 		exit(1);
-
 	new_c = create_cmdtab("export", argl, c->m);
 	if (!new_c)
 		exit(1);
-
 	ft_export(new_c);
-	//	print_cmdtab(new_c);
 	del_cmdtab(new_c);
 }
 
@@ -91,7 +88,6 @@ int	ft_cd(t_cmdtab *c)
 		path = get_arg_value(c->arg_list->content);
 	if (ft_memcmp(path, "~", 2) == 0)
 		path = ft_getenv("HOME", c->m->env_list);
-	//	printf("path %s\n", path);
 	if (chdir(path))
 	{
 		print_error("shell: cd", path, errno, "No such file or directory");

@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 14:32:15 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 15:10:23 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,9 @@ char	**ft_split_env(t_mini *mini)
 
 void	ft_execve(t_cmdtab *cmdtab, char **split_cmd, char **split_env)
 {
+	if (cmdtab->cmd == 0)
+		return ;
+//	print_split(split_cmd);
 	if (execve(cmdtab->cmd, split_cmd, split_env) == -1)
 	{
 		print_error("shell", split_cmd[0], 0, "command not found");

@@ -6,13 +6,24 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 22:22:36 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:48:29 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_in_list_or_replace(t_mini *m, t_env *e)
+static void	replace(t_list *l, t_env *e_from_envl, t_env *e, int *add)
+{
+	e_from_envl = l->content;
+	free(e_from_envl->value);
+	e_from_envl->value = ft_strdup(e->value);
+	if (!e_from_envl)
+		exit(1);
+	del_env(e);
+	*add = 1;
+}
+
+static void	add_in_list_or_replace(t_mini *m, t_env *e)
 {
 	t_list	*l;
 	t_list	*new;
@@ -28,13 +39,7 @@ void	add_in_list_or_replace(t_mini *m, t_env *e)
 			if (ft_memcmp(get_env_name(l->content), e->name,
 					ft_strlen(e->name) + 1) == 0)
 			{
-				e_from_envl = l->content;
-				free(e_from_envl->value);
-				e_from_envl->value = ft_strdup(e->value);
-				if (!e_from_envl)
-					exit(1);
-				del_env(e);
-				add = 1;
+				replace(l, e_from_envl, e, &add);
 				break ;
 			}
 			l = l->next;
@@ -44,6 +49,18 @@ void	add_in_list_or_replace(t_mini *m, t_env *e)
 			new = ft_lstnew(e);
 			ft_lstadd_back(&m->env_list, new);
 		}
+	}
+}
+
+static void	add_repl_tenv(t_env *e, t_cmdtab *c, t_list *l)
+{
+	if (is_syntax_ok(e->name))
+		add_in_list_or_replace(c->m, e);
+	else
+	{
+		print_error("shell: export", get_arg_value(l->content), 0,
+			"not a valid identifier");
+		del_env(e);
 	}
 }
 
@@ -60,17 +77,7 @@ int	ft_export(t_cmdtab *c)
 		{
 			e = create_tenv(l->content);
 			if (e)
-			{
-				if (is_syntax_ok(e->name))
-					add_in_list_or_replace(c->m, e);
-				else
-				{
-					print_error("shell: export", get_arg_value(l->content), 0,
-						"not a valid identifier");
-					del_env(e);
-					return (FAILURE);
-				}
-			}
+				add_repl_tenv(e, c, l);
 			else
 			{
 				if (!is_syntax_ok(get_arg_value(l->content)))

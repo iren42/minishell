@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 12:34:56 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 13:13:32 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,24 +249,24 @@ char	*var_substitution(t_list *list, char *s)
 		if (s[i] == '$')
 		{
 			f.res = join_regular_str(&f, i, s);
-			printf("after regular str %s.\n", f.res);
+//			printf("after regular str %s.\n", f.res);
 			if (check_if_substitution(&s[i], &f))
 			{
 				f.res = join_str_in_list(&f, s, i);
-				printf("is in list\n");
+//				printf("is in list\n");
 			}
 			else
 			{
 				
 				f.res = little_str_is_not_found(&f, s, i);
-				printf("env not found\n");
+//				printf("env not found\n");
 			}
 		}
 		i++;
 	}
 	f.res = join_regular_str(&f, i, s);
 	ft_lstclear(&f.quote_list, &del_quote);
-		printf("var_sub() final s %s\n", f.res);
+//		printf("var_sub() final s %s\n", f.res);
 	}
 	return (f.res);
 

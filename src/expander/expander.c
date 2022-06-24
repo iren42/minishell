@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 12:29:46 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 13:12:38 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,14 @@ int	expander(t_mini *m)
 	if (!ret)
 		return (0);
 	m->s = rm_superflous(m->s); // directement sur la string, pas malloc
-	printf("expander after rm superflous %s.\n", m->s);
-//	create_list(m);
-//		print_list(m->env_list, print_env);
+//	printf("in expander after rm superflous %s.\n", m->s);
 		
-	res = var_substitution(m->env_list, m->s);
+	res = var_substitution(m->env_list, m->s); // malloc
+	if (!res)
+		exit(0);
 
 	res = rm_superflous(res); // directement sur la string, pas malloc
-//	ft_lstclear(&env_list, del_tenv);
-	printf("expander after var subtitution s %s.\n", res);
-//	free(m->s);
+//	printf("in expander after var subtitution s %s.\n", res);
 	m->s = res;
-//	free(res);
 	return (ret);
 }

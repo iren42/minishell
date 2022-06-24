@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 11:30:25 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 13:14:46 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,10 +287,10 @@ int	lexer(t_mini *m)
 	int ret;
 
 	l = 0;
-			printf("before lexer s %s\n", m->s);
+	//			printf("before lexer s %s\n", m->s);
 	ret = create_token_list(m->s, &l, m);
 	m->token_list = l;
-		printf("after lexer\n");
+	//		printf("after lexer\n");
 	//	print_list(l, print_token);
 	return (ret);
 }

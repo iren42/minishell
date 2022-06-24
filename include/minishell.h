@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 23:13:38 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 23:41:53 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,5 +140,9 @@ int				is_syntax_ok(char *s);
 int				matching(char b1, char b2);
 char			*get_cmd(t_list *env_list, char *cmd);
 void			free_split(char **split);
+
+char			*ft_readline(void);
+int				clear_exit(t_mini mini);
+int				call_and_clear(t_mini *mini);
 
 #endif

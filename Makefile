@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/24 23:02:29 by iren             ###   ########.fr        #
+#    Updated: 2022/06/24 23:39:39 by gufestin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ HEADER	= include/minishell.h
 
 DIR_SOURCES	= src/
 
-SOURCES		=	minishell.c \
+SOURCES		=	main.c \
+			minishell.c \
 				signal_handler.c \
 				ft_error.c \
 				\

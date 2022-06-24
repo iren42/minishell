@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 13:14:46 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 14:06:00 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,7 @@ int create_token_list(char *s, t_list **l, t_mini *m)
 					//	printf("s[i] %s\n", &s[i]);
 					//		printf("token type %d\n", t->type);
 					//	ft_putstr_fd("syntax error, could not create token\n", 2);
+ft_lstclear(l, del_token);
 					return (FAILURE);
 				}
 				new = ft_lstnew(t);
@@ -281,7 +282,7 @@ int create_token_list(char *s, t_list **l, t_mini *m)
 	return (SUCCESS);
 }
 
-int	lexer(t_mini *m)
+int	lexer(t_mini *m) // return FAILURE if could not create tokens
 {
 	t_list	*l;
 	int ret;

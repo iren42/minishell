@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/25 00:09:19 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 01:48:47 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,23 @@ static void	case_double(char *s, int *i, int *meta, int *start)
 	}
 }
 
+static void	case_simple(char *s, int *i, int *meta, int *start)
+{
+	*start = (*i)++;
+	while (s[*i] && s[*i] != '\'')
+	{
+		if (ft_strchr(" <>$|\n\'", s[*i]))
+			*meta = 1;
+		(*i)++;
+	}
+	if (*meta == 0)
+	{
+		ft_memmove(&s[*i], &s[*i + 1], ft_strlen(s) + 1);
+		ft_memmove(&s[*start], &s[*start + 1], ft_strlen(s) + 1);
+		*i -= 2;
+	}
+}
+
 char	*rm_superflous(char *s)
 {
 	int		i;
@@ -65,15 +82,12 @@ char	*rm_superflous(char *s)
 		while (s[i])
 		{
 			if (s[i] == '\'')
-			{
-				i++;
-				while (s[i] && s[i] != '\'')
-					i++;
-			}
+				case_simple(s, &i, &meta, &start);
 			else if (s[i] == '"')
 				case_double(s, &i, &meta, &start);
 			i++;
 		}
 	}
+	printf("in rm superflous %s\n", s);
 	return (s);
 }

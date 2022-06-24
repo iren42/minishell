@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 14:29:06 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:19:03 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,27 +130,16 @@ int	main(int ac, char **av, char **env)
 		ret = expander(&mini);
 		if (ret == 0)
 		{
-			ft_putstr_fd("syntax error\n", 1);
-		}
+			print_error("shell", 0, errno, "syntax error main");
+			continue;
+	}
 //		mini.token_list = lexer(&mini);
 		ret = lexer(&mini);
 		mini.cmdtab_list = parser(&mini);
 
-//		print_tmini(&mini);
+		print_tmini(&mini);
 
 		ret = executor(&mini);
-//	printf("ret = %d\n", ret);
-		//	printf("ret executor %d\n", ret);	
-	//	executor(&mini);
-//		ft_heredoc("EOF");
-		
-		//	ft_unset(mini.cmdtab_list->content);
-		//		ft_pwd(mini.cmdtab_list->content);
-		//		ft_export(mini.cmdtab_list->content);
-		//	ft_env(mini.cmdtab_list->content);
-		//			ft_exit(mini.cmdtab_list->content);
-		//	ft_cd(mini.cmdtab_list->content);
-		//		ft_echo(mini.cmdtab_list->content);
 
 		ft_lstclear(&mini.token_list, del_token);
 		ft_lstclear(&mini.cmdtab_list, del_cmdtab);

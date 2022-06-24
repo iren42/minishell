@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 14:06:00 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 16:21:16 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,13 @@ t_token	*token_double_great_less(char *p, int *to_set, t_mini *m)
 	t = malloc(sizeof(t_token));
 	t->m = m;
 
-	t->type = DOUBLE_GREAT;
 	if (p)
 	{
-		start = 1;
-		if (p[start] == '>' && p[start + 1] == '>')
+		if (p[0] == '>' && p[1] == '>')
 			t->type = DOUBLE_GREAT;
 		else
 			t->type = DOUBLE_LESS;
-
+		start = 2;
 		len = 0;
 		while (ft_isspace(p[start]) && p[start])
 			start++;
@@ -259,7 +257,7 @@ int create_token_list(char *s, t_list **l, t_mini *m)
 				if (!t)
 				{
 					// syntax error
-					print_error("shell", 0, errno, "syntax error");
+					print_error("shell", 0, errno, "syntax error lexer");
 					//	ft_putnbr_fd(((t_token *)(ft_lstlast(*l)->content))->type, 2);
 					//		t = ft_lstlast((*l))->content;
 					//	printf("s[i] %s\n", &s[i]);

@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 19:40:32 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 21:16:06 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,6 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 {
 	t_list	*tmp;
 
-	if (child > 0)
-	{
-		fd_in = fd[child - 1][IN];
-		close(fd[child - 1][OUT]);
-	}
 	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	//	tmp = (ex_get_cmd_child(cmd, child))->infile;
 	while (tmp)
@@ -73,11 +68,6 @@ int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
 {
 	t_list	*tp;
 
-	if (child != e->nb_cmd - 1)
-	{
-		fd_out = fd[child][WRITE];
-		close(fd[child][READ]);
-	}
 	tp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	while (tp)
 	{
@@ -261,7 +251,18 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	fd_out = 0;
 	fd_in = 0;
 
-
+	if (i != e->nb_cmd - 1)
+	{
+		dup2(ends[i][1], STDOUT);
+		close(ends[i][1]);
+		close(ends[i][0]);
+	}
+	if (i > 0)
+	{
+		dup2(ends[i - 1][0], STDIN);
+		close(ends[i - 1][0]);
+		close(ends[i - 1][1]);
+	}
 
 	tmp = ((t_cmdtab *)(e->cmdtabl->content))->redir_list;
 	while (tmp)

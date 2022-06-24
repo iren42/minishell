@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/09 19:32:54 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 14:45:03 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 20:59:11 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	ft_nb_words(const char *s, const char *c)
 		{
 			while (ft_strchr(c, s[i]) && s[i])
 				i++;
-			if (s[i] && !ft_strchr(c, s[i]) )
+			if (s[i] && !ft_strchr(c, s[i]))
 			{
 				nb_w++;
 				if (!is_quote(s[i]))
@@ -52,7 +52,6 @@ static int	ft_nb_words(const char *s, const char *c)
 					while (s[i] && s[i] != q)
 						i++;
 					i++;
-
 				}
 			}
 		}

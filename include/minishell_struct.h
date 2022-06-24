@@ -1,27 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell_struct.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/24 20:50:39 by gufestin          #+#    #+#             */
+/*   Updated: 2022/06/24 20:56:54 by gufestin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_STRUCT_H
-#define MINISHELL_STRUCT_H
-struct s_mini;
+# define MINISHELL_STRUCT_H
+
+struct	s_mini;
+
 typedef enum e_token_type
 {
-	NONE, // 0
+	NONE,
 	WORD,
-	GREAT, // 2
+	GREAT,
 	LESS,
-	DOUBLE_GREAT , //4
+	DOUBLE_GREAT,
 	DOUBLE_LESS,
-	PIPE, //6
-	NL, // 7
+	PIPE,
+	NL,
 }	t_token_type;
 
-typedef struct	s_token
+typedef struct s_token
 {
-	char	*value;
+	char			*value;
 	t_token_type	type;
 	struct s_mini	*m;
-	
 }	t_token;
 
-typedef enum e_redir_type{
+typedef enum e_redir_type
+{
 	RE_GREAT,
 	RE_DOUBLE_GREAT,
 	RE_LESS,
@@ -36,33 +50,35 @@ typedef struct s_redir
 	char			*filename;
 }	t_redir;
 
-typedef struct s_arg{
+typedef struct s_arg
+{
 	int				is_in_quotes;
 	char			*value;
 }	t_arg;
 
-typedef enum e_cmd_type{
-	PWD, // 0
+typedef enum e_cmd_type
+{
+	PWD,
 	ECHO,
-	CD, //2
+	CD,
 	EXPORT,
-	UNSET, //4
+	UNSET,
 	ENV,
-	EXIT, // 6
-	OTHER, //7
+	EXIT,
+	OTHER,
 }	t_cmd_type;
 
-typedef struct	s_cmdtab
+typedef struct s_cmdtab
 {
-	int			is_in_quotes;
-	char		*cmd;
-	t_list		*arg_list;
-	t_list		*redir_list;
+	int				is_in_quotes;
+	char			*cmd;
+	t_list			*arg_list;
+	t_list			*redir_list;
 	struct s_mini	*m;
-	t_cmd_type	type;
-} t_cmdtab;
+	t_cmd_type		type;
+}	t_cmdtab;
 
-typedef struct	s_mini
+typedef struct s_mini
 {
 	t_list	*token_list;
 	t_list	*cmdtab_list;
@@ -70,46 +86,41 @@ typedef struct	s_mini
 	char	**split_builtin;
 	char	*s;
 	char	**env;
-	int	fd;
-
-} t_mini;
+	int		fd;
+}	t_mini;
 
 typedef struct s_env
 {
-//	int	is_in_quotes;
-	int	index;
+	int		index;
 	char	*name;
 	char	*value;
-} t_env;
+}	t_env;
 
 typedef struct s_quote
 {
 	char	c;
-	int	index;
+	int		index;
+}	t_quote;
 
-} t_quote;
 typedef struct s_func_cmd_sub
 {
 	t_list	*env_list;
 	t_list	*quote_list;
 	char	*res;
 	char	*tenv_value;
-	int	list_index;
-	int	start;
-	int	end;
+	int		list_index;
+	int		start;
+	int		end;
 	char	q;
-} t_func_cmd_sub;
+}	t_func_cmd_sub;
 
 typedef struct s_exec
 {
 	char	**split_env;
 	int		nb_cmd;
-//	pid_t	*pids;
-//	int		**ends;
-//	int		err;
 	t_mini	*m;
 	t_list	*cmdtabl;
-	int	redir_fd[2];
+	int		redir_fd[2];
+}	t_exec;
 
-} t_exec;
 #endif

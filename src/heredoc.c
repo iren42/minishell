@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 23:56:04 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 14:46:52 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 21:07:51 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 int	ft_heredoc(char *eof)
 {
-	int	fd;
+	int		fd;
 	char	*filename;
 	char	*read;
-	int	eof_len;
+	int		eof_len;
 
 	filename = ft_strjoin(eof, ".heredoc");
 	if (!filename)
-		exit(1); // malloc error
+		exit(1);
 	fd = open(filename, O_CREAT | O_WRONLY, 0777);
 	if (fd == -1)
-		exit(1); // open error
+		exit(1);
 	eof_len = ft_strlen(eof) + 1;
 	read = readline("> ");
 	if (read)
@@ -37,15 +37,14 @@ int	ft_heredoc(char *eof)
 			read = readline("> ");
 			if (!read)
 			{
-				ft_putstr_fd("Warning: here-document delimited by end of file\n", 2);
-				// g_errno = 0;
+				ft_putstr_fd("Warning: \
+						here-document delimited by end of file\n", 2);
 				break ;
 			}
 		}
 	}
 	else
 		ft_putstr_fd("Warning: here-document delimited by end of file\n", 2);
-	// g_errno = 0;
 	free(read);
 	close(fd);
 	fd = open(filename, O_RDONLY);

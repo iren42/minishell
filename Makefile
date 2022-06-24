@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/23 21:59:28 by iren             ###   ########.fr        #
+#    Updated: 2022/06/24 23:02:29 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,9 @@ SOURCES		=	minishell.c \
 				parser/lexer_utils.c \
 				parser/parser.c \
 				parser/get_cmd.c \
+				parser/fill_tokens.c \
+				parser/create_token.c \
+				parser/token_type.c \
 				\
 				expander/expander.c \
 				expander/var_substitution.c \

@@ -6,12 +6,11 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 20:57:54 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 17:00:39 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 21:57:10 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	free_split(char **split)
 {
@@ -29,5 +28,3 @@ void	free_split(char **split)
 		split = 0;
 	}
 }
-
-

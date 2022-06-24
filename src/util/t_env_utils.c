@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 16:23:02 by iren              #+#    #+#             */
-/*   Updated: 2022/06/21 22:44:56 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 22:04:13 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 char	*ft_getenv(char *name, t_list *env_list)
 {
-	t_list *l;
+	t_list	*l;
 
 	l = env_list;
 	if (env_list != 0 && name)
 	{
 		while (l)
 		{
-			if (ft_memcmp(get_env_name(l->content), name, ft_strlen(name) + 1) == 0)
-				//	return (get_env_name(l->content) + ft_strlen(name) + 1);
+			if (ft_memcmp(get_env_name(l->content), name,
+					ft_strlen(name) + 1) == 0)
 				return (get_env_value(l->content));
 			l = l->next;
 		}
@@ -32,20 +32,22 @@ char	*ft_getenv(char *name, t_list *env_list)
 
 t_env	*ft_getenv_ptr(char *name, t_list *env_list)
 {
-	t_list *l;
+	t_list	*l;
 
 	l = env_list;
 	if (env_list != 0 && name)
 	{
 		while (l)
 		{
-			if (ft_memcmp(get_env_name(l->content), name, ft_strlen(name) + 1) == 0)
+			if (ft_memcmp(get_env_name(l->content), name,
+					ft_strlen(name) + 1) == 0)
 				return (l->content);
 			l = l->next;
 		}
 	}
 	return (0);
 }
+
 void	del_env(void *o)
 {
 	t_env	*e;
@@ -61,9 +63,8 @@ char	*get_env_name(void *o)
 	t_env	*e;
 
 	e = (t_env *)o;
-	//	printf("env name %s\n", e->name);
 	if (e)
-	return (e->name);
+		return (e->name);
 	else
 		return (0);
 }
@@ -93,7 +94,6 @@ int	is_syntax_ok(char *s)
 	return (1);
 }
 
-
 int	get_len_env_name(char *env)
 {
 	int	i;
@@ -115,7 +115,7 @@ int	get_len_env_name(char *env)
 
 t_env	*create_tenv(t_arg *a)
 {
-	int	len;
+	int		len;
 	t_env	*e;
 
 	e = malloc(sizeof(t_env));
@@ -134,7 +134,6 @@ t_env	*create_tenv(t_arg *a)
 		del_env(e);
 		return (0);
 	}
-	//	printf("get export value %s\n", s);
 	return (e);
 }
 
@@ -149,6 +148,5 @@ t_env	*create_new_env(char *name, char *value)
 	e->name = 0;
 	e->name = ft_strdup(name);
 	e->value = ft_strdup(value);
-	//	printf("get export value %s\n", s);
 	return (e);
 }

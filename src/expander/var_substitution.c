@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 18:16:48 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 21:40:27 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ char	*var_substitution(t_list *list, char *s)
 				f.res = join_regular_str(&f, i, s);
 				printf("after regular str %s.\n", f.res);
 				if (s[i + 1] == '\0' || ft_isspace(s[i + 1]))
-					;
+					f.start += ft_strlen(f.res);
 				else if (s[i + 1] == '?')
 				{
 					printf("i %d\n", i);

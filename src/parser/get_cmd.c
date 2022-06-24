@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 20:53:42 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/21 04:47:43 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 02:14:15 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char	*get_cmd(t_list *env_list, char *cmd)
 	char	**splitpaths;
 	int		i;
 
+	if (!cmd || !env_list)
+		return (0);
 	init_get_cmd(&res, &splitpaths, &i);
 	splitpaths = get_splitpaths(env_list);
 	if (splitpaths != 0)

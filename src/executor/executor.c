@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 01:47:42 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/24 06:50:29 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,9 @@ char	**ft_split_cmd(t_mini *mini, int cmd_num)
 	if (!split_cmd)
 		exit(1); // malloc error
 	//	printf("split cmd 0 %s\n",ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd));
-	split_cmd[0] = ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd);
+	split_cmd[0] = 0;
+	if (((t_cmdtab *)(tmp_cmdtab_list->content))->cmd)
+		split_cmd[0] = ft_strdup(((t_cmdtab *)(tmp_cmdtab_list->content))->cmd);
 	if (!split_cmd[0])
 		exit(1); // malloc error
 	//	split_cmd[0] = ft_strdup("ls");
@@ -253,8 +255,10 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	}
 	p = is_builtin(split_cmd[0], e->m);
 	close_all_pipes(ends, e->nb_cmd);
+	printf("in exec child\n");
 	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
 	exit(0);
+	printf("after exec child\n");
 
 }
 
@@ -272,11 +276,13 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 			exit(1); // fork error
 		if (pids[i] == 0) // child
 		{
+			printf("inside child %d\n", i);
 			exec_child(e, ends, split_cmd, i);
 		}
 		e->cmdtabl = e->cmdtabl->next;
 		free_split(split_cmd);
 		i++;
+		printf("i %d is done\n", i);
 	}
 }
 
@@ -310,6 +316,7 @@ int	executor(t_mini *mini)
 	int	status;
 	t_cmdtab	*ptr;
 
+	printf("--IN EXECUTOR----\n");
 	if ((t_list *)(mini->cmdtab_list) == NULL)
 		return (0); // cmd =(null)
 	ptr = get_cmdtab_ptr(mini->cmdtab_list->content);
@@ -319,11 +326,13 @@ int	executor(t_mini *mini)
 		exec_no_fork(&e, ptr);
 	else
 	{
+		printf("execution of a command line with pipes\n");
 		pids = malloc(sizeof(pid_t) * e.nb_cmd);
 		if (!pids)
 			exit(1); // malloc error
 		ends = init_pipes(e.nb_cmd);
 		open_pipes(ends, e.nb_cmd);
+		printf("pipes are ready\n");
 		exec_cmdtab_list(&e, pids, ends);
 		close_all_pipes(ends, e.nb_cmd);
 		err = ft_wait(pids, e.nb_cmd);
@@ -332,5 +341,6 @@ int	executor(t_mini *mini)
 		free(pids);
 	}
 	free_split(e.split_env);
+	printf("--IN EXECUTOR END----\n");
 	return (err);
 }

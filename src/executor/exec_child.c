@@ -66,5 +66,5 @@ void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 	}
 	close_all_pipes_but_index(ends, e->nb_cmd, i);
 	execute_cmd(split_cmd, e->cmdtabl->content, e);
-	exit(0);
+	exit(g_errno);
 }

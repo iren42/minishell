@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 06:37:06 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 07:14:00 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,24 @@ void	execute_cmd(char **split_cmd, t_cmdtab *c, t_exec *e)
 	if (c->type == EXIT)
 		ft_exit(c);
 	else
+	{
 		g_errno = 0;
-	if (c->type == EXPORT)
-		ft_export(c);
-	else if (c->type == UNSET)
-		ft_unset(c);
-	else if (c->type == CD)
-		ft_cd(c);
-	else if (c->type == ECHO)
-		ft_echo(c);
-	else if (c->type == ENV)
-		ft_env(c);
-	else if (c->type == PWD)
-		ft_pwd();
-	else
-		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
+		if (c->type == EXPORT)
+			ft_export(c);
+		else if (c->type == UNSET)
+			ft_unset(c);
+		else if (c->type == CD)
+			ft_cd(c);
+		else if (c->type == ECHO)
+			ft_echo(c);
+		else if (c->type == ENV)
+			ft_env(c);
+		else if (c->type == PWD)
+			ft_pwd();
+		else
+			ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd,
+				e->split_env);
+	}
 }
 
 void	exec_no_fork(t_exec *e, t_cmdtab *ptr)

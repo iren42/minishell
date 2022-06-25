@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 18:02:11 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 23:48:29 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:44:55 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,21 @@ static void	replace(t_list *l, t_env *e_from_envl, t_env *e, int *add)
 	*add = 1;
 }
 
+static void	ft_add(t_env *e, t_mini *m)
+{
+	t_list	*new;
+
+	new = ft_lstnew(e);
+	ft_lstadd_back(&m->env_list, new);
+}
+
 static void	add_in_list_or_replace(t_mini *m, t_env *e)
 {
 	t_list	*l;
-	t_list	*new;
 	t_env	*e_from_envl;
 	int		add;
 
+	e_from_envl = NULL;
 	add = 0;
 	l = m->env_list;
 	if (e && l)
@@ -45,10 +53,7 @@ static void	add_in_list_or_replace(t_mini *m, t_env *e)
 			l = l->next;
 		}
 		if (add == 0)
-		{
-			new = ft_lstnew(e);
-			ft_lstadd_back(&m->env_list, new);
-		}
+			ft_add(e, m);
 	}
 }
 
@@ -66,7 +71,6 @@ static void	add_repl_tenv(t_env *e, t_cmdtab *c, t_list *l)
 
 int	ft_export(t_cmdtab *c)
 {
-	char	*p;
 	t_list	*l;
 	t_env	*e;
 

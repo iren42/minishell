@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/25 02:32:13 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:49:32 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ char	*var_substitution(t_list *list, char *s)
 {
 	t_func_cmd_sub	f;
 	int				i;
-	char			*tmp;
-	char			*tmp2;
 
 	init_cmd_sub(&f, list);
 	i = 0;

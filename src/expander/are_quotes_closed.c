@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:53:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:59:54 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:12:31 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	case_simple(char *s, int *i, int len, int *squote_closed)
 int	are_quotes_closed(char *s)
 {
 	int		i;
-	size_t	len;
+	int		len;
 	int		dquote_closed;
 	int		squote_closed;
 

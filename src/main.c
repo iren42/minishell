@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:36:18 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 23:38:07 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 01:58:17 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	g_errno = 0;
 t_list	*init_env_list(char **env)
 {
 	t_env	*new;
-	char	*value;
 	t_list	*env_list;
 	int		len;
 	int		i;

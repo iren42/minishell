@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 21:04:51 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 00:59:16 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:36:38 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ void	print_list(t_list *l, void (*f)(void *))
 
 void	print_tmini(t_mini *mini)
 {
-	int	i;
-
-	i = 0;
 	printf(BLU "----TOKEN LIST START----\n");
 	print_list(mini->token_list, &print_token);
 	printf("----TOKEN LIST END----\n");

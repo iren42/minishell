@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 01:08:39 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 01:20:28 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:14:35 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ char	*little_str_is_not_found(t_func_cmd_sub *f, char *s, int i)
 
 	res = 0;
 	q = 0;
+	p = NULL;
 	if (s)
 	{
 		if (f->quote_list)

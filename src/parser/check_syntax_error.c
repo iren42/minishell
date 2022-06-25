@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 02:05:58 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 02:24:59 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:52:55 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ int	check_syntax_size_two(t_list *l)
 int	check_syntax_token(t_list *tokens)
 {
 	t_list	*l;
-	int		i;
 	int		size;
 
-	i = 0;
 	l = tokens;
 	size = ft_lstsize(l);
 	if ((((t_token *)(l->content))->type == PIPE))

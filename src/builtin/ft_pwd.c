@@ -6,13 +6,13 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 14:31:53 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 22:25:27 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:32:02 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_cmdtab	*c)
+int	ft_pwd(void)
 {
 	char	*pwd;
 	char	buf[BUF_SIZE];

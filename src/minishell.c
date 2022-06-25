@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:39:03 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 01:59:07 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	clear_exit(t_mini mini)
 	return (0);
 }
 
-int	call_and_clear(t_mini *mini)
+void	call_and_clear(t_mini *mini)
 {
 	lexer(mini);
 	mini->cmdtab_list = parser(mini);

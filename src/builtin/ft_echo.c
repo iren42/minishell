@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 22:49:22 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:34:57 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:36:12 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 {
 	int		i;
 	int		len;
-	char	q;
 
 	i = 0;
 	len = ft_strlen(s) - 1;
@@ -40,7 +39,6 @@ static void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 	{
 		if (s[i] == '"' || s[i] == '\'')
 		{
-			q = s[i];
 			*f = i;
 			break ;
 		}
@@ -59,10 +57,10 @@ static void	get_index_first_nd_last_quote(char *s, int *f, int *l)
 
 static void	print_without_first_closing_quotes(char *s)
 {
-	int		i;
-	size_t	len;
-	int		first;
-	int		last;
+	int	i;
+	int	len;
+	int	first;
+	int	last;
 
 	i = 0;
 	len = ft_strlen(s);

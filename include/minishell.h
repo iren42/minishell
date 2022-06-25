@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 02:31:00 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:50:36 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int				lexer(t_mini *m);
 t_list			*parser(t_mini *m);
 void			fill_cmd(t_token *t, t_cmdtab *ct, int *ret);
 void			fill_args(t_token *t, t_cmdtab *c, int *ret);
-void			fill_redir(t_token *t, t_cmdtab *c, int *ret);
+void			fill_redir(t_token *t, t_cmdtab *c);
 t_token			*create_token(char *p, int *to_set, t_mini *m);
 t_token			*token_word(char *p, int *to_set, t_mini *m);
 t_token			*token_pipe_nl(char *p, int *to_set, t_mini *m);
@@ -93,7 +93,7 @@ int				expander(t_mini *m);
 char			*var_substitution(t_list *export_list, char *s);
 char			*rm_superflous(char *s);
 int				are_quotes_closed(char *s);
-void			push(t_list **l, char c, char *s, int i);
+void			push(t_list **l, char c, int i);
 int				check_if_substitution(char *s, t_func_cmd_sub *f);
 int				len_word(char *s);
 void			sub_dollar(t_func_cmd_sub *f, int *i, char *s);
@@ -104,7 +104,7 @@ void			signal_handler(void);
 void			print_prompt(void);
 
 // IN BUILTIN
-int				ft_pwd(t_cmdtab *c);
+int				ft_pwd(void);
 int				ft_env(t_cmdtab *c);
 int				ft_export(t_cmdtab *c);
 int				ft_unset(t_cmdtab *c);
@@ -150,22 +150,21 @@ void			free_split(char **split);
 
 char			*ft_readline(void);
 int				clear_exit(t_mini mini);
-int				call_and_clear(t_mini *mini);
+void			call_and_clear(t_mini *mini);
 
-int				ex_infile(t_exec *e, int fd_in, int child, int **fd);
-int				ex_outfile(t_exec *e, int fd_out, int child, int **fd);
+int				ex_infile(t_exec *e, int fd_in);
+int				ex_outfile(t_exec *e, int fd_out);
 
 char			**ft_split_env(t_mini *mini);
 char			**ft_split_cmd(t_mini *mini, int cmd_num);
 
 int				ft_wait(pid_t *pids, int n);
-int				redir_error(t_redir *redir, t_exec *e);
+int				redir_error(t_redir *redir);
 char			*is_builtin(char *cmd, t_mini *m);
-void			*init_t_exec(t_exec *e, t_mini *m);
+void			init_t_exec(t_exec *e, t_mini *m);
 
 void			exec_child(t_exec *e, int **ends, char **split_cmd, int i);
 
-void			execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c,
-					t_exec *e);
+void			execute_cmd(char **split_cmd, t_cmdtab *c, t_exec *e);
 
 #endif

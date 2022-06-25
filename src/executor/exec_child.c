@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 00:06:55 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 00:11:17 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:28:23 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,24 @@ static void	delete_heredoc_files(t_exec *e)
 
 void	exec_child(t_exec *e, int **ends, char **split_cmd, int i)
 {
-	char	*p;
 	int		fd_in;
 	int		fd_out;
 
 	close_ends(i, e, ends);
-	fd_in = ex_infile(e, STDIN, i, ends);
+	fd_in = ex_infile(e, STDIN);
 	if (fd_in != STDIN)
 	{
 		dup2(fd_in, STDIN);
 		close(fd_in);
 	}
 	delete_heredoc_files(e);
-	fd_out = ex_outfile(e, STDOUT, i, ends);
+	fd_out = ex_outfile(e, STDOUT);
 	if (fd_out != STDOUT)
 	{
 		dup2(fd_out, STDOUT);
 		close(fd_out);
 	}
-	p = is_builtin(split_cmd[0], e->m);
 	close_all_pipes_but_index(ends, e->nb_cmd, i);
-	execute_cmd(split_cmd, p, e->cmdtabl->content, e);
+	execute_cmd(split_cmd, e->cmdtabl->content, e);
 	exit(0);
 }

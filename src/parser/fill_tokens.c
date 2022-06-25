@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 22:06:40 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 22:15:06 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:02:27 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	fill_args(t_token *t, t_cmdtab *c, int *ret)
 	}
 }
 
-void	fill_redir(t_token *t, t_cmdtab *c, int *ret)
+void	fill_redir(t_token *t, t_cmdtab *c)
 {
 	t_redir	*new;
 

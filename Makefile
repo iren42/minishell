@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 02:28:58 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/25 02:54:59 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,8 +77,7 @@ OBJS	= $(SRCS:.c=.o)
 
 CC		= gcc
 
-CFLAGS	= 
-#-Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
 
 SANI	= -fsanitize=address -g3
 
@@ -87,12 +86,12 @@ RM		= rm -f
 all		: $(NAME)
 
 %.o		: %.c $(HEADER)
-		$(CC) $(CFLAGS) $(SANI) -g3 -Iinclude -c $< -o $@
+		$(CC) $(CFLAGS) -Iinclude -c $< -o $@
 
 $(NAME) : $(OBJS) $(HEADER) $(LIBFT)
 		make -C $(LIBFT)
 		make bonus -C $(LIBFT)
-	  	$(CC) $(SANI) -o  $@ $(OBJS) -lreadline libft/libft.a
+	  	$(CC) -o  $@ $(OBJS) -lreadline libft/libft.a
 	
 
 norm	:

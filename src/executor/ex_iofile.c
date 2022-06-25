@@ -6,13 +6,13 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:53:04 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/24 23:53:39 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:30:51 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
+int	ex_infile(t_exec *e, int fd_in)
 {
 	t_list	*tmp;
 
@@ -27,7 +27,7 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 			fd_in = ft_heredoc(((t_redir *)(tmp->content))->filename);
 		if (fd_in < 0)
 		{
-			redir_error(tmp->content, e);
+			redir_error(tmp->content);
 			exit(1);
 		}
 		tmp = tmp->next;
@@ -35,7 +35,7 @@ int	ex_infile(t_exec *e, int fd_in, int child, int **fd)
 	return (fd_in);
 }
 
-int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
+int	ex_outfile(t_exec *e, int fd_out)
 {
 	t_list	*tp;
 
@@ -52,7 +52,7 @@ int	ex_outfile(t_exec *e, int fd_out, int child, int **fd)
 					O_CREAT | O_RDWR | O_APPEND, 0664);
 		if (fd_out < 0)
 		{
-			redir_error(tp->content, e);
+			redir_error(tp->content);
 			exit(1);
 		}
 		tp = tp->next;

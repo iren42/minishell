@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 04:37:01 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 04:58:25 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 05:38:20 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 		free_split(split_cmd);
 		i++;
 	}
+	signal_handler();
 }
 /*
 void	executor_pipes(t_executor_variables *var)

@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:36:18 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 05:21:24 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 06:46:19 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ void	init_tmini(char **env, t_mini *mini)
 	mini->cmdtab_list = 0;
 }
 
+static int	ret_equal_zero(int ret)
+{
+	if (ret == 0)
+	{
+		g_errno = 2;
+		print_error("shell", 0, errno, "syntax error main");
+		return (42);
+	}
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*s;
@@ -76,13 +87,11 @@ int	main(int ac, char **av, char **env)
 			return (clear_exit(mini));
 		mini.s = s;
 		ret = expander(&mini);
-		if (ret == 0)
-		{
-			print_error("shell", 0, errno, "syntax error main");
+		if (ret_equal_zero(ret))
 			continue ;
-		}
 		call_and_clear(&mini);
 	}
 	ft_lstclear(&mini.env_list, del_env);
 	rl_clear_history();
+	return (0);
 }

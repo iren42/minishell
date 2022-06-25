@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 05:53:48 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 06:37:06 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ void	ft_execve(t_cmdtab *cmdtab, char **split_cmd, char **split_env)
 
 void	execute_cmd(char **split_cmd, t_cmdtab *c, t_exec *e)
 {
+	if (c->type == EXIT)
+		ft_exit(c);
+	else
+		g_errno = 0;
 	if (c->type == EXPORT)
 		ft_export(c);
 	else if (c->type == UNSET)
@@ -37,8 +41,6 @@ void	execute_cmd(char **split_cmd, t_cmdtab *c, t_exec *e)
 		ft_env(c);
 	else if (c->type == PWD)
 		ft_pwd();
-	else if (c->type == EXIT)
-		ft_exit(c);
 	else
 		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
 }

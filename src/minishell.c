@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 06:10:13 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 06:55:51 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	clear_exit(t_mini mini)
 	rl_clear_history();
 	free_split(mini.split_builtin);
 	ft_putendl_fd("exit", STDIN);
-	return (0);
+	return (g_errno);
 }
 
 void	call_and_clear(t_mini *mini)

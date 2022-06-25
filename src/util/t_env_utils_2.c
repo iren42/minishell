@@ -21,7 +21,7 @@ int	is_syntax_ok(char *s)
 	{
 		while (s[i])
 		{
-			if (!ft_isalnum(s[i]) && !ft_isdigit(s[i]) && s[i] != '_')
+			if (!ft_isalpha(s[i]) && s[i] != '_')
 				return (0);
 			i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 13:37:30 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 22:23:50 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 07:13:30 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ int	ft_cd(t_cmdtab *c)
 
 	if (c->arg_list == 0)
 		path = ft_getenv("HOME", c->m->env_list);
-	else if (ft_lstsize(c->arg_list) > 2)
+	else if (ft_lstsize(c->arg_list) >= 2)
 	{
 		print_error("shell: cd", NULL, 0, "Too many arguments");
+		g_errno = 1;
 		return (FAILURE);
 	}
 	else
@@ -91,6 +92,7 @@ int	ft_cd(t_cmdtab *c)
 	if (chdir(path))
 	{
 		print_error("shell: cd", path, errno, "No such file or directory");
+		g_errno = 1;
 		return (FAILURE);
 	}
 	update_oldpwd_nd_pwd(c);

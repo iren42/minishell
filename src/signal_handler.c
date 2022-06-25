@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 20:21:24 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 04:29:03 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 04:32:43 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	sig_prompt(int signum)
 		rl_redisplay();
 	}
 }
+
 void	sig_prompt_child(int signum)
 {
 	if (signum == SIGINT)
@@ -41,7 +42,6 @@ void	signal_handler(void)
 	sigaddset(&signals, SIGINT);
 	signal(SIGINT, sig_prompt);
 	signal(SIGQUIT, SIG_IGN);
-
 }
 
 void	signal_handler_child(void)

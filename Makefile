@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 02:54:59 by iren             ###   ########.fr        #
+#    Updated: 2022/06/25 04:42:15 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SOURCES		=	main.c \
 			executor/ex_iofile.c \
 			executor/exec_child.c \
 			executor/executor_utils.c \
+			executor/executor_pipes.c \
 				\
 			heredoc.c \
 				\
@@ -86,12 +87,12 @@ RM		= rm -f
 all		: $(NAME)
 
 %.o		: %.c $(HEADER)
-		$(CC) $(CFLAGS) -Iinclude -c $< -o $@
+		$(CC) $(CFLAGS) $(SANI) -Iinclude -c $< -o $@
 
 $(NAME) : $(OBJS) $(HEADER) $(LIBFT)
 		make -C $(LIBFT)
 		make bonus -C $(LIBFT)
-	  	$(CC) -o  $@ $(OBJS) -lreadline libft/libft.a
+	  	$(CC) $(SANI) -o  $@ $(OBJS) -lreadline libft/libft.a
 	
 
 norm	:

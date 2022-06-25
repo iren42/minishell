@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 04:07:32 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 05:00:15 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void			open_pipes(int **fd, int n);
 void			free_pipes(int **ends, int n);
 void			close_all_pipes(int **ends, int n);
 void			close_all_pipes_but_index(int **ends, int n, int index);
+//void			executor_pipes(t_executor_variables *var);
+void			exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends);
 
 int				ft_heredoc(char *eof);
 

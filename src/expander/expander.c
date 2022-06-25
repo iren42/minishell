@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 20:29:57 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/25 03:15:12 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 05:04:04 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	expander(t_mini *m)
 	ret = are_quotes_closed(m->s);
 	if (ret)
 	{
-		printf("before expander %s.\n", m->s);
 		m->s = rm_superflous(m->s);
 		res = var_substitution(m->env_list, m->s);
 		if (!res)
@@ -28,7 +27,6 @@ int	expander(t_mini *m)
 		res = rm_superflous(res);
 		free(m->s);
 		m->s = res;
-		printf("after expander %s.\n", res);
 	}
 	else
 		free(m->s);

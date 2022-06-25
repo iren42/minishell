@@ -6,11 +6,24 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:01:26 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 05:14:08 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/24 23:05:39 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	calc_len_word(int *len, int *start, char *p, t_token *t)
+{
+	while (p[*len + *start] && !ft_isspace(p[*len + *start])
+		&& !is_spe_char(p[*len + *start]))
+		(*len)++;
+	if (len == 0)
+	{
+		free(t);
+		return (1);
+	}
+	return (0);
+}
 
 static void	set_value(t_token *t, int start, int len, char *p)
 {

@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 01:59:07 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 05:07:55 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ char	*ft_readline(void)
 	char	*input;
 	char	*trimed;
 
-	input = readline(PROMPT);
+	if (g_errno != 130)
+		input = readline(PROMPT);
+	else
+		input = readline("");
 	if (!input)
 		return (NULL);
 	if (!input_empty(input))

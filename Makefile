@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 02:54:59 by iren             ###   ########.fr        #
+#    Updated: 2022/06/25 05:14:31 by gufestin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SOURCES		=	main.c \
 				parser/create_token.c \
 				parser/token_type.c \
 				parser/check_syntax_error.c \
+				parser/calc_len_word.c \
 				\
 				expander/expander.c \
 				expander/var_substitution.c \
@@ -86,12 +87,12 @@ RM		= rm -f
 all		: $(NAME)
 
 %.o		: %.c $(HEADER)
-		$(CC) $(CFLAGS) -Iinclude -c $< -o $@
+		$(CC) $(CFLAGS) $(SANI) -g3 -Iinclude -c $< -o $@
 
 $(NAME) : $(OBJS) $(HEADER) $(LIBFT)
 		make -C $(LIBFT)
 		make bonus -C $(LIBFT)
-	  	$(CC) -o  $@ $(OBJS) -lreadline libft/libft.a
+	  	$(CC) $(SANI) -o  $@ $(OBJS) -lreadline libft/libft.a
 	
 
 norm	:

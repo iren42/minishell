@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 12:23:51 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/25 01:27:54 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:32:13 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ char	*var_substitution(t_list *list, char *s)
 		}
 	}
 	f.res = join_regular_str(&f, i, s);
-	printf("in var sub s: %s.\n", f.res);
 	ft_lstclear(&f.quote_list, &del_quote);
 	return (f.res);
 }

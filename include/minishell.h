@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 02:28:31 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:31:00 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_token			*token_word(char *p, int *to_set, t_mini *m);
 t_token			*token_pipe_nl(char *p, int *to_set, t_mini *m);
 t_token			*token_great_less(char *p, int *to_set, t_mini *m);
 t_token			*token_double_great_less(char *p, int *to_set, t_mini *m);
+int				check_syntax_token(t_list *tokens);
 
 void			ft_error(char *m, int code);
 void			print_error(char *where, char *file, int err, char *msg);

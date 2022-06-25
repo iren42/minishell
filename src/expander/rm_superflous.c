@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/25 01:48:47 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:31:57 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,5 @@ char	*rm_superflous(char *s)
 			i++;
 		}
 	}
-	printf("in rm superflous %s\n", s);
 	return (s);
 }

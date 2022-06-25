@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 02:33:02 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 05:23:51 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,6 @@ void	execute_cmd(char **split_cmd, t_cmdtab *c, t_exec *e)
 		ft_execve((t_cmdtab *)(e->cmdtabl->content), split_cmd, e->split_env);
 }
 
-void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
-{
-	int		i;
-	char	**split_cmd;
-
-	i = 0;
-	while (i < e->nb_cmd)
-	{
-		split_cmd = ft_split_cmd(e->m, i);
-		pids[i] = fork();
-		if (pids[i] == -1)
-			exit(1);
-		if (pids[i] == 0)
-			exec_child(e, ends, split_cmd, i);
-		e->cmdtabl = e->cmdtabl->next;
-		free_split(split_cmd);
-		i++;
-	}
-}
-
 void	exec_no_fork(t_exec *e, t_cmdtab *ptr)
 {
 	char	**split_cmd;
@@ -70,6 +50,16 @@ void	exec_no_fork(t_exec *e, t_cmdtab *ptr)
 	split_cmd = ft_split_cmd(e->m, 0);
 	execute_cmd(split_cmd, ptr, e);
 	free_split(split_cmd);
+}
+
+static pid_t	*init_var_pids(int nb_cmd)
+{
+	pid_t	*pids;
+
+	pids = malloc(sizeof(pid_t) * nb_cmd);
+	if (!pids)
+		exit(1);
+	return (pids);
 }
 
 int	executor(t_mini *mini)
@@ -86,9 +76,7 @@ int	executor(t_mini *mini)
 		exec_no_fork(&(var.e), ptr);
 	else
 	{
-		var.pids = malloc(sizeof(pid_t) * var.e.nb_cmd);
-		if (!var.pids)
-			exit(1);
+		var.pids = init_var_pids(var.e.nb_cmd);
 		var.ends = init_pipes(var.e.nb_cmd);
 		open_pipes(var.ends, var.e.nb_cmd);
 		exec_cmdtab_list(&(var.e), var.pids, var.ends);
@@ -96,6 +84,7 @@ int	executor(t_mini *mini)
 		var.err = ft_wait(var.pids, var.e.nb_cmd);
 		free_pipes(var.ends, var.e.nb_cmd);
 		free(var.pids);
+		signal_handler();
 	}
 	free_split(var.e.split_env);
 	return (var.err);

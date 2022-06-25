@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 14:31:53 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 02:32:02 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 07:21:13 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ int	ft_pwd(void)
 		return (SUCCESS);
 	}
 	print_error("shell: pwd", NULL, 0, "BUF_SIZE too small");
+	g_errno = 1;
 	return (FAILURE);
 }

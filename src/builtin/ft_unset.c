@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 05:12:41 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:25:11 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 07:25:33 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ int	ft_unset(t_cmdtab *c)
 		{
 			name = get_arg_value(l1->content);
 			if (!is_syntax_ok(name))
+			{
+				g_errno = 1;
 				print_error("shell: unset", name, 0, "not a valid identifier");
+			}
 			prev = find_name_from_env(c->m->env_list, name);
 			if (prev)
 				del_unset(name, prev);

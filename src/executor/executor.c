@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 02:33:02 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 04:30:02 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	exec_cmdtab_list(t_exec *e, pid_t *pids, int **ends)
 	char	**split_cmd;
 
 	i = 0;
+	signal_handler_child();
 	while (i < e->nb_cmd)
 	{
 		split_cmd = ft_split_cmd(e->m, i);
@@ -96,6 +97,7 @@ int	executor(t_mini *mini)
 		var.err = ft_wait(var.pids, var.e.nb_cmd);
 		free_pipes(var.ends, var.e.nb_cmd);
 		free(var.pids);
+		signal_handler();
 	}
 	free_split(var.e.split_env);
 	return (var.err);

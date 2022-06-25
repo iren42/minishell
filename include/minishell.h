@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:42:57 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 02:50:36 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 04:07:32 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,9 @@ char			*join_regular_str(t_func_cmd_sub *f, int i, char *s);
 void			sub_for_quotes(t_func_cmd_sub *f, int *i, char *s);
 
 void			signal_handler(void);
+void			signal_handler_child(void);
 void			print_prompt(void);
+void			print_prompt_child(void);
 
 // IN BUILTIN
 int				ft_pwd(void);

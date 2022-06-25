@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:36:18 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 01:58:17 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 03:36:10 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	main(int ac, char **av, char **env)
 			print_error("shell", 0, errno, "syntax error main");
 			continue ;
 		}
+		printf("in main.c before call and clear  %s.\n", mini.s);
 		call_and_clear(&mini);
 	}
 	ft_lstclear(&mini.env_list, del_env);

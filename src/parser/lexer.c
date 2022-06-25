@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:06:24 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:06:31 by gufestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ int	lexer(t_mini *m)
 
 	l = 0;
 	ret = create_token_list(m->s, &l, m);
-	m->token_list = l;
+	if (ret == SUCCESS)
+	{
+		ret = check_syntax_token(l);
+		m->token_list = l;
+	}
 	return (ret);
 }

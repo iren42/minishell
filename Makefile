@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 01:03:48 by gufestin         ###   ########.fr        #
+#    Updated: 2022/06/25 02:22:50 by gufestin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SOURCES		=	main.c \
 				parser/fill_tokens.c \
 				parser/create_token.c \
 				parser/token_type.c \
+				parser/check_syntax_error.c \
 				\
 				expander/expander.c \
 				expander/var_substitution.c \

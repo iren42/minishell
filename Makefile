@@ -6,7 +6,7 @@
 #    By: iren <iren@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/15 17:41:07 by iren              #+#    #+#              #
-#    Updated: 2022/06/25 01:32:29 by iren             ###   ########.fr        #
+#    Updated: 2022/06/25 01:57:20 by iren             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,8 +76,7 @@ OBJS	= $(SRCS:.c=.o)
 
 CC		= gcc
 
-CFLAGS	= 
-#-Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
 
 SANI	= -fsanitize=address -g3
 

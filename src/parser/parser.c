@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 16:05:28 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/24 22:11:14 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:03:44 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	fill_everything(t_list *l, t_cmdtab **new, t_mini *m, t_list **cmdl)
 		return ;
 	fill_cmd(l->content, *new, &ret);
 	fill_args(l->content, *new, &ret);
-	fill_redir(l->content, *new, &ret);
+	fill_redir(l->content, *new);
 	if (get_token_type(l->content) == PIPE)
 	{
 		ft_lstadd_back(cmdl, ft_lstnew(*new));

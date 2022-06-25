@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 22:32:17 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:03:36 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:08:08 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 t_token	*token_pipe_nl(char *p, int *to_set, t_mini *m)
 {
-	int		start;
 	t_token	*t;
-	int		len;
 
 	t = malloc(sizeof(t_token));
 	if (!t)
@@ -59,4 +57,5 @@ t_token	*create_token(char *p, int *to_set, t_mini *m)
 		else
 			return (token_word(p, to_set, m));
 	}
+	return (NULL);
 }

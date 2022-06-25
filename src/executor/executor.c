@@ -6,7 +6,7 @@
 /*   By: gufestin <gufestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:28:08 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 00:30:04 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:33:02 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_execve(t_cmdtab *cmdtab, char **split_cmd, char **split_env)
 	}
 }
 
-void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
+void	execute_cmd(char **split_cmd, t_cmdtab *c, t_exec *e)
 {
 	if (c->type == EXPORT)
 		ft_export(c);
@@ -36,7 +36,7 @@ void	execute_cmd(char **split_cmd, char *cmd, t_cmdtab *c, t_exec *e)
 	else if (c->type == ENV)
 		ft_env(c);
 	else if (c->type == PWD)
-		ft_pwd(c);
+		ft_pwd();
 	else if (c->type == EXIT)
 		ft_exit(c);
 	else
@@ -68,7 +68,7 @@ void	exec_no_fork(t_exec *e, t_cmdtab *ptr)
 	char	**split_cmd;
 
 	split_cmd = ft_split_cmd(e->m, 0);
-	execute_cmd(split_cmd, ptr->cmd, ptr, e);
+	execute_cmd(split_cmd, ptr, e);
 	free_split(split_cmd);
 }
 

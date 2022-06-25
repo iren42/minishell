@@ -6,7 +6,7 @@
 /*   By: isabelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:24:36 by isabelle          #+#    #+#             */
-/*   Updated: 2022/06/25 01:48:47 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:40:14 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	matching(char b1, char b2)
 	return (0);
 }
 
-void	push(t_list **l, char c, char *s, int i)
+void	push(t_list **l, char c, int i)
 {
 	t_quote	*new;
 	t_list	*a;
@@ -72,10 +72,8 @@ char	*rm_superflous(char *s)
 	int		i;
 	int		start;
 	int		meta;
-	t_list	*quote_list;
 
 	i = 0;
-	quote_list = 0;
 	meta = 0;
 	if (s)
 	{

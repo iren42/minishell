@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:42:06 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:06:24 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:01:25 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static int	create_token_list(char *s, t_list **l, t_mini *m)
 	int		i;
 	t_list	*new;
 	int		len;
-	t_token	*t;
 
 	i = 0;
 	if (s)

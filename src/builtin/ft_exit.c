@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 12:07:54 by iren              #+#    #+#             */
-/*   Updated: 2022/06/24 23:31:14 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:34:43 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static int	error_size(void)
 
 int	ft_exit(t_cmdtab *c)
 {
-	t_mini	*m;
 	int		size;
 	char	*value;
 

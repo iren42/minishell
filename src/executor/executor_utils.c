@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 00:03:05 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 00:28:43 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:31:30 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_wait(pid_t *pids, int n)
 	return (err);
 }
 
-int	redir_error(t_redir *redir, t_exec *e)
+int	redir_error(t_redir *redir)
 {
 	struct stat	buf;
 
@@ -71,7 +71,7 @@ char	*is_builtin(char *cmd, t_mini *m)
 	return (0);
 }
 
-void	*init_t_exec(t_exec *e, t_mini *m)
+void	init_t_exec(t_exec *e, t_mini *m)
 {
 	e->split_env = ft_split_env(m);
 	e->nb_cmd = ft_lstsize(m->cmdtab_list);

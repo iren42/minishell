@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 00:12:41 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 01:21:04 by iren             ###   ########.fr       */
+/*   Updated: 2022/06/25 02:13:07 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	check_if_substitution(char *s, t_func_cmd_sub *f)
 {
 	t_list	*l;
 	char	*name;
-	int		index;
 	char	q;
 
 	if (f->quote_list != 0)

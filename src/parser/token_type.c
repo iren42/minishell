@@ -6,7 +6,7 @@
 /*   By: iren <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:01:26 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 05:14:08 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 08:23:05 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_token	*token_double_great_less(char *p, int *to_set, t_mini *m)
 		if (!t)
 			return (0);
 		t->m = m;
+		t->is_in_quotes = 0;
 		t->type = DOUBLE_LESS;
 		if (p[0] == '>' && p[1] == '>')
 			t->type = DOUBLE_GREAT;
@@ -60,6 +61,7 @@ t_token	*token_great_less(char *p, int *to_set, t_mini *m)
 		if (!t)
 			exit(1);
 		t->m = m;
+		t->is_in_quotes = 0;
 		start = 1;
 		if (p[0] == '>')
 			t->type = GREAT;
@@ -88,6 +90,7 @@ t_token	*token_word(char *p, int *to_set, t_mini *m)
 		if (!t)
 			exit(1);
 		start = 0;
+		t->is_in_quotes = 0;
 		t->type = WORD;
 		t->m = m;
 		len = 0;

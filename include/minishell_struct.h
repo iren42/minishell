@@ -6,7 +6,7 @@
 /*   By: gufestin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 20:50:39 by gufestin          #+#    #+#             */
-/*   Updated: 2022/06/25 00:22:53 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 08:08:50 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_token
 	char			*value;
 	t_token_type	type;
 	struct s_mini	*m;
+	int				is_in_quotes;
 }	t_token;
 
 typedef enum e_redir_type

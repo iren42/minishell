@@ -6,7 +6,7 @@
 /*   By: iren <iren@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:27:25 by iren              #+#    #+#             */
-/*   Updated: 2022/06/25 06:55:51 by gufestin         ###   ########.fr       */
+/*   Updated: 2022/06/25 08:05:03 by iren             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	call_and_clear(t_mini *mini)
 	lexer(mini);
 	mini->cmdtab_list = parser(mini);
 	executor(mini);
+	print_tmini(mini);
 	ft_lstclear(&mini->token_list, del_token);
 	ft_lstclear(&mini->cmdtab_list, del_cmdtab);
 	free(mini->s);

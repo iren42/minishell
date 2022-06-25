@@ -65,6 +65,8 @@ void	fill_args(t_token *t, t_cmdtab *c, int *ret)
 		if (!new)
 			exit(1);
 		new->value = ft_strdup(t->value);
+		new->is_in_quotes = t->is_in_quotes;
+		printf("is in %d\n", new->is_in_quotes);
 		ft_lstadd_back(&c->arg_list, ft_lstnew(new));
 	}
 }

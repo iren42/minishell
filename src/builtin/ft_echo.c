@@ -84,7 +84,7 @@ static void	in_loop(char *opt, t_list *l, int *nl)
 	else
 	{
 		print_without_first_closing_quotes(opt);
-		if (l->next)
+		if (l->next && !((t_arg *)(l->content))->is_in_quotes)
 			ft_putstr_fd(" ", 1);
 	}
 }
